@@ -1,6 +1,6 @@
-package com.backend_project_template;
+package com.back_alasso;
 
-import com.backend_project_template.config.InitLogger;
+import com.back_alasso.config.InitLogger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;

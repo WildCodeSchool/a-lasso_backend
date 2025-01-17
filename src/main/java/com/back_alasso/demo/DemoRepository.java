@@ -1,4 +1,4 @@
-package com.backend_project_template.demo;
+package com.back_alasso.demo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
