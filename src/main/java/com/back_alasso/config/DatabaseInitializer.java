@@ -1,7 +1,7 @@
-package com.backend_project_template.config;
+package com.back_alasso.config;
 
-import com.backend_project_template.demo.DemoEntity;
-import com.backend_project_template.demo.DemoRepository;
+import com.back_alasso.demo.DemoEntity;
+import com.back_alasso.demo.DemoRepository;
 import java.util.List;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;

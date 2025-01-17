@@ -1,4 +1,4 @@
-package com.backend_project_template.config;
+package com.back_alasso.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

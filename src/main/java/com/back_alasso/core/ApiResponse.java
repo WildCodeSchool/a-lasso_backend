@@ -1,4 +1,4 @@
-package com.backend_project_template.core;
+package com.back_alasso.core;
 
 import java.time.LocalDateTime;
 

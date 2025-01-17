@@ -1,6 +1,6 @@
-package com.backend_project_template.unit.config;
+package com.back_alasso.unit.config;
 
-import com.backend_project_template.config.InitLogger;
+import com.back_alasso.config.InitLogger;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

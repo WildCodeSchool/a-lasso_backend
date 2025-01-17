@@ -1,4 +1,4 @@
-package com.backend_project_template.config;
+package com.back_alasso.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;

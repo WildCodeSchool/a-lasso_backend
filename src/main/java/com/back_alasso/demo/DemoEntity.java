@@ -1,6 +1,6 @@
-package com.backend_project_template.demo;
+package com.back_alasso.demo;
 
-import com.backend_project_template.core.BaseEntity;
+import com.back_alasso.core.BaseEntity;
 import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

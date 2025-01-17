@@ -1,6 +1,6 @@
-package com.backend_project_template.demo;
+package com.back_alasso.demo;
 
-import com.backend_project_template.core.ApiResponse;
+import com.back_alasso.core.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
