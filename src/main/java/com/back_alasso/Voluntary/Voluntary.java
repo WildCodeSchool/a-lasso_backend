@@ -1,8 +1,8 @@
-package com.back_alasso.voluntary;
+package com.back_alasso.Voluntary;
 
 import com.back_alasso.Country.Country;
 import com.back_alasso.Image.Image;
-import com.back_alasso.user.User;
+import com.back_alasso.User.User;
 import jakarta.persistence.*;
 
 @Entity

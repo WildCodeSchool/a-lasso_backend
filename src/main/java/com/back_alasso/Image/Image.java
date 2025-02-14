@@ -12,4 +12,20 @@ public class Image extends BaseEntity {
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)
   private ImageEnumType type;
+
+  public String getUrl() {
+    return url;
+  }
+
+  public void setUrl(String url) {
+    this.url = url;
+  }
+
+  public ImageEnumType getType() {
+    return type;
+  }
+
+  public void setType(ImageEnumType type) {
+    this.type = type;
+  }
 }

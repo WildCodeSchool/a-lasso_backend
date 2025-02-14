@@ -1,4 +1,4 @@
-package com.back_alasso.user;
+package com.back_alasso.User;
 
 import com.back_alasso.core.BaseEntity;
 import jakarta.persistence.*;
