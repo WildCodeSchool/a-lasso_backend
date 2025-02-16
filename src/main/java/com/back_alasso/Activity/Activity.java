@@ -1,12 +1,13 @@
 package com.back_alasso.Activity;
 
 import com.back_alasso.ActivityImage.ActivityImage;
+import com.back_alasso.ActivityTheme.ActivityTheme;
 import com.back_alasso.Adress.Adress;
-import com.back_alasso.User.User;
+import com.back_alasso.Association.Association;
 import com.back_alasso.core.BaseEntity;
 import jakarta.persistence.*;
 import java.util.List;
-import org.hibernate.annotations.Where;
+
 
 @Entity
 public class Activity extends BaseEntity {
@@ -23,9 +24,8 @@ public class Activity extends BaseEntity {
   private Long volontaries_request;
 
   @ManyToOne
-  @JoinColumn(name = "user_id")
-  @Where(clause = "user_type = 'ASSOCIATION'")
-  private User user;
+  @JoinColumn(name = "association_id")
+  private Association association;
 
   @ManyToOne
   @JoinColumn(name = "adress_id")
@@ -33,6 +33,10 @@ public class Activity extends BaseEntity {
 
   @OneToMany(mappedBy = "activity")
   private List<ActivityImage> activityImages;
+
+  @OneToMany(mappedBy = "activity")
+  private List<ActivityTheme> activityThemes;
+
 
   public String getTitle() {
     return title;
@@ -58,12 +62,12 @@ public class Activity extends BaseEntity {
     this.volontaries_request = volontaries_request;
   }
 
-  public User getUser() {
-    return user;
+  public Association getAssociation() {
+    return association;
   }
 
-  public void setUser(User user) {
-    this.user = user;
+  public void setAssociation(Association association) {
+    this.association = association;
   }
 
   public Adress getAdress() {
@@ -80,5 +84,13 @@ public class Activity extends BaseEntity {
 
   public void setActivityImages(List<ActivityImage> activityImages) {
     this.activityImages = activityImages;
+  }
+
+  public List<ActivityTheme> getActivityThemes() {
+    return activityThemes;
+  }
+
+  public void setActivityThemes(List<ActivityTheme> activityThemes) {
+    this.activityThemes = activityThemes;
   }
 }

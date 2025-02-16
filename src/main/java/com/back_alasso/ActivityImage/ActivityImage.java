@@ -2,12 +2,13 @@ package com.back_alasso.ActivityImage;
 
 import com.back_alasso.Activity.Activity;
 import com.back_alasso.Image.Image;
+import com.back_alasso.core.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-public class ActivityImage {
+public class ActivityImage extends BaseEntity {
 
   @ManyToOne
   @JoinColumn(name = "image_id")
