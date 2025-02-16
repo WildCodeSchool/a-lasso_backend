@@ -3,6 +3,14 @@ spring:
     url: jdbc:mysql://${DB_HOST_DEV}:${DB_PORT_DEV}/${DB_NAME_DEV}?createDatabaseIfNotExist=true
     username: ${DB_USER_DEV}
     password: ${DB_PASSWORD_DEV}
+  jpa:
+    hibernate:
+      ddl-auto: update  # Change to 'create' if it's a new DB
+    show-sql: true      # Optional: Shows SQL queries in logs
+    properties:
+      hibernate:
+        format_sql: true # Formats SQL output for better readability
+
 
 springdoc:
   swagger-ui:

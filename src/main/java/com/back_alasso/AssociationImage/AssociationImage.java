@@ -10,27 +10,28 @@ import jakarta.persistence.ManyToOne;
 @Entity
 public class AssociationImage extends BaseEntity {
 
-  @ManyToOne
-  @JoinColumn(name = "image_id")
-  private Image image;
+    @ManyToOne
+    @JoinColumn(name = "image_id")
+    private Image image;
 
-  @ManyToOne
-  @JoinColumn(name = "association_id")
-  private Association association;
+    @ManyToOne
+    @JoinColumn(name = "association_id")
+    private Association association;
 
-  public Image getImage() {
-    return image;
-  }
 
-  public void setImage(Image image) {
-    this.image = image;
-  }
+    public Image getImage() {
+        return image;
+    }
 
-  public Association getAssociation() {
-    return association;
-  }
+    public void setImage(Image image) {
+        this.image = image;
+    }
 
-  public void setAssociation(Association association) {
-    this.association = association;
-  }
+    public Association getAssociation() {
+        return association;
+    }
+
+    public void setAssociation(Association association) {
+        this.association = association;
+    }
 }
