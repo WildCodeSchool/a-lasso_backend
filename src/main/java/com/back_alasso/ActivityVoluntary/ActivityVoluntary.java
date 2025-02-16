@@ -11,49 +11,49 @@ import jakarta.persistence.ManyToOne;
 @Entity
 public class ActivityVoluntary extends BaseEntity {
 
-    @Column(nullable = false)
-    private boolean is_saved;
+  @Column(nullable = false)
+  private boolean is_saved;
 
-    @Column(nullable = false)
-    private boolean is_registered;
-    
-    @ManyToOne
-    @JoinColumn(name = "voluntary_id")
-    private Voluntary voluntary;
+  @Column(nullable = false)
+  private boolean is_registered;
 
-    @ManyToOne
-    @JoinColumn(name = "activity_id")
-    private Activity activity;
+  @ManyToOne
+  @JoinColumn(name = "voluntary_id")
+  private Voluntary voluntary;
 
-    public Voluntary getVoluntary() {
-        return voluntary;
-    }
+  @ManyToOne
+  @JoinColumn(name = "activity_id")
+  private Activity activity;
 
-    public void setVoluntary(Voluntary voluntary) {
-        this.voluntary = voluntary;
-    }
+  public Voluntary getVoluntary() {
+    return voluntary;
+  }
 
-    public Activity getActivity() {
-        return activity;
-    }
+  public void setVoluntary(Voluntary voluntary) {
+    this.voluntary = voluntary;
+  }
 
-    public void setActivity(Activity activity) {
-        this.activity = activity;
-    }
+  public Activity getActivity() {
+    return activity;
+  }
 
-    public boolean isIs_saved() {
-        return is_saved;
-    }
+  public void setActivity(Activity activity) {
+    this.activity = activity;
+  }
 
-    public void setIs_saved(boolean is_saved) {
-        this.is_saved = is_saved;
-    }
+  public boolean isIs_saved() {
+    return is_saved;
+  }
 
-    public boolean isIs_registered() {
-        return is_registered;
-    }
+  public void setIs_saved(boolean is_saved) {
+    this.is_saved = is_saved;
+  }
 
-    public void setIs_registered(boolean is_registered) {
-        this.is_registered = is_registered;
-    }
+  public boolean isIs_registered() {
+    return is_registered;
+  }
+
+  public void setIs_registered(boolean is_registered) {
+    this.is_registered = is_registered;
+  }
 }
