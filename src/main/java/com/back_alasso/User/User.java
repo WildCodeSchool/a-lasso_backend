@@ -3,7 +3,6 @@ package com.back_alasso.User;
 import com.back_alasso.AssociationFollower.AssociationFollower;
 import com.back_alasso.core.BaseEntity;
 import jakarta.persistence.*;
-
 import java.util.List;
 
 @Entity

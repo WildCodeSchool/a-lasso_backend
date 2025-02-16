@@ -20,16 +20,16 @@ public record ActivityDTO(
   ThemeNameEnumType[] theme,
   boolean isFavorite
 ) {
-//      public static ActivityDTO fromEntityToDTO(Activity activity) {
-//          return new ActivityDTO(
-//                  activity.getId(),
-//                  activity.getTitle(),
-//                  activity.getDescription(),
-//                  activity.getActivityImages() != null ? activity.getActivityImages().stream().map((activityImage) -> activityImage.getImage().getUrl()).toList() : null,
-//                  activity.getAssociation() != null ? AssociationDTO.getAssociationDTO(activity.getAssociation()) : null,
-//                  activity.
-//  //                activity.getCategory() != null ? article.getCategory().getName() : null,
-//  //                activity.getArticleAuthors() != null ? article.getArticleAuthors().stream().map((i) -> AuthorDTO.mapFromEntity(i.getAuthor())).toList() : null
-//          );
-//      }
+  //      public static ActivityDTO fromEntityToDTO(Activity activity) {
+  //          return new ActivityDTO(
+  //                  activity.getId(),
+  //                  activity.getTitle(),
+  //                  activity.getDescription(),
+  //                  activity.getActivityImages() != null ? activity.getActivityImages().stream().map((activityImage) -> activityImage.getImage().getUrl()).toList() : null,
+  //                  activity.getAssociation() != null ? AssociationDTO.getAssociationDTO(activity.getAssociation()) : null,
+  //                  activity.
+  //  //                activity.getCategory() != null ? article.getCategory().getName() : null,
+  //  //                activity.getArticleAuthors() != null ? article.getArticleAuthors().stream().map((i) -> AuthorDTO.mapFromEntity(i.getAuthor())).toList() : null
+  //          );
+  //      }
 }

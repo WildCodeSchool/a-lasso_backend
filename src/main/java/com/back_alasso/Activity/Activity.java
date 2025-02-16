@@ -8,7 +8,6 @@ import com.back_alasso.core.BaseEntity;
 import jakarta.persistence.*;
 import java.util.List;
 
-
 @Entity
 public class Activity extends BaseEntity {
 
@@ -36,7 +35,6 @@ public class Activity extends BaseEntity {
 
   @OneToMany(mappedBy = "activity")
   private List<ActivityTheme> activityThemes;
-
 
   public String getTitle() {
     return title;
