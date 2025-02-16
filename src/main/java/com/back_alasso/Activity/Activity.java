@@ -2,93 +2,118 @@ package com.back_alasso.Activity;
 
 import com.back_alasso.ActivityImage.ActivityImage;
 import com.back_alasso.ActivityTheme.ActivityTheme;
-import com.back_alasso.Adress.Adress;
+import com.back_alasso.ActivityVoluntary.ActivityVoluntary;
+import com.back_alasso.Adress.Address;
 import com.back_alasso.Association.Association;
 import com.back_alasso.core.BaseEntity;
 import jakarta.persistence.*;
+
+import java.util.Date;
 import java.util.List;
 
 @Entity
 public class Activity extends BaseEntity {
 
-  public static final int TITLE_MAX_LENGTH = 50;
+    public static final int TITLE_MAX_LENGTH = 50;
 
-  @Column(nullable = false, length = TITLE_MAX_LENGTH)
-  private String title;
+    @Column(nullable = false, length = TITLE_MAX_LENGTH)
+    private String title;
 
-  @Column(nullable = false)
-  private String description;
+    @Column(nullable = false)
+    private Date date;
 
-  @Column(nullable = false)
-  private Long volontaries_request;
+    @Column(nullable = false)
+    private String description;
 
-  @ManyToOne
-  @JoinColumn(name = "association_id")
-  private Association association;
+    @Column(nullable = false)
+    private Long volontaries_request;
 
-  @ManyToOne
-  @JoinColumn(name = "adress_id")
-  private Adress adress;
+    @ManyToOne
+    @JoinColumn(name = "association_id")
+    private Association association;
 
-  @OneToMany(mappedBy = "activity")
-  private List<ActivityImage> activityImages;
+    @ManyToOne
+    @JoinColumn(name = "adress_id")
+    private Address address;
 
-  @OneToMany(mappedBy = "activity")
-  private List<ActivityTheme> activityThemes;
+    @OneToMany(mappedBy = "activity")
+    private List<ActivityImage> activityImages;
 
-  public String getTitle() {
-    return title;
-  }
+    @OneToMany(mappedBy = "activity")
+    private List<ActivityTheme> activityThemes;
 
-  public void setTitle(String title) {
-    this.title = title;
-  }
+    @OneToMany(mappedBy = "voluntary")
+    private List<ActivityVoluntary> activityVoluntaries;
 
-  public String getDescription() {
-    return description;
-  }
+    public String getTitle() {
+        return title;
+    }
 
-  public void setDescription(String description) {
-    this.description = description;
-  }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-  public Long getVolontaries_request() {
-    return volontaries_request;
-  }
+    public String getDescription() {
+        return description;
+    }
 
-  public void setVolontaries_request(Long volontaries_request) {
-    this.volontaries_request = volontaries_request;
-  }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-  public Association getAssociation() {
-    return association;
-  }
+    public Long getVolontaries_request() {
+        return volontaries_request;
+    }
 
-  public void setAssociation(Association association) {
-    this.association = association;
-  }
+    public void setVolontaries_request(Long volontaries_request) {
+        this.volontaries_request = volontaries_request;
+    }
 
-  public Adress getAdress() {
-    return adress;
-  }
+    public Association getAssociation() {
+        return association;
+    }
 
-  public void setAdress(Adress adress) {
-    this.adress = adress;
-  }
+    public void setAssociation(Association association) {
+        this.association = association;
+    }
 
-  public List<ActivityImage> getActivityImages() {
-    return activityImages;
-  }
+    public Address getAddress() {
+        return address;
+    }
 
-  public void setActivityImages(List<ActivityImage> activityImages) {
-    this.activityImages = activityImages;
-  }
+    public void setAddress(Address address) {
+        this.address = address;
+    }
 
-  public List<ActivityTheme> getActivityThemes() {
-    return activityThemes;
-  }
+    public List<ActivityImage> getActivityImages() {
+        return activityImages;
+    }
 
-  public void setActivityThemes(List<ActivityTheme> activityThemes) {
-    this.activityThemes = activityThemes;
-  }
+    public void setActivityImages(List<ActivityImage> activityImages) {
+        this.activityImages = activityImages;
+    }
+
+    public List<ActivityTheme> getActivityThemes() {
+        return activityThemes;
+    }
+
+    public void setActivityThemes(List<ActivityTheme> activityThemes) {
+        this.activityThemes = activityThemes;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public List<ActivityVoluntary> getActivityVoluntaries() {
+        return activityVoluntaries;
+    }
+
+    public void setActivityVoluntaries(List<ActivityVoluntary> activityVoluntaries) {
+        this.activityVoluntaries = activityVoluntaries;
+    }
 }
