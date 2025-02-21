@@ -1,158 +1,77 @@
-//package com.back_alasso.config;
-//
-//import com.back_alasso.Activity.Activity;
-//import com.back_alasso.Activity.ActivityRepository;
-//import com.back_alasso.ActivityImage.ActivityImage;
-//import com.back_alasso.ActivityVoluntary.ActivityVoluntary;
-//import com.back_alasso.ActivityTheme.ActivityTheme;
-//import com.back_alasso.Association.Association;
-//import com.back_alasso.Address.Address;
-//import com.back_alasso.Image.Image;
-//import com.back_alasso.Image.ImageEnumType;
-//import com.back_alasso.Theme.ThemeNameEnumType;
-//import com.back_alasso.Voluntary.Voluntary;
-//import com.back_alasso.Country.Country;
-//import com.back_alasso.Theme.Theme;
-//import com.back_alasso.AssociationImage.AssociationImage;
-//import org.springframework.boot.CommandLineRunner;
-//import org.springframework.context.annotation.Bean;
-//import org.springframework.context.annotation.Configuration;
-//
-//import java.util.ArrayList;
-//import java.util.List;
-//import java.util.Random;
-//
-//@Configuration
-//public class DatabaseInitializer {
-//
-//    private final ActivityRepository activityRepository;
-//
-//    public DatabaseInitializer(ActivityRepository activityRepository) {
-//        this.activityRepository = activityRepository;
-//    }
-//
-//    @Bean
-//    CommandLineRunner init() {
-//        return args -> {
-//            List<Activity> activities = new ArrayList<>();
-//            for (int i = 0; i < 5; i++) {
-//                Activity activity = generateRandomActivity();
-//                activities.add(activity);
-//            }
-//            activityRepository.saveAll(activities);
-//        };
-//    }
-//
-//    private Activity generateRandomActivity() {
-//        Activity activity = new Activity();
-//
-//        // Titre aléatoire
-//        activity.setTitle(generateRandomString(10, 50));
-//
-//        // Description aléatoire
-//        activity.setDescription(generateRandomString(30, 100));
-//
-//        // Date aléatoire
-//        activity.setDate(generateRandomDate());
-//
-//        // Nombre de volontaires demandés
-//        activity.setVolontaries_request(new Random().nextLong(100, 500));
-//
-//        // Associer à une association fictive
-//        Association association = new Association();
-//        association.setName(generateRandomString(5, 20));
-//        activity.setAssociation(association);
-//
-//        // Associer à une adresse fictive
-//        Address address = new Address();
-//        address.setCity(generateRandomString(5, 20));
-//        address.setStreet_name(generateRandomString(5, 20));
-//        address.setZipCode("ZIP" + new Random().nextInt(10000, 99999));
-//        activity.setAddress(address);
-//
-//
-//        // Créer des images fictives
-//        List<ActivityImage> activityImages = new ArrayList<>();
-//        for (int i = 0; i < 3; i++) {
-//            ActivityImage activityImage = new ActivityImage();
-//
-//            Image image = new Image();
-//            image.setUrl("http://example.com/image" + i + ".jpg");
-//            image.setType(generateRandomImageType());
-//
-//            activityImage.setImage(image);
-//            activityImage.setActivity(activity);
-//
-//            activityImages.add(activityImage);
-//        }
-//        activity.setActivityImages(activityImages);
-//
-//        // Créer des thèmes fictifs
-//        List<ActivityTheme> activityThemes = new ArrayList<>();
-//        for (int i = 0; i < 2; i++) {
-//            ActivityTheme activityTheme = new ActivityTheme();
-//            Theme theme = new Theme();
-//            theme.setName(generateRandomThemeType());
-//            theme.setIcon_url("http://example.com/icon" + i + ".png");
-//
-//            activityTheme.setTheme(theme);
-//            activityTheme.setActivity(activity);
-//            activityThemes.add(activityTheme);
-//        }
-//        activity.setActivityThemes(activityThemes);
-//
-//        // Créer des volontaires fictifs
-//        List<ActivityVoluntary> activityVoluntaries = new ArrayList<>();
-//        for (int i = 0; i < 5; i++) {
-//            ActivityVoluntary activityVoluntary = new ActivityVoluntary();
-//            activityVoluntary.setIs_saved(new Random().nextBoolean());
-//            activityVoluntary.setIs_registered(new Random().nextBoolean());
-//
-//            Voluntary voluntary = new Voluntary();
-//            voluntary.setFirst_name(generateRandomString(3, 15));
-//            voluntary.setLast_name(generateRandomString(3, 15));
-//            voluntary.setCity(generateRandomString(5, 20));
-//
-//            activityVoluntary.setVoluntary(voluntary);
-//            activityVoluntary.setActivity(activity);
-//
-//            activityVoluntaries.add(activityVoluntary);
-//        }
-//        activity.setActivityVoluntaries(activityVoluntaries);
-//
-//        return activity;
-//    }
-//
-//    // Méthode pour générer une chaîne aléatoire entre deux longueurs
-//    private static String generateRandomString(int minLength, int maxLength) {
-//        int length = new Random().nextInt(maxLength - minLength) + minLength;
-//        StringBuilder stringBuilder = new StringBuilder();
-//        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ";
-//        for (int i = 0; i < length; i++) {
-//            stringBuilder.append(characters.charAt(new Random().nextInt(characters.length())));
-//        }
-//        return stringBuilder.toString();
-//    }
-//
-//    // Méthode pour générer une date aléatoire
-//    private static java.util.Date generateRandomDate() {
-//        long minDate = 1672531200000L; // 01-01-2023 (en millisecondes)
-//        long maxDate = 1735680000000L; // 01-01-2025 (en millisecondes)
-//        return new java.util.Date(new Random().nextLong(minDate, maxDate));
-//    }
-//
-//    // Méthode pour générer un UUID
-//    private static String generateRandomUUID() {
-//        return java.util.UUID.randomUUID().toString();
-//    }
-//
-//    // Méthode pour générer un type d'image aléatoire
-//    private static ImageEnumType generateRandomImageType() {
-//        return ImageEnumType.values()[new Random().nextInt(ImageEnumType.values().length)];
-//    }
-//
-//    // Méthode pour générer un type de theme aléatoire
-//    private static ThemeNameEnumType generateRandomThemeType() {
-//        return ThemeNameEnumType.values()[new Random().nextInt(ImageEnumType.values().length)];
-//    }
-//}
+package com.back_alasso.config;
+
+import com.back_alasso.Address.AddressRepository;
+import com.back_alasso.AssociationImage.AssociationImageRepository;
+
+import com.back_alasso.Association.Association;
+import com.back_alasso.Address.Address;
+import com.back_alasso.Association.AssociationRepository;
+import com.back_alasso.Country.CountryRepository;
+import com.back_alasso.Image.Image;
+import com.back_alasso.Image.ImageEnumType;
+import com.back_alasso.Image.ImageRepository;
+
+import com.back_alasso.User.AccountEnumType;
+import com.back_alasso.User.UserEnumType;
+
+import com.back_alasso.Country.Country;
+
+import com.back_alasso.AssociationImage.AssociationImage;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import java.time.LocalDate;
+
+
+@Configuration
+public class DatabaseInitializer {
+
+    // const
+    public static final int FIRST_HOUSE_NUMBER = 7;
+    public static final int FIRST_ASSO_YEAR_FOUNDED = 1864;
+    public static final int FIRST_ASSO_MONTH_FOUNDED = 8;
+    public static final int FIRST_ASSO_DAY_FOUNDED = 25;
+
+    public static final int NAME_MAX_LENGTH = 50;
+
+    private final CountryRepository countryRepository;
+    private final AddressRepository addressRepository;
+    private final AssociationRepository associationRepository;
+    private final AssociationImageRepository associationImageRepository;
+    private final ImageRepository imageRepository;
+
+    public DatabaseInitializer(CountryRepository countryRepository, AddressRepository addressRepository, AssociationRepository associationRepository, AssociationImageRepository associationImageRepository, ImageRepository imageRepository) {
+        this.countryRepository = countryRepository;
+        this.addressRepository = addressRepository;
+        this.associationRepository = associationRepository;
+        this.associationImageRepository = associationImageRepository;
+        this.imageRepository = imageRepository;
+    }
+
+    @Bean
+    CommandLineRunner init() {
+        Country firstCountry = new Country("France");
+
+        Address firstAddress = new Address(FIRST_HOUSE_NUMBER, "rue de l'industrie", null, "44120", "VERTOU", firstCountry);
+
+        Image laCroixRougePicture1 = new Image("/images/LaCroixRougePicture1.jpg", ImageEnumType.PROFILE_ASSOCIATION);
+
+        Association fristAssociation = new Association("Une organisation pour aider ceux dans le besoin", "Henry DUNANT",
+                LocalDate.of(FIRST_ASSO_YEAR_FOUNDED, FIRST_ASSO_MONTH_FOUNDED, FIRST_ASSO_DAY_FOUNDED), "LA CROIX ROUGE", firstAddress, null,
+                UserEnumType.ASSOCIATION, AccountEnumType.ACTIVE, "hashed_password", "lacroixrouge@gmail.com", null);
+
+        AssociationImage laCroixRougeImages = new AssociationImage(laCroixRougePicture1, fristAssociation);
+
+        return args -> {
+            countryRepository.save(firstCountry);
+            addressRepository.save(firstAddress);
+            imageRepository.save(laCroixRougePicture1);
+            associationRepository.save(fristAssociation);
+            associationImageRepository.save(laCroixRougeImages);
+        };
+    }
+
+}
+
+
