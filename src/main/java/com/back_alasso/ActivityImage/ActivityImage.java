@@ -10,32 +10,32 @@ import jakarta.persistence.ManyToOne;
 @Entity
 public class ActivityImage extends BaseEntity {
 
-    @ManyToOne
-    @JoinColumn(name = "image_id")
-    private Image image;
+  @ManyToOne
+  @JoinColumn(name = "image_id")
+  private Image image;
 
-    @ManyToOne
-    @JoinColumn(name = "activity_id")
-    private Activity activity;
+  @ManyToOne
+  @JoinColumn(name = "activity_id")
+  private Activity activity;
 
-    public ActivityImage(Image image, Activity activity) {
-        this.image = image;
-        this.activity = activity;
-    }
+  public ActivityImage(Image image, Activity activity) {
+    this.image = image;
+    this.activity = activity;
+  }
 
-    public Image getImage() {
-        return image;
-    }
+  public Image getImage() {
+    return image;
+  }
 
-    public void setImage(Image image) {
-        this.image = image;
-    }
+  public void setImage(Image image) {
+    this.image = image;
+  }
 
-    public Activity getActivity() {
-        return activity;
-    }
+  public Activity getActivity() {
+    return activity;
+  }
 
-    public void setActivity(Activity activity) {
-        this.activity = activity;
-    }
+  public void setActivity(Activity activity) {
+    this.activity = activity;
+  }
 }

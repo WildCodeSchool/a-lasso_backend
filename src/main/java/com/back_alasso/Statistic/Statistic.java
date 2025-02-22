@@ -10,45 +10,45 @@ import jakarta.persistence.ManyToOne;
 @Entity
 public class Statistic extends BaseEntity {
 
-    public static final int DESCRIPTION_MAX_LENGTH = 100;
+  public static final int DESCRIPTION_MAX_LENGTH = 100;
 
-    @Column(nullable = false)
-    private Integer value;
+  @Column(nullable = false)
+  private Integer value;
 
-    @Column(nullable = false, length = DESCRIPTION_MAX_LENGTH)
-    private String description;
+  @Column(nullable = false, length = DESCRIPTION_MAX_LENGTH)
+  private String description;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+  @ManyToOne
+  @JoinColumn(name = "user_id")
+  private User user;
 
-    public Statistic(Integer value, String description, User user) {
-        this.value = value;
-        this.description = description;
-        this.user = user;
-    }
+  public Statistic(Integer value, String description, User user) {
+    this.value = value;
+    this.description = description;
+    this.user = user;
+  }
 
-    public Integer getValue() {
-        return value;
-    }
+  public Integer getValue() {
+    return value;
+  }
 
-    public void setValue(Integer value) {
-        this.value = value;
-    }
+  public void setValue(Integer value) {
+    this.value = value;
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public User getUser() {
-        return user;
-    }
+  public User getUser() {
+    return user;
+  }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+  public void setUser(User user) {
+    this.user = user;
+  }
 }
