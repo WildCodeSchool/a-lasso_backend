@@ -24,6 +24,9 @@ public class Message extends BaseEntity {
   @JoinColumn(name = "activity_id")
   private Activity activity;
 
+  // Necessary to have an empty constructor to instance object.
+  public Message() {}
+
   public Message(String content, User user, Activity activity) {
     this.content = content;
     this.user = user;

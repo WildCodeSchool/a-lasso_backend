@@ -37,8 +37,13 @@ public class Association extends User {
   @OneToMany(mappedBy = "association")
   private List<AssociationImage> associationImages;
 
-  @OneToMany(mappedBy = "userAssociation")
+  @OneToMany(mappedBy = "association")
   private List<AssociationFollower> associationFollowers;
+
+  // Necessary to have an empty constructor to instance object.
+  public Association() {
+    super();
+  }
 
   public Association(
     String description,

@@ -18,6 +18,9 @@ public class AssociationImage extends BaseEntity {
   @JoinColumn(name = "association_id")
   private Association association;
 
+  // Necessary to have an empty constructor to instance object.
+  public AssociationImage() {}
+
   public AssociationImage(Image image, Association association) {
     this.image = image;
     this.association = association;

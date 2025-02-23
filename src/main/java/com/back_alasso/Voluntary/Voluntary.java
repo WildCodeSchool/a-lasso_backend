@@ -15,6 +15,7 @@ public class Voluntary extends User {
 
   public static final int CITY_MAX_LENGTH = 200;
   public static final int NAME_MAX_LENGTH = 50;
+  public static final int PHONE_MAX_LENGTH = 20;
 
   @Column(nullable = false, length = CITY_MAX_LENGTH)
   private String city;
@@ -25,6 +26,9 @@ public class Voluntary extends User {
   @Column(nullable = false, length = NAME_MAX_LENGTH)
   private String last_name;
 
+  @Column(nullable = true, length = PHONE_MAX_LENGTH)
+  private String mobile_phone;
+
   @ManyToOne
   @JoinColumn(name = "country_id")
   private Country country;
@@ -33,8 +37,13 @@ public class Voluntary extends User {
   @JoinColumn(name = "image_id")
   private Image avatar;
 
-  @OneToMany(mappedBy = "userVoluntary")
+  @OneToMany(mappedBy = "voluntary")
   private List<AssociationFollower> associationFollowers;
+
+  // Necessary to have an empty constructor to instance object.
+  public Voluntary() {
+    super();
+  }
 
   public Voluntary(
     UserEnumType user_type,
@@ -42,10 +51,11 @@ public class Voluntary extends User {
     String hashed_password,
     String email,
     String city,
+    Country country,
     String first_name,
     String last_name,
-    Country country,
     Image avatar,
+    String mobile_phone,
     List<AssociationFollower> associationFollowers,
     Preferences preferences
   ) {
@@ -55,6 +65,7 @@ public class Voluntary extends User {
     this.last_name = last_name;
     this.country = country;
     this.avatar = avatar;
+    this.mobile_phone = mobile_phone;
     this.associationFollowers = associationFollowers;
   }
 
@@ -104,5 +115,13 @@ public class Voluntary extends User {
 
   public void setAssociationFollowers(List<AssociationFollower> associationFollowers) {
     this.associationFollowers = associationFollowers;
+  }
+
+  public String getMobile_phone() {
+    return mobile_phone;
+  }
+
+  public void setMobile_phone(String mobile_phone) {
+    this.mobile_phone = mobile_phone;
   }
 }

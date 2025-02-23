@@ -47,6 +47,9 @@ public class User extends BaseEntity {
   @JoinColumn(name = "geolocalisation_id")
   private Geolocalisation geolocalisation;
 
+  // Necessary to have an empty constructor to instance object.
+  public User() {}
+
   public User(UserEnumType user_type, AccountEnumType account_status, String hashed_password, String email, Preferences preferences) {
     this.user_type = user_type;
     this.account_status = account_status;

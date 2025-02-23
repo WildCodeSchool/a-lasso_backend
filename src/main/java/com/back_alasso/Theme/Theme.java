@@ -16,6 +16,9 @@ public class Theme extends BaseEntity {
   @Column(nullable = false, length = ICON_URL_MAX_LENGTH)
   private String icon_url;
 
+  // Necessary to have an empty constructor to instance object.
+  public Theme() {}
+
   public Theme(ThemeNameEnumType name, String icon_url) {
     this.name = name;
     this.icon_url = icon_url;

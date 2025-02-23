@@ -12,7 +12,7 @@ public record AssociationDTO(String name, String logo, boolean isFollow) {
         .filter(i -> i.getImage().getType().name().equals("logo"))
         .map(i -> i.getImage().getUrl())
         .collect(Collectors.joining()),
-      association.getAssociationFollowers().stream().anyMatch(a -> a.getUserAssociation().getId().equals(association.getId()) && a.isIs_follow())
+      association.getAssociationFollowers().stream().anyMatch(a -> a.getAssociation().getId().equals(association.getId()) && a.isIs_follow())
     );
   }
 }

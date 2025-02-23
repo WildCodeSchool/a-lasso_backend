@@ -16,6 +16,7 @@ import java.util.List;
 public class Activity extends BaseEntity {
 
   public static final int TITLE_MAX_LENGTH = 50;
+  public static final int DESC_MAX_LENGTH = 1000;
 
   @Column(nullable = false, length = TITLE_MAX_LENGTH)
   private String title;
@@ -23,7 +24,7 @@ public class Activity extends BaseEntity {
   @Column(nullable = false)
   private LocalDateTime date;
 
-  @Column(nullable = false)
+  @Column(nullable = false, length = DESC_MAX_LENGTH)
   private String description;
 
   @Column(nullable = false)
@@ -52,6 +53,9 @@ public class Activity extends BaseEntity {
   @ManyToOne
   @JoinColumn(name = "geolocalisation_id")
   private Geolocalisation geolocalisation;
+
+  // Necessary to have an empty constructor to instance object.
+  public Activity() {}
 
   public Activity(
     String title,

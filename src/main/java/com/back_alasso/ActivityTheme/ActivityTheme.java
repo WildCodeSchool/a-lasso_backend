@@ -18,6 +18,9 @@ public class ActivityTheme extends BaseEntity {
   @JoinColumn(name = "theme_id")
   private Theme theme;
 
+  // Necessary to have an empty constructor to instance object.
+  public ActivityTheme() {}
+
   public ActivityTheme(Activity activity, Theme theme) {
     this.activity = activity;
     this.theme = theme;

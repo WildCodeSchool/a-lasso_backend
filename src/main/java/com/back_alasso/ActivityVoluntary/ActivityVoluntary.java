@@ -25,6 +25,16 @@ public class ActivityVoluntary extends BaseEntity {
   @JoinColumn(name = "activity_id")
   private Activity activity;
 
+  // Necessary to have an empty constructor to instance object.
+  public ActivityVoluntary() {}
+
+  public ActivityVoluntary(boolean is_saved, boolean is_registered, Voluntary voluntary, Activity activity) {
+    this.is_saved = is_saved;
+    this.is_registered = is_registered;
+    this.voluntary = voluntary;
+    this.activity = activity;
+  }
+
   public Voluntary getVoluntary() {
     return voluntary;
   }

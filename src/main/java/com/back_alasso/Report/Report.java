@@ -37,12 +37,25 @@ public class Report extends BaseEntity {
   @JoinColumn(name = "user_admin_id")
   private User user_admin;
 
-  public Report(StatusReportEnumType status, ReasonReportEnumType reason, User user_reported, User user_reporter, User user_admin) {
+  // Necessary to have an empty constructor to instance object.
+  public Report() {}
+
+  public Report(
+    StatusReportEnumType status,
+    ReasonReportEnumType reason,
+    User user_reported,
+    User user_reporter,
+    User user_admin,
+    String message_reporter,
+    String commentary_admin
+  ) {
     this.status = status;
     this.reason = reason;
     this.user_reported = user_reported;
     this.user_reporter = user_reporter;
     this.user_admin = user_admin;
+    this.message_reporter = message_reporter;
+    this.commentary_admin = commentary_admin;
   }
 
   public String getMessage_reporter() {

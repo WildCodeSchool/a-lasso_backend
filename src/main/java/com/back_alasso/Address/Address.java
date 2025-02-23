@@ -31,6 +31,9 @@ public class Address extends BaseEntity {
   @JoinColumn(name = "country_id")
   private Country country;
 
+  // Necessary to have an empty constructor to instance object.
+  public Address() {}
+
   public Address(Integer house_number, String street_name, AddressSuffixEnumType adress_suffix, String zipCode, String city, Country country) {
     this.house_number = house_number;
     this.street_name = street_name;

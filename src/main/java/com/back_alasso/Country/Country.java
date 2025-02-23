@@ -13,6 +13,9 @@ public class Country extends BaseEntity {
   private String name;
 
   // Constructor
+  // Necessary to have an empty constructor to instance object.
+  public Country() {}
+
   public Country(String name) {
     this.name = name;
   }

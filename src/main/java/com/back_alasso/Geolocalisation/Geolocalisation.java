@@ -24,6 +24,9 @@ public class Geolocalisation extends BaseEntity {
   @OneToMany(mappedBy = "geolocalisation") // one localisation can be shared by some activities
   private List<Activity> activities = new ArrayList<>();
 
+  // Necessary to have an empty constructor to instance object.
+  public Geolocalisation() {}
+
   // constructor for activity or user(voluntary or association) 's localisation
   public Geolocalisation(double longitude, double latitude) {
     this.longitude = longitude;
@@ -65,12 +68,10 @@ public class Geolocalisation extends BaseEntity {
   // Method to add an activity to the geolocalisation
   public void addActivity(Activity activity) {
     this.activities.add(activity);
-    activity.setGeolocalisation(this);
   }
 
   // Method to add a user(volutary or association) to the geolocalisation
   public void addUser(User user) {
     this.users.add(user);
-    user.setGeolocalisation(this);
   }
 }

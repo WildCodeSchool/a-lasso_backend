@@ -6,10 +6,14 @@ import com.back_alasso.ActivityImage.ActivityImage;
 import com.back_alasso.ActivityImage.ActivityImageRepository;
 import com.back_alasso.ActivityTheme.ActivityTheme;
 import com.back_alasso.ActivityTheme.ActivityThemeRepository;
+import com.back_alasso.ActivityVoluntary.ActivityVoluntary;
+import com.back_alasso.ActivityVoluntary.ActivityVoluntaryRepository;
 import com.back_alasso.Address.Address;
 import com.back_alasso.Address.AddressRepository;
 import com.back_alasso.Association.Association;
 import com.back_alasso.Association.AssociationRepository;
+import com.back_alasso.AssociationFollower.AssociationFollower;
+import com.back_alasso.AssociationFollower.AssociationFollowerRepository;
 import com.back_alasso.AssociationImage.AssociationImage;
 import com.back_alasso.AssociationImage.AssociationImageRepository;
 import com.back_alasso.Country.Country;
@@ -19,13 +23,23 @@ import com.back_alasso.Geolocalisation.GeolocalisationRepository;
 import com.back_alasso.Image.Image;
 import com.back_alasso.Image.ImageEnumType;
 import com.back_alasso.Image.ImageRepository;
+import com.back_alasso.Message.Message;
+import com.back_alasso.Message.MessageRepository;
 import com.back_alasso.Preferences.Preferences;
 import com.back_alasso.Preferences.PreferencesRepository;
+import com.back_alasso.Report.ReasonReportEnumType;
+import com.back_alasso.Report.Report;
+import com.back_alasso.Report.ReportRepository;
+import com.back_alasso.Report.StatusReportEnumType;
+import com.back_alasso.Statistic.Statistic;
+import com.back_alasso.Statistic.StatisticRepository;
 import com.back_alasso.Theme.Theme;
 import com.back_alasso.Theme.ThemeNameEnumType;
 import com.back_alasso.Theme.ThemeRepository;
 import com.back_alasso.User.AccountEnumType;
 import com.back_alasso.User.UserEnumType;
+import com.back_alasso.Voluntary.Voluntary;
+import com.back_alasso.Voluntary.VoluntaryRepository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -38,17 +52,23 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class DatabaseInitializer {
 
-  // const
   public static final int FIRST_HOUSE_NUMBER = 7;
   public static final int FIRST_ASSO_YEAR_FOUNDED = 1864;
   public static final int FIRST_ASSO_MONTH_FOUNDED = 8;
   public static final int FIRST_ASSO_DAY_FOUNDED = 25;
-
   public static final double FIRST_ASSO_LONGITUDE = -1.4693;
   public static final double FIRST_ASSO_LATITUDE = 47.1687;
+  public static final int FIRST_ASSO_FIRST_STATS = 70521;
+  public static final int FIRST_ASSO_SECOND_STATS = 64430;
+  public static final int FIRST_ASSO_THIRD_STATS = 10446;
+
   public static final double FIRST_ACTIVITY_LATITUDE = 47.2173;
   public static final double FIRST_ACTIVITY_LONGITUDE = -1.5534;
   public static final long FIRST_ACTIVITY_VOLONTARY_REQUEST = 10;
+  public static final int ACTIVITY_THEME_NUMBER = 5;
+
+  public static final double FIRST_VOLUNTARY_LATITUDE = 47.218637;
+  public static final double FIRST_VOLUNTARY_LONGITUDE = -1.554136;
 
   private final CountryRepository countryRepository;
   private final AddressRepository addressRepository;
@@ -61,6 +81,12 @@ public class DatabaseInitializer {
   private final ActivityImageRepository activityImageRepository;
   private final ActivityRepository activityRepository;
   private final ActivityThemeRepository activityThemeRepository;
+  private final StatisticRepository statisticRepository;
+  private final VoluntaryRepository voluntaryRepository;
+  private final AssociationFollowerRepository associationFollowerRepository;
+  private final ActivityVoluntaryRepository activityVoluntaryRepository;
+  private final MessageRepository messageRepository;
+  private final ReportRepository reportRepository;
 
   public DatabaseInitializer(
     CountryRepository countryRepository,
@@ -73,7 +99,13 @@ public class DatabaseInitializer {
     PreferencesRepository preferencesRepository,
     ActivityImageRepository activityImageRepository,
     ActivityRepository activityRepository,
-    ActivityThemeRepository activityThemeRepository
+    ActivityThemeRepository activityThemeRepository,
+    StatisticRepository statisticRepository,
+    VoluntaryRepository voluntaryRepository,
+    AssociationFollowerRepository associationFollowerRepository,
+    ActivityVoluntaryRepository activityVoluntaryRepository,
+    MessageRepository messageRepository,
+    ReportRepository reportRepository
   ) {
     this.countryRepository = countryRepository;
     this.addressRepository = addressRepository;
@@ -86,6 +118,12 @@ public class DatabaseInitializer {
     this.activityImageRepository = activityImageRepository;
     this.activityRepository = activityRepository;
     this.activityThemeRepository = activityThemeRepository;
+    this.statisticRepository = statisticRepository;
+    this.voluntaryRepository = voluntaryRepository;
+    this.associationFollowerRepository = associationFollowerRepository;
+    this.activityVoluntaryRepository = activityVoluntaryRepository;
+    this.messageRepository = messageRepository;
+    this.reportRepository = reportRepository;
   }
 
   @Bean
@@ -102,93 +140,193 @@ public class DatabaseInitializer {
       new Theme(ThemeNameEnumType.Sport, "/images/Activity/Themes/Theme_Sport.png")
     );
 
-    // initiate example of one association : "La Croix Rouge"
-    Address firstAddress = new Address(FIRST_HOUSE_NUMBER, "rue de l'industrie", null, "44120", "VERTOU", firstCountry);
-    Image laCroixRougeProfileImage = new Image("/images/Association/croixRouge.png", ImageEnumType.PROFILE_ASSOCIATION);
-    Image laCroixRougeLogo = new Image("/images/Association/logoCroixRouge.png", ImageEnumType.LOGO);
+    // initiate examples of associations
+    List<Address> associationAddresses = Arrays.asList(new Address(FIRST_HOUSE_NUMBER, "rue de l'industrie", null, "44120", "VERTOU", firstCountry));
 
-    Association firstAssociation = new Association(
-      "La Croix-Rouge française agit pour protéger et relever sans condition, les personnes en situation de vulnérabilité et construire avec elles leur résilience.",
-      "Henry DUNANT",
-      LocalDate.of(FIRST_ASSO_YEAR_FOUNDED, FIRST_ASSO_MONTH_FOUNDED, FIRST_ASSO_DAY_FOUNDED),
-      "LA CROIX ROUGE",
-      firstAddress,
-      null,
-      UserEnumType.ASSOCIATION,
-      AccountEnumType.ACTIVE,
-      "hashed_password",
-      "lacroixrouge@gmail.com",
-      null
+    List<Image> images = Arrays.asList(
+      new Image("/images/Association/croixRouge.png", ImageEnumType.PROFILE_ASSOCIATION),
+      new Image("/images/Association/logoCroixRouge.png", ImageEnumType.LOGO)
     );
 
-    Preferences laCroixRougePreferences = new Preferences(firstAssociation);
-    Geolocalisation laCroixRougeLocalisation = new Geolocalisation(FIRST_ASSO_LONGITUDE, FIRST_ASSO_LATITUDE);
-    laCroixRougeLocalisation.addUser(firstAssociation);
-
-    List<AssociationImage> laCroixRougeAssociationImages = Arrays.asList(
-      new AssociationImage(laCroixRougeProfileImage, firstAssociation),
-      new AssociationImage(laCroixRougeLogo, firstAssociation)
+    List<Association> associations = Arrays.asList(
+      new Association(
+        "La Croix-Rouge française agit pour protéger et relever sans condition, les personnes en situation de vulnérabilité et construire avec elles leur résilience.",
+        "Henry DUNANT",
+        LocalDate.of(FIRST_ASSO_YEAR_FOUNDED, FIRST_ASSO_MONTH_FOUNDED, FIRST_ASSO_DAY_FOUNDED),
+        "LA CROIX ROUGE",
+        associationAddresses.get(0),
+        null,
+        UserEnumType.ASSOCIATION,
+        AccountEnumType.ACTIVE,
+        "hashed_password",
+        "lacroixrouge@gmail.com",
+        null
+      )
     );
 
-    // initiate example of one activity : "La Maraude de La Croix Rouge"
-    Image maraudeOne = new Image("/images/Association/maraude1.png", ImageEnumType.ACTIVITY);
-    Image maraudeTwo = new Image("/images/Association/maraude2.png", ImageEnumType.ACTIVITY);
-    Address maraudeAddress = new Address(FIRST_HOUSE_NUMBER, "rue du bonheur", null, "44300", "NANTES", firstCountry);
+    List<Preferences> associationPreferences = Arrays.asList(new Preferences(associations.get(0)));
 
-    Activity maraudeActivity = new Activity(
-      "La maraude",
-      LocalDateTime.parse("2025-12-22 04:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
-      "Vous souhaitez vous engager pour une société plus humaine et solidaire ? Vous êtes sensible aux besoins des personnes sans-abri ?\n" +
-      "\n" +
-      "\n" +
-      "Participez à des maraudes pour créer du lien social avec les personnes sans-abri. Au sein d'une équipe, partez à la rencontre de ces \"invisibles\" pour le temps d’une soirée, leur apporter votre soutien, distribuer des cafés, des couvertures et des sourires, et préserver ainsi leur dignité et favoriser leur retour à l'autonomie.",
-      FIRST_ACTIVITY_VOLONTARY_REQUEST,
-      firstAssociation,
-      maraudeAddress,
-      null,
-      null
+    List<Geolocalisation> associationLocalisations = Arrays.asList(new Geolocalisation(FIRST_ASSO_LONGITUDE, FIRST_ASSO_LATITUDE));
+
+    associationLocalisations.get(0).addUser(associations.get(0));
+
+    List<AssociationImage> associationImages = Arrays.asList(
+      new AssociationImage(images.get(0), associations.get(0)),
+      new AssociationImage(images.get(1), associations.get(0))
     );
 
-    List<ActivityImage> maraudeActivityImages = Arrays.asList(
-      new ActivityImage(maraudeOne, maraudeActivity),
-      new ActivityImage(maraudeTwo, maraudeActivity)
+    List<Statistic> associationStatistics = Arrays.asList(
+      new Statistic(FIRST_ASSO_FIRST_STATS, "bénévoles", associations.get(0)),
+      new Statistic(FIRST_ASSO_SECOND_STATS, "personnes prises en charge", associations.get(0)),
+      new Statistic(FIRST_ASSO_THIRD_STATS, "interventions", associations.get(0))
     );
 
-    Geolocalisation maraudeLocalisation = new Geolocalisation(FIRST_ACTIVITY_LONGITUDE, FIRST_ACTIVITY_LATITUDE);
-    maraudeLocalisation.addActivity(maraudeActivity);
+    // initiate examples of activities
+    List<Image> imagesTwo = Arrays.asList(
+      new Image("/images/Association/maraude1.png", ImageEnumType.ACTIVITY),
+      new Image("/images/Association/maraude2.png", ImageEnumType.ACTIVITY)
+    );
+
+    List<Address> activityAddresses = Arrays.asList(new Address(FIRST_HOUSE_NUMBER, "rue du bonheur", null, "44300", "NANTES", firstCountry));
+
+    List<Activity> activities = Arrays.asList(
+      new Activity(
+        "La maraude",
+        LocalDateTime.parse("2025-12-22 04:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
+        "Vous souhaitez vous engager pour une société plus humaine et solidaire ? Vous êtes sensible aux besoins des personnes sans-abri ?\n" +
+        "\n" +
+        "\n" +
+        "Participez à des maraudes pour créer du lien social avec les personnes sans-abri. Au sein d'une équipe, partez à la rencontre de ces \"invisibles\" pour le temps d’une soirée, leur apporter votre soutien, distribuer des cafés, des couvertures et des sourires, et préserver ainsi leur dignité et favoriser leur retour à l'autonomie.",
+        FIRST_ACTIVITY_VOLONTARY_REQUEST,
+        associations.get(0),
+        activityAddresses.get(0),
+        null,
+        null
+      )
+    );
+
+    List<ActivityImage> activityImages = Arrays.asList(
+      new ActivityImage(imagesTwo.get(0), activities.get(0)),
+      new ActivityImage(imagesTwo.get(1), activities.get(0))
+    );
+
+    List<ActivityTheme> activityThemes = Arrays.asList(
+      new ActivityTheme(activities.get(0), allThemesForActivity.get(0)),
+      new ActivityTheme(activities.get(0), allThemesForActivity.get(ACTIVITY_THEME_NUMBER))
+    );
+
+    List<Geolocalisation> activityLocalisations = Arrays.asList(new Geolocalisation(FIRST_ACTIVITY_LONGITUDE, FIRST_ACTIVITY_LATITUDE));
+
+    activityLocalisations.get(0).addActivity(activities.get(0));
+
+    // initiate exemples of voluntaries
+    List<Image> voluntaryAvatars = Arrays.asList(new Image("/images/Voluntary/avatarFirstVoluntary.png", ImageEnumType.AVATAR));
+
+    List<Voluntary> voluntaries = Arrays.asList(
+      new Voluntary(
+        UserEnumType.VOLUNTARY,
+        AccountEnumType.ACTIVE,
+        "hashPasswordToReplace",
+        "pierre@gmail.com",
+        "Nantes",
+        firstCountry,
+        "Pierre",
+        "Lapin",
+        voluntaryAvatars.get(0),
+        "+33612345678",
+        null,
+        null
+      ),
+      new Voluntary(
+        UserEnumType.ADMIN,
+        AccountEnumType.ACTIVE,
+        "hashPasswordToReplace",
+        "admin@gmail.com",
+        "Nantes",
+        firstCountry,
+        "Jacques",
+        "Loyal",
+        voluntaryAvatars.get(0),
+        "+33612345678",
+        null,
+        null
+      )
+    );
+
+    List<Preferences> voluntaryPreferences = Arrays.asList(new Preferences(voluntaries.get(0)), new Preferences(voluntaries.get(1)));
+
+    List<AssociationFollower> voluntaryAssociationFollowers = Arrays.asList(
+      new AssociationFollower(true, true, voluntaries.get(0), associations.get(0))
+    );
+
+    List<ActivityVoluntary> activityVoluntaries = Arrays.asList(new ActivityVoluntary(false, true, voluntaries.get(0), activities.get(0)));
+
+    List<Geolocalisation> voluntaryLocalisations = Arrays.asList(new Geolocalisation(FIRST_VOLUNTARY_LONGITUDE, FIRST_VOLUNTARY_LATITUDE));
+
+    voluntaryLocalisations.get(0).addUser(voluntaries.get(0));
+    voluntaryLocalisations.get(0).addUser(voluntaries.get(1));
+
+    // save messages between associations and voluntaries for a specific activity
+    List<Message> allMessageFirstActivity = Arrays.asList(
+      new Message("Bonjour à tous, merci de participer !", associations.get(0), activities.get(0)),
+      new Message("Bonjour, Faut-il prévoir quelque chose? Des habits de rechange ?", voluntaries.get(0), activities.get(0)),
+      new Message(
+        "Effectivement, il serait plus sage de prévoir quelques affaires." +
+        "\n" +
+        " Plutôt des affaires chaudes, il est prévu des températures négatives pour le jour de l'évènement !",
+        associations.get(0),
+        activities.get(0)
+      )
+    );
+
+    // initiate reports
+    List<Report> allReports = Arrays.asList(
+      new Report(
+        StatusReportEnumType.IN_PROGRESS,
+        ReasonReportEnumType.RULE_VIOLATION,
+        voluntaries.get(0),
+        associations.get(0),
+        voluntaries.get(1),
+        "Lors de ma participation à l’évenement d’aide au SDF, à plusieurs reprise le référent Mr.Patate à tenu des propos dégrant envers les femmes.",
+        "Ce retour concorde avec les 3 précédents."
+      )
+    );
 
     return args -> {
       // save general data
       countryRepository.save(firstCountry);
       themeRepository.saveAll(allThemesForActivity);
 
-      Theme socialTheme = themeRepository.findByName(ThemeNameEnumType.Social);
-      Theme santeTheme = themeRepository.findByName(ThemeNameEnumType.Santé);
+      // save associations
+      addressRepository.saveAll(associationAddresses);
+      imageRepository.saveAll(images);
+      associationRepository.saveAll(associations);
+      associationImageRepository.saveAll(associationImages);
+      geolocalisationRepository.saveAll(associationLocalisations);
+      preferencesRepository.saveAll(associationPreferences);
+      statisticRepository.saveAll(associationStatistics);
 
-      // save association : "La croix rouge"
-      addressRepository.save(firstAddress);
-      imageRepository.save(laCroixRougeProfileImage);
-      imageRepository.save(laCroixRougeLogo);
-      associationRepository.save(firstAssociation);
-      associationImageRepository.saveAll(laCroixRougeAssociationImages);
-      geolocalisationRepository.save(laCroixRougeLocalisation);
-      preferencesRepository.save(laCroixRougePreferences);
+      // save activities
+      imageRepository.saveAll(imagesTwo);
+      addressRepository.saveAll(activityAddresses);
+      activityRepository.saveAll(activities);
+      activityThemeRepository.saveAll(activityThemes);
+      activityImageRepository.saveAll(activityImages);
+      geolocalisationRepository.saveAll(activityLocalisations);
 
-      // save activity : "La Maraude de la Croix Rouge"
-      imageRepository.save(maraudeOne);
-      imageRepository.save(maraudeTwo);
-      activityRepository.save(maraudeActivity);
+      // save voluntaries
+      imageRepository.saveAll(voluntaryAvatars);
+      voluntaryRepository.saveAll(voluntaries);
+      preferencesRepository.saveAll(voluntaryPreferences);
+      associationFollowerRepository.saveAll(voluntaryAssociationFollowers);
+      activityVoluntaryRepository.saveAll(activityVoluntaries);
+      geolocalisationRepository.saveAll(voluntaryLocalisations);
 
-      List<ActivityTheme> maraudeActivityThemes = Arrays.asList(
-        new ActivityTheme(maraudeActivity, socialTheme),
-        new ActivityTheme(maraudeActivity, santeTheme)
-      );
+      // save messages of activity between associations and voluntaries
+      messageRepository.saveAll(allMessageFirstActivity);
 
-      activityThemeRepository.saveAll(maraudeActivityThemes);
-      activityImageRepository.saveAll(maraudeActivityImages);
-      geolocalisationRepository.save(maraudeLocalisation);
-      // save voluntary
-
+      // save reports
+      reportRepository.saveAll(allReports);
     };
   }
 }

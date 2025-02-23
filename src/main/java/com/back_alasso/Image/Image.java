@@ -13,6 +13,9 @@ public class Image extends BaseEntity {
   @Enumerated(EnumType.STRING)
   private ImageEnumType type;
 
+  // Necessary to have an empty constructor to instance object.
+  public Image() {}
+
   public Image(String url, ImageEnumType type) {
     this.url = url;
     this.type = type;

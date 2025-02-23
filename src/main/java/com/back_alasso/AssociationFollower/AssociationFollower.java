@@ -19,11 +19,16 @@ public class AssociationFollower extends BaseEntity {
 
   @ManyToOne
   @JoinColumn(name = "voluntary_id")
-  private Voluntary userVoluntary;
+  private Voluntary voluntary;
 
   @ManyToOne
   @JoinColumn(name = "association_id")
-  private Association userAssociation;
+  private Association association;
+
+  // Necessary to have an empty constructor to instance object.
+  public AssociationFollower() {}
+
+  public AssociationFollower(boolean is_follow, boolean is_notification_active, Voluntary voluntary, Association association) {}
 
   public boolean isIs_notification_active() {
     return is_notification_active;
@@ -41,19 +46,19 @@ public class AssociationFollower extends BaseEntity {
     this.is_follow = is_follow;
   }
 
-  public Voluntary getUserVoluntary() {
-    return userVoluntary;
+  public Voluntary getVoluntary() {
+    return voluntary;
   }
 
-  public void setUserVoluntary(Voluntary userVoluntary) {
-    this.userVoluntary = userVoluntary;
+  public void setVoluntary(Voluntary voluntary) {
+    this.voluntary = voluntary;
   }
 
-  public Association getUserAssociation() {
-    return userAssociation;
+  public Association getAssociation() {
+    return association;
   }
 
-  public void setUserAssociation(Association userAssociation) {
-    this.userAssociation = userAssociation;
+  public void setAssociation(Association association) {
+    this.association = association;
   }
 }

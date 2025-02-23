@@ -26,6 +26,9 @@ public class Preferences extends BaseEntity {
     this.user = user;
   }
 
+  // Necessary to have an empty constructor to instance object.
+  public Preferences() {}
+
   public boolean isIs_dark_theme_selected() {
     return is_dark_theme_selected;
   }

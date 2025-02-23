@@ -22,6 +22,9 @@ public class Statistic extends BaseEntity {
   @JoinColumn(name = "user_id")
   private User user;
 
+  // Necessary to have an empty constructor to instance object.
+  public Statistic() {}
+
   public Statistic(Integer value, String description, User user) {
     this.value = value;
     this.description = description;
