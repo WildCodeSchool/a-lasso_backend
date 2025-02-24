@@ -1,7 +1,6 @@
 package com.back_alasso.Activity;
 
 import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -14,15 +13,15 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "http://localhost:4200") // Allow Angular frontend
 public class ActivityController {
 
-    private final ActivityService activityService;
+  private final ActivityService activityService;
 
-    public ActivityController(ActivityService activityService) {
-        this.activityService = activityService;
-    }
+  public ActivityController(ActivityService activityService) {
+    this.activityService = activityService;
+  }
 
-    @GetMapping
-    public ResponseEntity<List<ActivityDTO>> getAllActivities() {
-        List<ActivityDTO> activities = activityService.getAllActivities();
-        return ResponseEntity.status(HttpStatus.OK).body(activities);
-    }
+  @GetMapping
+  public ResponseEntity<List<ActivityDTO>> getAllActivities() {
+    List<ActivityDTO> activities = activityService.getAllActivities();
+    return ResponseEntity.status(HttpStatus.OK).body(activities);
+  }
 }
