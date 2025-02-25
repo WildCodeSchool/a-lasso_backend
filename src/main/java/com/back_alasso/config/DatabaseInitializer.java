@@ -202,8 +202,8 @@ public class DatabaseInitializer {
       new Geolocalisation(SECOND_ASSO_LONGITUDE, SECOND_ASSO_LATITUDE)
     );
 
-    associationLocalisations.get(0).addUser(associations.get(0));
-    associationLocalisations.get(1).addUser(associations.get(1));
+    associations.get(0).setGeolocalisation(associationLocalisations.get(0));
+    associations.get(1).setGeolocalisation(associationLocalisations.get(1));
 
     List<AssociationImage> associationImages = Arrays.asList(
       new AssociationImage(images.get(0), associations.get(0)),
@@ -270,8 +270,8 @@ public class DatabaseInitializer {
 
     List<Geolocalisation> activityLocalisations = Arrays.asList(new Geolocalisation(FIRST_ACTIVITY_LONGITUDE, FIRST_ACTIVITY_LATITUDE));
 
-    activityLocalisations.get(0).addActivity(activities.get(0));
-    associationLocalisations.get(1).addActivity(activities.get(1));
+    activities.get(0).setGeolocalisation(activityLocalisations.get(0));
+    activities.get(1).setGeolocalisation(associationLocalisations.get(1));
 
     // initiate exemples of voluntaries
     List<Image> voluntaryAvatars = Arrays.asList(new Image("/images/Voluntary/avatarFirstVoluntary.png", ImageEnumType.AVATAR));
@@ -317,8 +317,8 @@ public class DatabaseInitializer {
 
     List<Geolocalisation> voluntaryLocalisations = Arrays.asList(new Geolocalisation(FIRST_VOLUNTARY_LONGITUDE, FIRST_VOLUNTARY_LATITUDE));
 
-    voluntaryLocalisations.get(0).addUser(voluntaries.get(0));
-    voluntaryLocalisations.get(0).addUser(voluntaries.get(1));
+    voluntaries.get(0).setGeolocalisation(voluntaryLocalisations.get(0));
+    voluntaries.get(1).setGeolocalisation(voluntaryLocalisations.get(0));
 
     // save messages between associations and voluntaries for a specific activity
     List<Message> allMessageFirstActivity = Arrays.asList(
@@ -352,29 +352,29 @@ public class DatabaseInitializer {
       themeRepository.saveAll(allThemesForActivity);
 
       // save associations
-      addressRepository.saveAll(associationAddresses);
       imageRepository.saveAll(images);
+      addressRepository.saveAll(associationAddresses);
+      geolocalisationRepository.saveAll(associationLocalisations);
       associationRepository.saveAll(associations);
       associationImageRepository.saveAll(associationImages);
-      geolocalisationRepository.saveAll(associationLocalisations);
       preferencesRepository.saveAll(associationPreferences);
       statisticRepository.saveAll(associationStatistics);
 
       // save activities
       imageRepository.saveAll(imagesTwo);
       addressRepository.saveAll(activityAddresses);
+      geolocalisationRepository.saveAll(activityLocalisations);
       activityRepository.saveAll(activities);
       activityThemeRepository.saveAll(activityThemes);
       activityImageRepository.saveAll(activityImages);
-      geolocalisationRepository.saveAll(activityLocalisations);
 
       // save voluntaries
       imageRepository.saveAll(voluntaryAvatars);
+      geolocalisationRepository.saveAll(voluntaryLocalisations);
       voluntaryRepository.saveAll(voluntaries);
       preferencesRepository.saveAll(voluntaryPreferences);
       associationFollowerRepository.saveAll(voluntaryAssociationFollowers);
       activityVoluntaryRepository.saveAll(activityVoluntaries);
-      geolocalisationRepository.saveAll(voluntaryLocalisations);
 
       // save messages of activity between associations and voluntaries
       messageRepository.saveAll(allMessageFirstActivity);

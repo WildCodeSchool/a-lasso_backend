@@ -6,6 +6,7 @@ import com.back_alasso.ActivityVoluntary.ActivityVoluntary;
 import com.back_alasso.Address.Address;
 import com.back_alasso.Association.Association;
 import com.back_alasso.Geolocalisation.Geolocalisation;
+import com.back_alasso.Geolocalisation.Geolocatable;
 import com.back_alasso.Message.Message;
 import com.back_alasso.core.BaseEntity;
 import jakarta.persistence.*;
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-public class Activity extends BaseEntity {
+public class Activity extends BaseEntity implements Geolocatable {
 
   public static final int TITLE_MAX_LENGTH = 50;
   public static final int DESC_MAX_LENGTH = 1000;

@@ -64,14 +64,4 @@ public class Geolocalisation extends BaseEntity {
   public void setActivities(List<Activity> activities) {
     this.activities = activities;
   }
-
-  // Method to add an activity to the geolocalisation
-  public void addActivity(Activity activity) {
-    this.activities.add(activity);
-  }
-
-  // Method to add a user(volutary or association) to the geolocalisation
-  public void addUser(User user) {
-    this.users.add(user);
-  }
 }

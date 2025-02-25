@@ -34,7 +34,7 @@ public record ActivityDTO(
         ? activity.getActivityImages().stream().map(activityImage -> activityImage.getImage().getUrl()).toList()
         : null,
       activity.getAssociation() != null ? AssociationDTO.getAssociationDTO(activity.getAssociation()) : null,
-      GeolocalisationDTO.getActivityCoordinates(activity),
+      GeolocalisationDTO.getCoordinates(activity),
       activity.getDate(),
       ActivityVoluntaryDTO.convertToDTO(activity),
       activity.getActivityThemes().stream().map(activityTheme -> activityTheme.getTheme().getName()).toList(),

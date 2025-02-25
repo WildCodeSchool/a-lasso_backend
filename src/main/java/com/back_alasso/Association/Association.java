@@ -3,6 +3,7 @@ package com.back_alasso.Association;
 import com.back_alasso.Address.Address;
 import com.back_alasso.AssociationFollower.AssociationFollower;
 import com.back_alasso.AssociationImage.AssociationImage;
+import com.back_alasso.Geolocalisation.Geolocatable;
 import com.back_alasso.Preferences.Preferences;
 import com.back_alasso.User.AccountEnumType;
 import com.back_alasso.User.User;
@@ -12,7 +13,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-public class Association extends User {
+public class Association extends User implements Geolocatable {
 
   public static final int DESC_MAX_LENGTH = 500;
   public static final int FOUNDER_MAX_LENGTH = 50;
