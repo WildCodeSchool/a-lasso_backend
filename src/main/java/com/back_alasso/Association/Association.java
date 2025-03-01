@@ -18,6 +18,7 @@ public class Association extends User implements Geolocatable {
   public static final int DESC_MAX_LENGTH = 500;
   public static final int FOUNDER_MAX_LENGTH = 50;
   public static final int NAME_MAX_LENGTH = 50;
+  public static final int SITE_URL_MAX_LENGTH = 255;
 
   @Column(nullable = true, length = DESC_MAX_LENGTH)
   private String description;
@@ -30,6 +31,9 @@ public class Association extends User implements Geolocatable {
 
   @Column(nullable = false, length = NAME_MAX_LENGTH)
   private String name;
+
+  @Column(nullable = true, length =  SITE_URL_MAX_LENGTH)
+  private String siteURL;
 
   @ManyToOne
   @JoinColumn(name = "adress_id")
@@ -57,7 +61,8 @@ public class Association extends User implements Geolocatable {
     AccountEnumType account_status,
     String hashed_password,
     String email,
-    Preferences preferences
+    Preferences preferences,
+    String siteURL
   ) {
     super(user_type, account_status, hashed_password, email, preferences);
     this.description = description;
@@ -66,6 +71,7 @@ public class Association extends User implements Geolocatable {
     this.name = name;
     this.address = address;
     this.associationImages = associationImages;
+    this.siteURL = siteURL;
   }
 
   public String getDescription() {
@@ -130,5 +136,13 @@ public class Association extends User implements Geolocatable {
 
   public void setAssociationFollowers(List<AssociationFollower> associationFollowers) {
     this.associationFollowers = associationFollowers;
+  }
+
+  public String getSiteURL() {
+    return siteURL;
+  }
+
+  public void setSiteURL(String siteURL) {
+    this.siteURL = siteURL;
   }
 }
