@@ -179,7 +179,7 @@ public class DatabaseInitializer {
         "hashed_password",
         "lacroixrouge@gmail.com",
         null,
-              "https://www.croix-rouge.fr/"
+        "https://www.croix-rouge.fr/"
       ),
       new Association(
         "Depuis 1845, la SPA n’a cessé de protéger les animaux en s’adaptant aux évolutions et aux nouveaux enjeux de la cause et de la société.",
@@ -193,7 +193,7 @@ public class DatabaseInitializer {
         "hashed_password",
         "spa@gmail.com",
         null,
-              "https://www.la-spa.fr/"
+        "https://www.la-spa.fr/"
       )
     );
 

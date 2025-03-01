@@ -32,7 +32,7 @@ public class Association extends User implements Geolocatable {
   @Column(nullable = false, length = NAME_MAX_LENGTH)
   private String name;
 
-  @Column(nullable = true, length =  SITE_URL_MAX_LENGTH)
+  @Column(nullable = true, length = SITE_URL_MAX_LENGTH)
   private String siteURL;
 
   @ManyToOne
