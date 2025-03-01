@@ -1,11 +1,13 @@
 package com.back_alasso.Association;
 
 import com.back_alasso.Geolocalisation.GeolocalisationDTO;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
-public record AssociationActivityDTO(String name, String logo, boolean isFollow, GeolocalisationDTO localisation) {
+public record AssociationActivityDTO(UUID id, String name, String logo, boolean isFollow, GeolocalisationDTO localisation) {
   public static AssociationActivityDTO getAssociationDTO(Association association) {
     return new AssociationActivityDTO(
+      association.getId(),
       association.getName(),
       association
         .getAssociationImages()
