@@ -2,7 +2,6 @@ package com.back_alasso.Association;
 
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Service

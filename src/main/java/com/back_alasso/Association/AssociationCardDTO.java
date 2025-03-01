@@ -1,16 +1,12 @@
 package com.back_alasso.Association;
 
-import com.back_alasso.ActivityVoluntary.ActivityVoluntary;
-import com.back_alasso.Address.Address;
+
 import com.back_alasso.AssociationFollower.AssociationFollower;
-import com.back_alasso.AssociationImage.AssociationImage;
-import com.back_alasso.Image.Image;
+
 import com.back_alasso.Image.ImageEnumType;
-import com.back_alasso.Preferences.Preferences;
-import com.back_alasso.Statistic.Statistic;
+
 import com.back_alasso.Statistic.StatisticDTO;
-import com.back_alasso.User.AccountEnumType;
-import com.back_alasso.User.UserEnumType;
+
 
 import java.time.LocalDate;
 import java.util.List;

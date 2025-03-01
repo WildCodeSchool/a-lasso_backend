@@ -3,9 +3,9 @@ package com.back_alasso.Association;
 import com.back_alasso.Geolocalisation.GeolocalisationDTO;
 import java.util.stream.Collectors;
 
-public record AssociationDTO(String name, String logo, boolean isFollow, GeolocalisationDTO localisation) {
-  public static AssociationDTO getAssociationDTO(Association association) {
-    return new AssociationDTO(
+public record AssociationActivityDTO(String name, String logo, boolean isFollow, GeolocalisationDTO localisation) {
+  public static AssociationActivityDTO getAssociationDTO(Association association) {
+    return new AssociationActivityDTO(
       association.getName(),
       association
         .getAssociationImages()
