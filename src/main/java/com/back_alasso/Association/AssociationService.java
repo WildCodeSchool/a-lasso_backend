@@ -1,0 +1,19 @@
+package com.back_alasso.Association;
+
+import java.util.UUID;
+import org.springframework.stereotype.Service;
+
+@Service
+public class AssociationService {
+
+  private final AssociationRepository associationRepository;
+
+  public AssociationService(AssociationRepository associationRepository) {
+    this.associationRepository = associationRepository;
+  }
+
+  public AssociationCardDTO getAssociation(UUID id) {
+    Association association = associationRepository.findById(id).orElse(null);
+    return AssociationCardDTO.fromEntityToDTO(association);
+  }
+}

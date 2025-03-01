@@ -4,6 +4,7 @@ import com.back_alasso.Geolocalisation.Geolocalisation;
 import com.back_alasso.Message.Message;
 import com.back_alasso.Preferences.Preferences;
 import com.back_alasso.Report.Report;
+import com.back_alasso.Statistic.Statistic;
 import com.back_alasso.core.BaseEntity;
 import jakarta.persistence.*;
 import java.util.List;
@@ -46,6 +47,9 @@ public class User extends BaseEntity {
   @ManyToOne
   @JoinColumn(name = "geolocalisation_id")
   private Geolocalisation geolocalisation;
+
+  @OneToMany(mappedBy = "user")
+  private List<Statistic> statistic;
 
   // Necessary to have an empty constructor to instance object.
   public User() {}
@@ -144,5 +148,13 @@ public class User extends BaseEntity {
 
   public void setGeolocalisation(Geolocalisation geolocalisation) {
     this.geolocalisation = geolocalisation;
+  }
+
+  public List<Statistic> getStatistic() {
+    return statistic;
+  }
+
+  public void setStatistic(List<Statistic> statistic) {
+    this.statistic = statistic;
   }
 }

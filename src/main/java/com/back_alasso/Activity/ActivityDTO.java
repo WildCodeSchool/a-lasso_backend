@@ -2,7 +2,7 @@ package com.back_alasso.Activity;
 
 import com.back_alasso.ActivityVoluntary.ActivityVoluntary;
 import com.back_alasso.ActivityVoluntary.ActivityVoluntaryDTO;
-import com.back_alasso.Association.AssociationDTO;
+import com.back_alasso.Association.AssociationActivityDTO;
 import com.back_alasso.Geolocalisation.GeolocalisationDTO;
 import com.back_alasso.Theme.ThemeNameEnumType;
 import java.time.LocalDateTime;
@@ -16,7 +16,7 @@ public record ActivityDTO(
   String title,
   String description,
   List<String> image,
-  AssociationDTO association,
+  AssociationActivityDTO association,
   GeolocalisationDTO location,
   LocalDateTime date,
   ActivityVoluntaryDTO participants,
@@ -33,7 +33,7 @@ public record ActivityDTO(
       activity.getActivityImages() != null
         ? activity.getActivityImages().stream().map(activityImage -> activityImage.getImage().getUrl()).toList()
         : null,
-      activity.getAssociation() != null ? AssociationDTO.getAssociationDTO(activity.getAssociation()) : null,
+      activity.getAssociation() != null ? AssociationActivityDTO.getAssociationDTO(activity.getAssociation()) : null,
       GeolocalisationDTO.getCoordinates(activity),
       activity.getDate(),
       ActivityVoluntaryDTO.convertToDTO(activity),
