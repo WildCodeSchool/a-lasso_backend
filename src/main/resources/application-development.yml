@@ -3,6 +3,14 @@ spring:
     url: jdbc:mysql://${DB_HOST_DEV}:${DB_PORT_DEV}/${DB_NAME_DEV}?createDatabaseIfNotExist=true
     username: ${DB_USER_DEV}
     password: ${DB_PASSWORD_DEV}
+  jpa:
+    hibernate:
+      ddl-auto: create-drop  # Drops and recreates the schema on each run. TODO : Switch to update once DatabaseInitializer is completely done
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
 
 springdoc:
   swagger-ui:

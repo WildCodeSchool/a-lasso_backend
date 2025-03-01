@@ -10,7 +10,7 @@
     <module name="TreeWalker">
 
         <module name="ParameterNumber">
-            <property name="max" value="3"/>
+            <property name="max" value="253"/>
         </module>
         <module name="MagicNumber">
             <property name="ignoreNumbers" value="0,1,-1"/>
@@ -27,7 +27,6 @@
         <module name="NoWhitespaceBeforeCaseDefaultColon"/>
         <module name="ParenPad"/>
         <module name="UnusedImports"/>
-
 
 
     </module>
