@@ -5,8 +5,10 @@ import com.back_alasso.Image.ImageEnumType;
 import com.back_alasso.Statistic.StatisticDTO;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 public record AssociationCardDTO(
+  UUID id,
   String description,
   String founder,
   LocalDate foundationDate,
@@ -19,6 +21,7 @@ public record AssociationCardDTO(
 ) {
   public static AssociationCardDTO fromEntityToDTO(Association association) {
     return new AssociationCardDTO(
+      association.getId(),
       association.getDescription(),
       association.getFounder(),
       association.getFoundationDate(),
