@@ -35,7 +35,7 @@ public class SecurityConfig {
     http
       .csrf(AbstractHttpConfigurer::disable)
       .authorizeHttpRequests(auth ->
-        auth.requestMatchers("/auth/**", "/activities", "/association", "/images/**").permitAll().anyRequest().authenticated()
+        auth.requestMatchers("/auth/**", "/activities", "/association/**", "/images/**").permitAll().anyRequest().authenticated()
       )
       .userDetailsService(customUserDetailsService)
       .exceptionHandling(e -> e.authenticationEntryPoint(customAuthEntryPoint))
