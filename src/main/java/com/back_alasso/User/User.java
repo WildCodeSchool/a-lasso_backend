@@ -7,17 +7,24 @@ import com.back_alasso.Report.Report;
 import com.back_alasso.Statistic.Statistic;
 import com.back_alasso.core.BaseEntity;
 import jakarta.persistence.*;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Inheritance(strategy = InheritanceType.JOINED) // Use separate tables for each entity
 @Entity
-public class User extends BaseEntity {
+public class User extends BaseEntity implements UserDetails {
 
   public static final int EMAIL_MAX_LENGTH = 320;
 
   @Enumerated(EnumType.STRING)
-  @Column(nullable = false)
-  private UserEnumType user_type;
+  @ElementCollection(fetch = FetchType.EAGER)
+  private Set<UserEnumType> roles = new HashSet<>();
 
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
@@ -54,20 +61,51 @@ public class User extends BaseEntity {
   // Necessary to have an empty constructor to instance object.
   public User() {}
 
-  public User(UserEnumType user_type, AccountEnumType account_status, String hashed_password, String email, Preferences preferences) {
-    this.user_type = user_type;
+  public User(Set<UserEnumType> roles, AccountEnumType account_status, String hashed_password, String email, Preferences preferences) {
+    this.roles = roles;
     this.account_status = account_status;
     this.hashed_password = hashed_password;
     this.email = email;
     this.preferences = preferences;
   }
 
-  public UserEnumType getUser_type() {
-    return user_type;
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return roles.stream().map(Enum::name).map(SimpleGrantedAuthority::new).collect(Collectors.toSet());
   }
 
-  public void setUser_type(UserEnumType user_type) {
-    this.user_type = user_type;
+  @Override
+  public String getPassword() {
+    return hashed_password;
+  }
+
+  @Override
+  public String getUsername() {
+    return email;
+  }
+
+  @Override
+  public boolean isAccountNonExpired() {
+    // return true - TODO complete
+    return UserDetails.super.isAccountNonExpired();
+  }
+
+  @Override
+  public boolean isAccountNonLocked() {
+    // return true - TODO complete
+    return UserDetails.super.isAccountNonLocked();
+  }
+
+  @Override
+  public boolean isCredentialsNonExpired() {
+    // return true - TODO complete
+    return UserDetails.super.isCredentialsNonExpired();
+  }
+
+  @Override
+  public boolean isEnabled() {
+    // return true - TODO complete
+    return UserDetails.super.isEnabled();
   }
 
   public AccountEnumType getAccount_status() {
@@ -156,5 +194,13 @@ public class User extends BaseEntity {
 
   public void setStatistic(List<Statistic> statistic) {
     this.statistic = statistic;
+  }
+
+  public Set<UserEnumType> getRoles() {
+    return roles;
+  }
+
+  public void setRoles(Set<UserEnumType> roles) {
+    this.roles = roles;
   }
 }

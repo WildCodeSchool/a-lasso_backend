@@ -1,6 +1,9 @@
 package com.back_alasso.Image;
 
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ImageRepository extends JpaRepository<Image, UUID> {}
+public interface ImageRepository extends JpaRepository<Image, UUID> {
+  Optional<Image> findByUrl(String url);
+}

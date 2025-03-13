@@ -4,6 +4,11 @@ spring:
     username: ${DB_USER_STAGING}
     password: ${DB_PASSWORD_STAGING}
 
+security:
+  jwt:
+    secret-key: ${JWT_SECRET_KEY}
+    expiration-time: ${JWT_EXP_TIME}
+
 springdoc:
   swagger-ui:
     enabled: false

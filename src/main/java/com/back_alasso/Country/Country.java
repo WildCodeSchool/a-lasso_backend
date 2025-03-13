@@ -10,6 +10,7 @@ public class Country extends BaseEntity {
   public static final int NAME_MAX_LENGTH = 100;
 
   @Column(nullable = false, length = NAME_MAX_LENGTH)
+  // TODO change for HashList to make it unique
   private String name;
 
   // Constructor
