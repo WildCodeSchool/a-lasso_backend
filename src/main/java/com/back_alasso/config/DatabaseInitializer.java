@@ -42,6 +42,7 @@ import com.back_alasso.Voluntary.Voluntary;
 import com.back_alasso.Voluntary.VoluntaryRepository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -59,6 +60,7 @@ public class DatabaseInitializer {
   public static final int FIRST_ASSO_MONTH_FOUNDED = 8;
   public static final int FIRST_ASSO_DAY_FOUNDED = 25;
   public static final int SECOND_ASSO_YEAR_FOUNDED = 1845;
+  public static final int YEAR_MESSAGE = 2025;
   public static final int SECOND_ASSO_MONTH_FOUNDED = 12;
   public static final int SECOND_ASSO_DAY_FOUNDED = 2;
   public static final double FIRST_ASSO_LONGITUDE = -1.5043288;
@@ -325,14 +327,25 @@ public class DatabaseInitializer {
 
     // save messages between associations and voluntaries for a specific activity
     List<Message> allMessageFirstActivity = Arrays.asList(
-      new Message("Bonjour à tous, merci de participer !", associations.get(0), activities.get(0)),
-      new Message("Bonjour, Faut-il prévoir quelque chose? Des habits de rechange ?", voluntaries.get(0), activities.get(0)),
+      new Message(
+        "Bonjour à tous, merci de participer !",
+        associations.get(0),
+        activities.get(0),
+        LocalDateTime.of(YEAR_MESSAGE, Month.DECEMBER, FIRST_HOUSE_NUMBER, FIRST_HOUSE_NUMBER, 0)
+      ),
+      new Message(
+        "Bonjour, Faut-il prévoir quelque chose? Des habits de rechange ?",
+        voluntaries.get(0),
+        activities.get(0),
+        LocalDateTime.of(YEAR_MESSAGE, Month.DECEMBER, FIRST_HOUSE_NUMBER, FIRST_HOUSE_NUMBER, 0)
+      ),
       new Message(
         "Effectivement, il serait plus sage de prévoir quelques affaires." +
         "\n" +
         " Plutôt des affaires chaudes, il est prévu des températures négatives pour le jour de l'évènement !",
         associations.get(0),
-        activities.get(0)
+        activities.get(0),
+        LocalDateTime.of(YEAR_MESSAGE, Month.DECEMBER, FIRST_HOUSE_NUMBER, FIRST_HOUSE_NUMBER, 0)
       )
     );
 
