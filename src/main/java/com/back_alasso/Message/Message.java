@@ -7,11 +7,15 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.time.LocalDateTime;
 
 @Entity
 public class Message extends BaseEntity {
 
   public static final int CONTENT_MAX_LENGTH = 250;
+
+  @Column(nullable = false)
+  private LocalDateTime date;
 
   @Column(nullable = false, length = CONTENT_MAX_LENGTH)
   private String content;
@@ -27,10 +31,11 @@ public class Message extends BaseEntity {
   // Necessary to have an empty constructor to instance object.
   public Message() {}
 
-  public Message(String content, User user, Activity activity) {
+  public Message(String content, User user, Activity activity, LocalDateTime date) {
     this.content = content;
     this.user = user;
     this.activity = activity;
+    this.date = date;
   }
 
   public String getContent() {
@@ -55,5 +60,13 @@ public class Message extends BaseEntity {
 
   public void setActivity(Activity activity) {
     this.activity = activity;
+  }
+
+  public LocalDateTime getDate() {
+    return date;
+  }
+
+  public void setDate(LocalDateTime date) {
+    this.date = date;
   }
 }
