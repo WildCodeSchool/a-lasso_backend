@@ -11,6 +11,10 @@ spring:
       hibernate:
         format_sql: true
 
+security:
+  jwt:
+    secret-key: ${JWT_SECRET_KEY}
+    expiration-time: ${JWT_EXP_TIME}
 
 springdoc:
   swagger-ui:

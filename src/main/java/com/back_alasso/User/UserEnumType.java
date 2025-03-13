@@ -1,7 +1,7 @@
 package com.back_alasso.User;
 
 public enum UserEnumType {
-  VOLUNTARY,
-  ASSOCIATION,
-  ADMIN,
+  ROLE_VOLUNTARY,
+  ROLE_ASSOCIATION,
+  ROLE_ADMIN,
 }

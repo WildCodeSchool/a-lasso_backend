@@ -11,6 +11,7 @@ import com.back_alasso.User.UserEnumType;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Association extends User implements Geolocatable {
@@ -57,14 +58,14 @@ public class Association extends User implements Geolocatable {
     String name,
     Address address,
     List<AssociationImage> associationImages,
-    UserEnumType user_type,
+    Set<UserEnumType> roles,
     AccountEnumType account_status,
     String hashed_password,
     String email,
     Preferences preferences,
     String siteURL
   ) {
-    super(user_type, account_status, hashed_password, email, preferences);
+    super(roles, account_status, hashed_password, email, preferences);
     this.description = description;
     this.founder = founder;
     this.foundationDate = foundationDate;

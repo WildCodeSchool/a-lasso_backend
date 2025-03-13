@@ -9,6 +9,7 @@ import com.back_alasso.User.User;
 import com.back_alasso.User.UserEnumType;
 import jakarta.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Voluntary extends User {
@@ -46,7 +47,7 @@ public class Voluntary extends User {
   }
 
   public Voluntary(
-    UserEnumType user_type,
+    Set<UserEnumType> roles,
     AccountEnumType account_status,
     String hashed_password,
     String email,
@@ -59,7 +60,7 @@ public class Voluntary extends User {
     List<AssociationFollower> associationFollowers,
     Preferences preferences
   ) {
-    super(user_type, account_status, hashed_password, email, preferences);
+    super(roles, account_status, hashed_password, email, preferences);
     this.city = city;
     this.first_name = first_name;
     this.last_name = last_name;

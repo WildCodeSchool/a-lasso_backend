@@ -44,6 +44,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -174,9 +175,9 @@ public class DatabaseInitializer {
         "LA CROIX ROUGE",
         associationAddresses.get(0),
         null,
-        UserEnumType.ASSOCIATION,
+        new HashSet<>(List.of(UserEnumType.ROLE_ASSOCIATION)),
         AccountEnumType.ACTIVE,
-        "hashed_password",
+        "$2a$10$N37M1SniasB/0hNos6ZCGeynDI/16GgNNyI7AzJ2zzITgnVJxQ.Yu",
         "lacroixrouge@gmail.com",
         null,
         "https://www.croix-rouge.fr/"
@@ -188,9 +189,9 @@ public class DatabaseInitializer {
         "S.P.A.",
         associationAddresses.get(1),
         null,
-        UserEnumType.ASSOCIATION,
+        new HashSet<>(List.of(UserEnumType.ROLE_ASSOCIATION)),
         AccountEnumType.ACTIVE,
-        "hashed_password",
+        "$2a$10$N37M1SniasB/0hNos6ZCGeynDI/16GgNNyI7AzJ2zzITgnVJxQ.Yu",
         "spa@gmail.com",
         null,
         "https://www.la-spa.fr/"
@@ -230,7 +231,7 @@ public class DatabaseInitializer {
       new Image("/images/Activity/spaActivity.jpg", ImageEnumType.ACTIVITY)
     );
 
-    List<Address> activityAddresses = Arrays.asList(new Address(FIRST_HOUSE_NUMBER, "rue du bonheur", null, "44300", "NANTES", firstCountry));
+    List<Address> activityAddresses = List.of(new Address(FIRST_HOUSE_NUMBER, "rue du bonheur", null, "44300", "NANTES", firstCountry));
 
     List<Activity> activities = Arrays.asList(
       new Activity(
@@ -270,19 +271,19 @@ public class DatabaseInitializer {
       new ActivityTheme(activities.get(1), allThemesForActivity.get(1))
     );
 
-    List<Geolocalisation> activityLocalisations = Arrays.asList(new Geolocalisation(FIRST_ACTIVITY_LONGITUDE, FIRST_ACTIVITY_LATITUDE));
+    List<Geolocalisation> activityLocalisations = List.of(new Geolocalisation(FIRST_ACTIVITY_LONGITUDE, FIRST_ACTIVITY_LATITUDE));
 
     activities.get(0).setGeolocalisation(activityLocalisations.get(0));
     activities.get(1).setGeolocalisation(associationLocalisations.get(1));
 
     // initiate exemples of voluntaries
-    List<Image> voluntaryAvatars = Arrays.asList(new Image("/images/Voluntary/avatarFirstVoluntary.png", ImageEnumType.AVATAR));
+    List<Image> voluntaryAvatars = List.of(new Image("/images/Voluntary/defaultAvatar.png", ImageEnumType.AVATAR));
 
     List<Voluntary> voluntaries = Arrays.asList(
       new Voluntary(
-        UserEnumType.VOLUNTARY,
+        new HashSet<>(List.of(UserEnumType.ROLE_VOLUNTARY)),
         AccountEnumType.ACTIVE,
-        "hashPasswordToReplace",
+        "$2a$10$N37M1SniasB/0hNos6ZCGeynDI/16GgNNyI7AzJ2zzITgnVJxQ.Yu",
         "pierre@gmail.com",
         "Nantes",
         firstCountry,
@@ -294,9 +295,9 @@ public class DatabaseInitializer {
         null
       ),
       new Voluntary(
-        UserEnumType.ADMIN,
+        new HashSet<>(List.of(UserEnumType.ROLE_ADMIN, UserEnumType.ROLE_VOLUNTARY)),
         AccountEnumType.ACTIVE,
-        "hashPasswordToReplace",
+        "$2a$10$N37M1SniasB/0hNos6ZCGeynDI/16GgNNyI7AzJ2zzITgnVJxQ.Yu",
         "admin@gmail.com",
         "Nantes",
         firstCountry,
