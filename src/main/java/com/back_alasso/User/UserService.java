@@ -11,7 +11,6 @@ import com.back_alasso.Country.CountryRepository;
 import com.back_alasso.Exception.EmailAlreadyUsedException;
 import com.back_alasso.Exception.ResourceNotFoundException;
 import com.back_alasso.Image.Image;
-import com.back_alasso.Image.ImageEnumType;
 import com.back_alasso.Image.ImageRepository;
 import com.back_alasso.Voluntary.Voluntary;
 import com.back_alasso.Voluntary.VoluntaryRepository;
@@ -56,12 +55,12 @@ public class UserService {
 
   public boolean registerVoluntary(VoluntaryRegistrationDTO voluntaryRegistrationDTO) {
     Image profileImage = imageRepository
-      .findByUrl("/images/Voluntary/defaultAvatar.png")
-      .orElse(imageRepository.save(new Image("/images/Voluntary/defaultAvatar.png", ImageEnumType.AVATAR)));
+      .findFirstByUrl("/images/Voluntary/defaultAvatar.png")
+      .orElseThrow(() -> new RuntimeException("Image non trouvé"));
 
     Country country = countryRepository
-      .findByName(voluntaryRegistrationDTO.country())
-      .orElse(countryRepository.save(new Country(voluntaryRegistrationDTO.country())));
+      .findFirstByName(voluntaryRegistrationDTO.country())
+      .orElseThrow(() -> new RuntimeException("Pays non trouvé"));
 
     Voluntary voluntary = new Voluntary(
       new HashSet<>(List.of(UserEnumType.ROLE_VOLUNTARY)),
@@ -84,7 +83,7 @@ public class UserService {
 
   public boolean registerAssociation(AssociationRegistrationDTO associationRegistrationDTO) {
     Country country = countryRepository
-      .findByName(associationRegistrationDTO.address().getCountry().getName())
+      .findFirstByName(associationRegistrationDTO.address().getCountry().getName())
       .orElse(countryRepository.save(new Country(associationRegistrationDTO.address().getCountry().getName())));
 
     Address address = addressRepository.save(

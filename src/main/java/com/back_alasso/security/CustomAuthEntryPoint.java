@@ -1,6 +1,7 @@
 package com.back_alasso.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -17,7 +18,8 @@ import org.springframework.stereotype.Component;
 public class CustomAuthEntryPoint implements AuthenticationEntryPoint {
 
   @Override
-  public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
+  public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
+    throws IOException, ServletException {
     String[] exceptionClassParts = authException.getClass().getName().split("\\.");
     String exceptionType = exceptionClassParts[exceptionClassParts.length - 1];
     System.out.println(exceptionType);

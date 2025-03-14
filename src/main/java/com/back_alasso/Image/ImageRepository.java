@@ -5,5 +5,5 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ImageRepository extends JpaRepository<Image, UUID> {
-  Optional<Image> findByUrl(String url);
+  Optional<Image> findFirstByUrl(String url);
 }

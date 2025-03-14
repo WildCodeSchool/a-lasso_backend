@@ -33,7 +33,7 @@ public class User extends BaseEntity implements UserDetails {
   @Column(nullable = false)
   private String hashed_password;
 
-  @Column(nullable = false, length = EMAIL_MAX_LENGTH)
+  @Column(nullable = false, length = EMAIL_MAX_LENGTH, unique = true)
   private String email;
 
   @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
