@@ -44,6 +44,10 @@ public class JwtService {
     return Jwts.parser().setSigningKey(secretKey.getBytes()).parseClaimsJws(token).getBody();
   }
 
+  public String extractEmail(String token) {
+    return extractClaims(token).getSubject();
+  }
+
   public boolean validateJwtToken(String token, HttpServletResponse response) {
     try {
       Jwts.parserBuilder().setSigningKey(secretKey.getBytes()).build().parseClaimsJws(token);

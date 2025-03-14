@@ -61,6 +61,9 @@ public class DatabaseInitializer {
   public static final int FIRST_ASSO_DAY_FOUNDED = 25;
   public static final int SECOND_ASSO_YEAR_FOUNDED = 1845;
   public static final int YEAR_MESSAGE = 2025;
+  public static final int DAY_MESSAGE_ONE = 10;
+  public static final int DAY_MESSAGE_TWO = 11;
+
   public static final int SECOND_ASSO_MONTH_FOUNDED = 12;
   public static final int SECOND_ASSO_DAY_FOUNDED = 2;
   public static final double FIRST_ASSO_LONGITUDE = -1.5043288;
@@ -331,13 +334,13 @@ public class DatabaseInitializer {
         "Bonjour à tous, merci de participer !",
         associations.get(0),
         activities.get(0),
-        LocalDateTime.of(YEAR_MESSAGE, Month.DECEMBER, FIRST_HOUSE_NUMBER, FIRST_HOUSE_NUMBER, 0)
+        LocalDateTime.of(YEAR_MESSAGE, Month.DECEMBER, DAY_MESSAGE_ONE, DAY_MESSAGE_ONE, 0)
       ),
       new Message(
         "Bonjour, Faut-il prévoir quelque chose? Des habits de rechange ?",
         voluntaries.get(0),
         activities.get(0),
-        LocalDateTime.of(YEAR_MESSAGE, Month.DECEMBER, FIRST_HOUSE_NUMBER, FIRST_HOUSE_NUMBER, 0)
+        LocalDateTime.of(YEAR_MESSAGE, Month.DECEMBER, DAY_MESSAGE_TWO, DAY_MESSAGE_ONE, 0)
       ),
       new Message(
         "Effectivement, il serait plus sage de prévoir quelques affaires." +
@@ -345,7 +348,7 @@ public class DatabaseInitializer {
         " Plutôt des affaires chaudes, il est prévu des températures négatives pour le jour de l'évènement !",
         associations.get(0),
         activities.get(0),
-        LocalDateTime.of(YEAR_MESSAGE, Month.DECEMBER, FIRST_HOUSE_NUMBER, FIRST_HOUSE_NUMBER, 0)
+        LocalDateTime.of(YEAR_MESSAGE, Month.DECEMBER, DAY_MESSAGE_TWO, DAY_MESSAGE_TWO, 0)
       )
     );
 
