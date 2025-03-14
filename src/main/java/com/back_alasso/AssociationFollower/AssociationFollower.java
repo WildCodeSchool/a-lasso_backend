@@ -28,7 +28,12 @@ public class AssociationFollower extends BaseEntity {
   // Necessary to have an empty constructor to instance object.
   public AssociationFollower() {}
 
-  public AssociationFollower(boolean is_follow, boolean is_notification_active, Voluntary voluntary, Association association) {}
+  public AssociationFollower(boolean is_notification_active, boolean is_follow, Voluntary voluntary, Association association) {
+    this.is_notification_active = is_notification_active;
+    this.is_follow = is_follow;
+    this.voluntary = voluntary;
+    this.association = association;
+  }
 
   public boolean isIs_notification_active() {
     return is_notification_active;

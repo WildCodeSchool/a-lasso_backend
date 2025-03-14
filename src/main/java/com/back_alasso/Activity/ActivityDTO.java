@@ -15,7 +15,7 @@ public record ActivityDTO(
   UUID id,
   String title,
   String description,
-  List<String> image,
+  List<String> images,
   AssociationActivityDTO association,
   GeolocalisationDTO location,
   LocalDateTime date,
