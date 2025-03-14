@@ -8,6 +8,8 @@ import com.back_alasso.Authentication.AssociationRegistrationDTO;
 import com.back_alasso.Authentication.VoluntaryRegistrationDTO;
 import com.back_alasso.Country.Country;
 import com.back_alasso.Country.CountryRepository;
+import com.back_alasso.Exception.EmailAlreadyUsedException;
+import com.back_alasso.Exception.ResourceNotFoundException;
 import com.back_alasso.Image.Image;
 import com.back_alasso.Image.ImageEnumType;
 import com.back_alasso.Image.ImageRepository;
@@ -48,7 +50,7 @@ public class UserService {
 
   public void checkUserExists(String email) {
     if (userRepository.existsByEmail(email)) {
-      throw new RuntimeException("Cet email est déjà utilisé");
+      throw new EmailAlreadyUsedException("Cet email est déjà utilisé");
     }
   }
 
@@ -117,7 +119,7 @@ public class UserService {
 
   public User initializeUser(String email, String password) {
     if (userRepository.existsByEmail(email)) {
-      throw new RuntimeException("Cet email est déjà utilisé");
+      throw new EmailAlreadyUsedException("Cet email est déjà utilisé");
     }
 
     User user = new User();
@@ -127,10 +129,10 @@ public class UserService {
   }
 
   public User findById(UUID id) {
-    return userRepository.findById(id).orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+    return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Utilisateur non trouvé"));
   }
 
   public User findByEmail(String email) {
-    return userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+    return userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Utilisateur non trouvé"));
   }
 }
