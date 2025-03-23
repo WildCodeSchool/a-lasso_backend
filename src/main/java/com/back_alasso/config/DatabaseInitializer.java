@@ -232,7 +232,7 @@ public class DatabaseInitializer {
     // initiate examples of activities
     List<Image> imagesTwo = Arrays.asList(
       new Image("/images/Activity/maraude1.png", ImageEnumType.ACTIVITY),
-      new Image("/images/Activity/maraude2.png", ImageEnumType.ACTIVITY),
+      new Image("/images/Activity/maraude2.jpg", ImageEnumType.ACTIVITY),
       new Image("/images/Activity/spaActivity.jpg", ImageEnumType.ACTIVITY)
     );
 
@@ -334,13 +334,13 @@ public class DatabaseInitializer {
         "Bonjour à tous, merci de participer !",
         associations.get(0),
         activities.get(0),
-        LocalDateTime.of(YEAR_MESSAGE, Month.DECEMBER, DAY_MESSAGE_ONE, DAY_MESSAGE_ONE, 0)
+        LocalDateTime.of(YEAR_MESSAGE, Month.MARCH, DAY_MESSAGE_ONE, DAY_MESSAGE_ONE, 0)
       ),
       new Message(
         "Bonjour, Faut-il prévoir quelque chose? Des habits de rechange ?",
         voluntaries.get(0),
         activities.get(0),
-        LocalDateTime.of(YEAR_MESSAGE, Month.DECEMBER, DAY_MESSAGE_TWO, DAY_MESSAGE_ONE, 0)
+        LocalDateTime.of(YEAR_MESSAGE, Month.MARCH, DAY_MESSAGE_TWO, DAY_MESSAGE_ONE, 0)
       ),
       new Message(
         "Effectivement, il serait plus sage de prévoir quelques affaires." +
@@ -348,7 +348,7 @@ public class DatabaseInitializer {
         " Plutôt des affaires chaudes, il est prévu des températures négatives pour le jour de l'évènement !",
         associations.get(0),
         activities.get(0),
-        LocalDateTime.of(YEAR_MESSAGE, Month.DECEMBER, DAY_MESSAGE_TWO, DAY_MESSAGE_TWO, 0)
+        LocalDateTime.of(YEAR_MESSAGE, Month.MARCH, DAY_MESSAGE_TWO, DAY_MESSAGE_TWO, 0)
       )
     );
 
