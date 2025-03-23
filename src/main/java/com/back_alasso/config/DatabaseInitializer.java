@@ -232,7 +232,7 @@ public class DatabaseInitializer {
     // initiate examples of activities
     List<Image> imagesTwo = Arrays.asList(
       new Image("/images/Activity/maraude1.png", ImageEnumType.ACTIVITY),
-      new Image("/images/Activity/maraude2.png", ImageEnumType.ACTIVITY),
+      new Image("/images/Activity/maraude2.jpg", ImageEnumType.ACTIVITY),
       new Image("/images/Activity/spaActivity.jpg", ImageEnumType.ACTIVITY)
     );
 

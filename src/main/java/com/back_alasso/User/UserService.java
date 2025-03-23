@@ -10,8 +10,13 @@ import com.back_alasso.Country.Country;
 import com.back_alasso.Country.CountryRepository;
 import com.back_alasso.Exception.EmailAlreadyUsedException;
 import com.back_alasso.Exception.ResourceNotFoundException;
+import com.back_alasso.Geolocalisation.Geolocalisation;
+import com.back_alasso.Geolocalisation.GeolocalisationRepository;
+import com.back_alasso.Geolocalisation.GeolocalisationService;
 import com.back_alasso.Image.Image;
 import com.back_alasso.Image.ImageRepository;
+import com.back_alasso.Preferences.Preferences;
+import com.back_alasso.Preferences.PreferencesRepository;
 import com.back_alasso.Voluntary.Voluntary;
 import com.back_alasso.Voluntary.VoluntaryRepository;
 import java.util.*;
@@ -28,6 +33,9 @@ public class UserService {
   private final ImageRepository imageRepository;
   private final CountryRepository countryRepository;
   private final AddressRepository addressRepository;
+  private final PreferencesRepository preferencesRepository;
+  private final GeolocalisationService geolocalisationService;
+  private final GeolocalisationRepository geolocalisationRepository;
 
   public UserService(
     UserRepository userRepository,
@@ -36,7 +44,10 @@ public class UserService {
     AssociationRepository associationRepository,
     ImageRepository imageRepository,
     CountryRepository countryRepository,
-    AddressRepository addressRepository
+    AddressRepository addressRepository,
+    PreferencesRepository preferencesRepository,
+    GeolocalisationService geolocalisationService,
+    GeolocalisationRepository geolocalisationRepository
   ) {
     this.userRepository = userRepository;
     this.passwordEncoder = passwordEncoder;
@@ -45,6 +56,9 @@ public class UserService {
     this.imageRepository = imageRepository;
     this.countryRepository = countryRepository;
     this.addressRepository = addressRepository;
+    this.preferencesRepository = preferencesRepository;
+    this.geolocalisationService = geolocalisationService;
+    this.geolocalisationRepository = geolocalisationRepository;
   }
 
   public void checkUserExists(String email) {
@@ -77,7 +91,17 @@ public class UserService {
       null
     );
 
+    Geolocalisation geolocVoluntary = geolocalisationService.getVoluntaryCoordinates(
+      voluntaryRegistrationDTO.city(),
+      voluntaryRegistrationDTO.country()
+    );
+
+    geolocalisationRepository.save(geolocVoluntary);
+    voluntary.setGeolocalisation(geolocVoluntary);
+
     voluntaryRepository.save(voluntary);
+    preferencesRepository.save(new Preferences(voluntary));
+
     return true;
   }
 
@@ -112,19 +136,14 @@ public class UserService {
       null
     );
 
+    Geolocalisation geolocAssociation = geolocalisationService.getCoordinatesWithFullAddress(associationRegistrationDTO.address());
+
+    geolocalisationRepository.save(geolocAssociation);
+    association.setGeolocalisation(geolocAssociation);
+
     associationRepository.save(association);
+    preferencesRepository.save(new Preferences(association));
     return true;
-  }
-
-  public User initializeUser(String email, String password) {
-    if (userRepository.existsByEmail(email)) {
-      throw new EmailAlreadyUsedException("Cet email est déjà utilisé");
-    }
-
-    User user = new User();
-    user.setEmail(email);
-    user.setHashed_password(passwordEncoder.encode(password));
-    return user;
   }
 
   public User findById(UUID id) {
