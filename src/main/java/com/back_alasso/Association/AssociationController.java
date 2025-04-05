@@ -26,16 +26,15 @@ public class AssociationController {
     return ResponseEntity.status(HttpStatus.OK).body(associationCard);
   }
 
-  @PutMapping("/{associationId}/updateFollow")
+  @PostMapping("/{associationId}/updateFollow")
   public ResponseEntity<Boolean> putUpdateFollowStatus(
     @PathVariable UUID associationId,
-    @RequestBody boolean isFollow,
+    @RequestBody UpdateFollowRequestDTO request,
     @AuthenticationPrincipal UserDetails userDetails
   ) {
     String emailAuthentificatedUser = userDetails.getUsername();
     UUID authenticatedUser = userService.findByEmail(emailAuthentificatedUser).getId();
-
-    boolean updatedFollowStatus = associationService.updateFollowStatus(associationId, isFollow, authenticatedUser);
+    boolean updatedFollowStatus = associationService.updateFollowStatus(associationId, request.isFollow(), authenticatedUser);
     return ResponseEntity.status(HttpStatus.OK).body(updatedFollowStatus);
   }
 }

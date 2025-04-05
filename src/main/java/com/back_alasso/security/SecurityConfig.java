@@ -1,5 +1,8 @@
 package com.back_alasso.security;
 
+import static com.back_alasso.security.SecurityConstants.PRIVATE_URLS;
+import static com.back_alasso.security.SecurityConstants.PUBLIC_URLS;
+
 import com.back_alasso.User.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,7 +38,13 @@ public class SecurityConfig {
     http
       .csrf(AbstractHttpConfigurer::disable)
       .authorizeHttpRequests(auth ->
-        auth.requestMatchers("/auth/**", "/activities", "/association/**", "/images/**").permitAll().anyRequest().authenticated()
+        auth
+          .requestMatchers(PUBLIC_URLS.toArray(new String[0]))
+          .permitAll()
+          .requestMatchers(PRIVATE_URLS.toArray(new String[0]))
+          .authenticated()
+          .anyRequest()
+          .authenticated()
       )
       .userDetailsService(customUserDetailsService)
       .exceptionHandling(e -> e.authenticationEntryPoint(customAuthEntryPoint))
