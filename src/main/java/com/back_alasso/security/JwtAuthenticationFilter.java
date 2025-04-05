@@ -1,5 +1,6 @@
 package com.back_alasso.security;
 
+import static com.back_alasso.security.SecurityConstants.PRIVATE_URLS;
 import static com.back_alasso.security.SecurityConstants.PUBLIC_URLS;
 
 import jakarta.servlet.FilterChain;
@@ -13,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 @Component
@@ -20,6 +22,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
   private final JwtService jwtService;
   private final UserDetailsService userDetailsService;
+  private final AntPathMatcher pathMatcher = new AntPathMatcher();
 
   public JwtAuthenticationFilter(JwtService jwtService, UserDetailsService userDetailsService) {
     this.jwtService = jwtService;
@@ -28,26 +31,38 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-    throws ServletException, IOException, ServletException, IOException {
-    // Skip JWT filter for public URLs
+    throws ServletException, IOException {
+    // Get the request URI
     String requestURI = request.getRequestURI();
-    if (PUBLIC_URLS.stream().anyMatch(requestURI::startsWith)) {
+
+    // First check if it's a private URL - these take precedence
+    boolean isPrivateUrl = PRIVATE_URLS.stream().anyMatch(pattern -> pathMatcher.match(pattern, requestURI));
+
+    // If not private, check if it's a public URL
+    boolean isPublicUrl = false;
+    if (!isPrivateUrl) {
+      isPublicUrl = PUBLIC_URLS.stream().anyMatch(pattern -> pathMatcher.match(pattern, requestURI));
+    }
+
+    // If public and not private, skip authentication
+    if (isPublicUrl && !isPrivateUrl) {
       filterChain.doFilter(request, response);
       return;
     }
 
+    // For private URLs or any other URL, process authentication
     try {
       String jwt = parseJwt(request);
-      // If no token is provided, continue (unauthenticated request)
+      // If no token is provided, continue (security config will handle access)
       if (jwt == null) {
         filterChain.doFilter(request, response);
         return;
       }
-      boolean isTokenValid = jwtService.validateJwtToken(jwt, response);
-      System.out.println("isTokenValid" + isTokenValid);
 
-      // If no token is invalid, send error to front to redirect user to auth page
-      if (isTokenValid == false) {
+      boolean isTokenValid = jwtService.validateJwtToken(jwt, response);
+
+      // If token is invalid, send error to front to redirect user to auth page
+      if (!isTokenValid) {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType("application/json");
         response.getWriter().write("{\"message\": \"Token expiré\", \"error\": \"INVALID_TOKEN\"}");
@@ -57,7 +72,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
       String username = jwtService.extractClaims(jwt).getSubject();
       UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-      System.out.println("userDetails" + userDetails);
       UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
       authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
       SecurityContextHolder.getContext().setAuthentication(authentication);

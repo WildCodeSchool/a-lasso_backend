@@ -26,7 +26,7 @@ public class AssociationController {
     return ResponseEntity.status(HttpStatus.OK).body(associationCard);
   }
 
-  @PostMapping("/{associationId}/updateFollow")
+  @PatchMapping("/{associationId}/updateFollow")
   public ResponseEntity<Boolean> putUpdateFollowStatus(
     @PathVariable UUID associationId,
     @RequestBody UpdateFollowRequestDTO request,
