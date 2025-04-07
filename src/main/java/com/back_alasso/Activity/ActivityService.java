@@ -56,13 +56,16 @@ public class ActivityService {
       activityVoluntaryRepository.save(activityVoluntary);
       return isFavorite;
     } else {
+
       Voluntary voluntary = getVoluntary(authenticatedUser);
       Activity activity = getActivity(activityId);
+
       ActivityVoluntary newActivityVoluntary = new ActivityVoluntary(isFavorite, false, voluntary, activity);
       activityVoluntaryRepository.save(newActivityVoluntary);
       return isFavorite;
     }
   }
+
 
   public Boolean updatedRegisterStatus(UUID activityId, boolean isRegistered, UUID authenticatedUser) {
     ActivityVoluntary activityVoluntary = getActivityVoluntary(authenticatedUser, activityId);
@@ -78,4 +81,5 @@ public class ActivityService {
       return isRegistered;
     }
   }
+
 }
