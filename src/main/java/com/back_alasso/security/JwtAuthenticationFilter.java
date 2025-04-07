@@ -39,17 +39,27 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     // If public , skip authentication
     if (isPublicUrl) {
+      String jwt = parseJwt(request);
+      if (jwt != null) {
+        jwtAuthentication(request, response, filterChain);
+        filterChain.doFilter(request, response);
+        return;
+      }
       filterChain.doFilter(request, response);
       return;
     }
 
     // For private URLs, process authentication
+    jwtAuthentication(request, response, filterChain);
+    filterChain.doFilter(request, response);
+  }
+
+  private void jwtAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) {
     try {
       String jwt = parseJwt(request);
       // If no token is provided, continue (security config will handle access)
       if (jwt == null) {
         filterChain.doFilter(request, response);
-        return;
       }
 
       boolean isTokenValid = jwtService.validateJwtToken(jwt, response);
@@ -60,7 +70,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         response.setContentType("application/json");
         response.getWriter().write("{\"message\": \"Token invalide - Non Authorisé\", \"error\": \"INVALID_TOKEN\"}");
         response.getWriter().flush(); // send immediately the response
-        return;
       }
 
       String username = jwtService.extractClaims(jwt).getSubject();
@@ -71,7 +80,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     } catch (Exception e) {
       System.out.println("Cannot set user authentication: " + e);
     }
-    filterChain.doFilter(request, response);
   }
 
   private String parseJwt(HttpServletRequest request) {

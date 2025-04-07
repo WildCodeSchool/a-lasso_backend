@@ -5,8 +5,8 @@ import com.back_alasso.ActivityTheme.ActivityTheme;
 import com.back_alasso.ActivityVoluntary.ActivityVoluntary;
 import com.back_alasso.Address.Address;
 import com.back_alasso.Association.Association;
-import com.back_alasso.Geolocalisation.Geolocalisation;
-import com.back_alasso.Geolocalisation.Geolocatable;
+import com.back_alasso.Geolocation.Geolocatable;
+import com.back_alasso.Geolocation.Geolocation;
 import com.back_alasso.Message.Message;
 import com.back_alasso.core.BaseEntity;
 import jakarta.persistence.*;
@@ -52,8 +52,8 @@ public class Activity extends BaseEntity implements Geolocatable {
   private List<Message> messages;
 
   @ManyToOne
-  @JoinColumn(name = "geolocalisation_id")
-  private Geolocalisation geolocalisation;
+  @JoinColumn(name = "geolocation_id")
+  private Geolocation geolocation;
 
   // Necessary to have an empty constructor to instance object.
   public Activity() {}
@@ -158,11 +158,11 @@ public class Activity extends BaseEntity implements Geolocatable {
     this.messages = messages;
   }
 
-  public Geolocalisation getGeolocalisation() {
-    return geolocalisation;
+  public Geolocation getGeolocation() {
+    return geolocation;
   }
 
-  public void setGeolocalisation(Geolocalisation geolocalisation) {
-    this.geolocalisation = geolocalisation;
+  public void setGeolocation(Geolocation geolocation) {
+    this.geolocation = geolocation;
   }
 }
