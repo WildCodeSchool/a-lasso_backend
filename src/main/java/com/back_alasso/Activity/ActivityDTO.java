@@ -7,9 +7,8 @@ import com.back_alasso.Geolocalisation.GeolocalisationDTO;
 import com.back_alasso.Theme.ThemeNameEnumType;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public record ActivityDTO(
   UUID id,
@@ -21,36 +20,34 @@ public record ActivityDTO(
   LocalDateTime date,
   ActivityVoluntaryDTO participants,
   List<ThemeNameEnumType> theme,
-  boolean isSaved
+  boolean isSaved,
+  boolean isRegistered
 ) {
-  private static final Logger log = LoggerFactory.getLogger(ActivityDTO.class);
-
   public static ActivityDTO fromEntityToDTO(Activity activity) {
+    Optional<ActivityVoluntary> voluntary = activity
+      .getActivityVoluntaries()
+      .stream()
+      .filter(activityVoluntary -> {
+        String authenticatedUserId = "TODO -->"; // getUserAuthenticated();
+        if (authenticatedUserId == null) {
+          return false;
+        }
+        return activityVoluntary.getVoluntary().getId().equals(authenticatedUserId);
+      })
+      .findFirst();
+
     return new ActivityDTO(
       activity.getId(),
       activity.getTitle(),
       activity.getDescription(),
-      activity.getActivityImages() != null
-        ? activity.getActivityImages().stream().map(activityImage -> activityImage.getImage().getUrl()).toList()
-        : null,
+      activity.getActivityImages() != null ? activity.getActivityImages().stream().map(image -> image.getImage().getUrl()).toList() : null,
       activity.getAssociation() != null ? AssociationActivityDTO.getAssociationDTO(activity.getAssociation()) : null,
       GeolocalisationDTO.getCoordinates(activity),
       activity.getDate(),
       ActivityVoluntaryDTO.convertToDTO(activity),
-      activity.getActivityThemes().stream().map(activityTheme -> activityTheme.getTheme().getName()).toList(),
-      activity
-        .getActivityVoluntaries()
-        .stream()
-        .filter(activityVoluntary -> {
-          String authenticatedUserId = "TODO -->"; // getUserAuthentificated();
-          if (authenticatedUserId == null) {
-            return false;
-          }
-          return activityVoluntary.getVoluntary().getId().equals(authenticatedUserId);
-        })
-        .findFirst()
-        .map(ActivityVoluntary::isIs_saved)
-        .orElse(false)
+      activity.getActivityThemes().stream().map(theme -> theme.getTheme().getName()).toList(),
+      voluntary.map(ActivityVoluntary::isIs_saved).orElse(false),
+      voluntary.map(ActivityVoluntary::isIs_registered).orElse(false)
     );
   }
 }

@@ -1,6 +1,5 @@
 package com.back_alasso.security;
 
-import static com.back_alasso.security.SecurityConstants.PRIVATE_URLS;
 import static com.back_alasso.security.SecurityConstants.PUBLIC_URLS;
 
 import com.back_alasso.User.CustomUserDetailsService;
@@ -37,15 +36,7 @@ public class SecurityConfig {
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
       .csrf(AbstractHttpConfigurer::disable)
-      .authorizeHttpRequests(auth ->
-        auth
-          .requestMatchers(PUBLIC_URLS.toArray(new String[0]))
-          .permitAll()
-          .requestMatchers(PRIVATE_URLS.toArray(new String[0]))
-          .authenticated()
-          .anyRequest()
-          .authenticated()
-      )
+      .authorizeHttpRequests(auth -> auth.requestMatchers(PUBLIC_URLS.toArray(new String[0])).permitAll().anyRequest().authenticated())
       .userDetailsService(customUserDetailsService)
       .exceptionHandling(e -> e.authenticationEntryPoint(customAuthEntryPoint))
       .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

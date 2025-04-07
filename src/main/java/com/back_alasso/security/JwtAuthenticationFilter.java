@@ -1,6 +1,5 @@
 package com.back_alasso.security;
 
-import static com.back_alasso.security.SecurityConstants.PRIVATE_URLS;
 import static com.back_alasso.security.SecurityConstants.PUBLIC_URLS;
 
 import jakarta.servlet.FilterChain;
@@ -35,22 +34,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     // Get the request URI
     String requestURI = request.getRequestURI();
 
-    // First check if it's a private URL - these take precedence
-    boolean isPrivateUrl = PRIVATE_URLS.stream().anyMatch(pattern -> pathMatcher.match(pattern, requestURI));
+    // First check if it's a public URL (that doesn't need JWT)
+    boolean isPublicUrl = PUBLIC_URLS.stream().anyMatch(pattern -> pathMatcher.match(pattern, requestURI));
 
-    // If not private, check if it's a public URL
-    boolean isPublicUrl = false;
-    if (!isPrivateUrl) {
-      isPublicUrl = PUBLIC_URLS.stream().anyMatch(pattern -> pathMatcher.match(pattern, requestURI));
-    }
-
-    // If public and not private, skip authentication
-    if (isPublicUrl && !isPrivateUrl) {
+    // If public , skip authentication
+    if (isPublicUrl) {
       filterChain.doFilter(request, response);
       return;
     }
 
-    // For private URLs or any other URL, process authentication
+    // For private URLs, process authentication
     try {
       String jwt = parseJwt(request);
       // If no token is provided, continue (security config will handle access)
@@ -65,7 +58,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       if (!isTokenValid) {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType("application/json");
-        response.getWriter().write("{\"message\": \"Token expiré\", \"error\": \"INVALID_TOKEN\"}");
+        response.getWriter().write("{\"message\": \"Token invalide - Non Authorisé\", \"error\": \"INVALID_TOKEN\"}");
         response.getWriter().flush(); // send immediately the response
         return;
       }
