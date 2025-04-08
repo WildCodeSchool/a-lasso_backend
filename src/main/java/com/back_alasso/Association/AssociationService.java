@@ -25,14 +25,14 @@ public class AssociationService {
     this.voluntaryRepository = voluntaryRepository;
   }
 
-  public AssociationCardDTO getAssociation(UUID id) {
+  public AssociationCardDTO getAssociation(UUID id, UUID authenticatedUserId) {
     Association association = associationRepository.findById(id).orElse(null);
-    return AssociationCardDTO.fromEntityToDTO(association);
+    return AssociationCardDTO.fromEntityToDTO(association, authenticatedUserId);
   }
 
-  public Boolean updateFollowStatus(UUID associationId, boolean isFollow, UUID authenticatedUser) {
+  public Boolean updateFollowStatus(UUID associationId, boolean isFollow, UUID authenticatedUserId) {
     AssociationFollower associationfollower = associationFollowerRepository
-      .findByVoluntary_idAndAssociation_id(authenticatedUser, associationId)
+      .findByVoluntary_idAndAssociation_id(authenticatedUserId, associationId)
       .orElse(null);
 
     if (associationfollower != null) {
@@ -40,7 +40,7 @@ public class AssociationService {
       associationFollowerRepository.save(associationfollower);
       return isFollow;
     } else {
-      Voluntary voluntary = voluntaryRepository.findById(authenticatedUser).orElseThrow(() -> new ResourceNotFoundException("Voluntary not found"));
+      Voluntary voluntary = voluntaryRepository.findById(authenticatedUserId).orElseThrow(() -> new ResourceNotFoundException("Voluntary not found"));
       Association association = associationRepository
         .findById(associationId)
         .orElseThrow(() -> new ResourceNotFoundException("Association not found"));

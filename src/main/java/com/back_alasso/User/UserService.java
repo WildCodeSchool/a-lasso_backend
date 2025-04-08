@@ -15,6 +15,7 @@ import com.back_alasso.Image.ImageRepository;
 import com.back_alasso.Voluntary.Voluntary;
 import com.back_alasso.Voluntary.VoluntaryRepository;
 import java.util.*;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -51,6 +52,15 @@ public class UserService {
     if (userRepository.existsByEmail(email)) {
       throw new EmailAlreadyUsedException("Cet email est déjà utilisé");
     }
+  }
+
+  public UUID getAuthenticatedUserId(UserDetails userDetails) {
+    if (userDetails == null) {
+      return null;
+    }
+    String authenticatedUserEmail = userDetails.getUsername();
+    UUID authenticatedUserId = findByEmail(authenticatedUserEmail).getId();
+    return authenticatedUserId;
   }
 
   public boolean registerVoluntary(VoluntaryRegistrationDTO voluntaryRegistrationDTO) {
