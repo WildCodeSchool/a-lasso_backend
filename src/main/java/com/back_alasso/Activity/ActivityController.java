@@ -27,8 +27,9 @@ public class ActivityController {
   }
 
   @GetMapping
-  public ResponseEntity<List<ActivityDTO>> getAllActivities() {
-    List<ActivityDTO> activities = activityService.getAllActivities();
+  public ResponseEntity<List<ActivityDTO>> getAllActivities(@AuthenticationPrincipal UserDetails userDetails) {
+    UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
+    List<ActivityDTO> activities = activityService.getAllActivities(authenticatedUserId);
     return ResponseEntity.status(HttpStatus.OK).body(activities);
   }
 
@@ -38,8 +39,8 @@ public class ActivityController {
     @RequestBody UpdateFavoriteRequestDTO request,
     @AuthenticationPrincipal UserDetails userDetails
   ) {
-    UUID authenticatedUser = userService.getAuthenticatedUserId(userDetails);
-    boolean updatedFavoriteStatus = activityService.updatedFavoriteStatus(activityId, request.isFavorite(), authenticatedUser);
+    UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
+    boolean updatedFavoriteStatus = activityService.updatedFavoriteStatus(activityId, request.isSaved(), authenticatedUserId);
     return ResponseEntity.status(HttpStatus.OK).body(updatedFavoriteStatus);
   }
 
@@ -49,8 +50,8 @@ public class ActivityController {
     @RequestBody UpdateRegisteredRequestDTO request,
     @AuthenticationPrincipal UserDetails userDetails
   ) {
-    UUID authenticatedUser = userService.getAuthenticatedUserId(userDetails);
-    boolean updatedRegisterStatus = activityService.updatedRegisterStatus(activityId, request.isRegistered(), authenticatedUser);
+    UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
+    boolean updatedRegisterStatus = activityService.updatedRegisterStatus(activityId, request.isRegistered(), authenticatedUserId);
 
     // get fresh data to update frontEnd number of participants
     ActivityVoluntaryDTO activityVoluntaryDTO = activityVoluntaryService.getActivityVoluntary(activityId);

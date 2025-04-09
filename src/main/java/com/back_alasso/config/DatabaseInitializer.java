@@ -18,8 +18,8 @@ import com.back_alasso.AssociationImage.AssociationImage;
 import com.back_alasso.AssociationImage.AssociationImageRepository;
 import com.back_alasso.Country.Country;
 import com.back_alasso.Country.CountryRepository;
-import com.back_alasso.Geolocalisation.Geolocalisation;
-import com.back_alasso.Geolocalisation.GeolocalisationRepository;
+import com.back_alasso.Geolocation.Geolocation;
+import com.back_alasso.Geolocation.GeolocationRepository;
 import com.back_alasso.Image.Image;
 import com.back_alasso.Image.ImageEnumType;
 import com.back_alasso.Image.ImageRepository;
@@ -94,7 +94,7 @@ public class DatabaseInitializer {
   private final AssociationRepository associationRepository;
   private final AssociationImageRepository associationImageRepository;
   private final ImageRepository imageRepository;
-  private final GeolocalisationRepository geolocalisationRepository;
+  private final GeolocationRepository geolocationRepository;
   private final ThemeRepository themeRepository;
   private final PreferencesRepository preferencesRepository;
   private final ActivityImageRepository activityImageRepository;
@@ -113,7 +113,7 @@ public class DatabaseInitializer {
     AssociationRepository associationRepository,
     AssociationImageRepository associationImageRepository,
     ImageRepository imageRepository,
-    GeolocalisationRepository geolocalisationRepository,
+    GeolocationRepository geolocationRepository,
     ThemeRepository themeRepository,
     PreferencesRepository preferencesRepository,
     ActivityImageRepository activityImageRepository,
@@ -131,7 +131,7 @@ public class DatabaseInitializer {
     this.associationRepository = associationRepository;
     this.associationImageRepository = associationImageRepository;
     this.imageRepository = imageRepository;
-    this.geolocalisationRepository = geolocalisationRepository;
+    this.geolocationRepository = geolocationRepository;
     this.themeRepository = themeRepository;
     this.preferencesRepository = preferencesRepository;
     this.activityImageRepository = activityImageRepository;
@@ -205,13 +205,13 @@ public class DatabaseInitializer {
 
     List<Preferences> associationPreferences = Arrays.asList(new Preferences(associations.get(0)), new Preferences(associations.get(1)));
 
-    List<Geolocalisation> associationLocalisations = Arrays.asList(
-      new Geolocalisation(FIRST_ASSO_LONGITUDE, FIRST_ASSO_LATITUDE),
-      new Geolocalisation(SECOND_ASSO_LONGITUDE, SECOND_ASSO_LATITUDE)
+    List<Geolocation> associationLocalisations = Arrays.asList(
+      new Geolocation(FIRST_ASSO_LONGITUDE, FIRST_ASSO_LATITUDE),
+      new Geolocation(SECOND_ASSO_LONGITUDE, SECOND_ASSO_LATITUDE)
     );
 
-    associations.get(0).setGeolocalisation(associationLocalisations.get(0));
-    associations.get(1).setGeolocalisation(associationLocalisations.get(1));
+    associations.get(0).setGeolocation(associationLocalisations.get(0));
+    associations.get(1).setGeolocation(associationLocalisations.get(1));
 
     List<AssociationImage> associationImages = Arrays.asList(
       new AssociationImage(images.get(0), associations.get(0)),
@@ -276,10 +276,10 @@ public class DatabaseInitializer {
       new ActivityTheme(activities.get(1), allThemesForActivity.get(1))
     );
 
-    List<Geolocalisation> activityLocalisations = List.of(new Geolocalisation(FIRST_ACTIVITY_LONGITUDE, FIRST_ACTIVITY_LATITUDE));
+    List<Geolocation> activityLocalisations = List.of(new Geolocation(FIRST_ACTIVITY_LONGITUDE, FIRST_ACTIVITY_LATITUDE));
 
-    activities.get(0).setGeolocalisation(activityLocalisations.get(0));
-    activities.get(1).setGeolocalisation(associationLocalisations.get(1));
+    activities.get(0).setGeolocation(activityLocalisations.get(0));
+    activities.get(1).setGeolocation(associationLocalisations.get(1));
 
     // initiate exemples of voluntaries
     List<Image> voluntaryAvatars = List.of(new Image("/images/Voluntary/defaultAvatar.png", ImageEnumType.AVATAR));
@@ -323,10 +323,10 @@ public class DatabaseInitializer {
 
     List<ActivityVoluntary> activityVoluntaries = Arrays.asList(new ActivityVoluntary(false, true, voluntaries.get(0), activities.get(0)));
 
-    List<Geolocalisation> voluntaryLocalisations = Arrays.asList(new Geolocalisation(FIRST_VOLUNTARY_LONGITUDE, FIRST_VOLUNTARY_LATITUDE));
+    List<Geolocation> voluntaryLocalisations = Arrays.asList(new Geolocation(FIRST_VOLUNTARY_LONGITUDE, FIRST_VOLUNTARY_LATITUDE));
 
-    voluntaries.get(0).setGeolocalisation(voluntaryLocalisations.get(0));
-    voluntaries.get(1).setGeolocalisation(voluntaryLocalisations.get(0));
+    voluntaries.get(0).setGeolocation(voluntaryLocalisations.get(0));
+    voluntaries.get(1).setGeolocation(voluntaryLocalisations.get(0));
 
     // save messages between associations and voluntaries for a specific activity
     List<Message> allMessageFirstActivity = Arrays.asList(
@@ -373,7 +373,7 @@ public class DatabaseInitializer {
       // save associations
       imageRepository.saveAll(images);
       addressRepository.saveAll(associationAddresses);
-      geolocalisationRepository.saveAll(associationLocalisations);
+      geolocationRepository.saveAll(associationLocalisations);
       associationRepository.saveAll(associations);
       associationImageRepository.saveAll(associationImages);
       preferencesRepository.saveAll(associationPreferences);
@@ -382,14 +382,14 @@ public class DatabaseInitializer {
       // save activities
       imageRepository.saveAll(imagesTwo);
       addressRepository.saveAll(activityAddresses);
-      geolocalisationRepository.saveAll(activityLocalisations);
+      geolocationRepository.saveAll(activityLocalisations);
       activityRepository.saveAll(activities);
       activityThemeRepository.saveAll(activityThemes);
       activityImageRepository.saveAll(activityImages);
 
       // save voluntaries
       imageRepository.saveAll(voluntaryAvatars);
-      geolocalisationRepository.saveAll(voluntaryLocalisations);
+      geolocationRepository.saveAll(voluntaryLocalisations);
       voluntaryRepository.saveAll(voluntaries);
       preferencesRepository.saveAll(voluntaryPreferences);
       associationFollowerRepository.saveAll(voluntaryAssociationFollowers);

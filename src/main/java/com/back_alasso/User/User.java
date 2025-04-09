@@ -1,6 +1,6 @@
 package com.back_alasso.User;
 
-import com.back_alasso.Geolocalisation.Geolocalisation;
+import com.back_alasso.Geolocation.Geolocation;
 import com.back_alasso.Message.Message;
 import com.back_alasso.Preferences.Preferences;
 import com.back_alasso.Report.Report;
@@ -52,8 +52,8 @@ public class User extends BaseEntity implements UserDetails {
   private List<Report> reportsHandled; // reports where the user is the admin
 
   @ManyToOne
-  @JoinColumn(name = "geolocalisation_id")
-  private Geolocalisation geolocalisation;
+  @JoinColumn(name = "geolocation_id")
+  private Geolocation geolocation;
 
   @OneToMany(mappedBy = "user")
   private List<Statistic> statistic;
@@ -180,12 +180,12 @@ public class User extends BaseEntity implements UserDetails {
     this.reportsHandled = reportsHandled;
   }
 
-  public Geolocalisation getGeolocalisation() {
-    return geolocalisation;
+  public Geolocation getGeolocation() {
+    return geolocation;
   }
 
-  public void setGeolocalisation(Geolocalisation geolocalisation) {
-    this.geolocalisation = geolocalisation;
+  public void setGeolocation(Geolocation geolocation) {
+    this.geolocation = geolocation;
   }
 
   public List<Statistic> getStatistic() {

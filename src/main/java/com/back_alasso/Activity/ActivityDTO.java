@@ -3,7 +3,7 @@ package com.back_alasso.Activity;
 import com.back_alasso.ActivityVoluntary.ActivityVoluntary;
 import com.back_alasso.ActivityVoluntary.ActivityVoluntaryDTO;
 import com.back_alasso.Association.AssociationActivityDTO;
-import com.back_alasso.Geolocalisation.GeolocalisationDTO;
+import com.back_alasso.Geolocation.GeolocationDTO;
 import com.back_alasso.Theme.ThemeNameEnumType;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,25 +16,15 @@ public record ActivityDTO(
   String description,
   List<String> images,
   AssociationActivityDTO association,
-  GeolocalisationDTO location,
+  GeolocationDTO location,
   LocalDateTime date,
   ActivityVoluntaryDTO participants,
   List<ThemeNameEnumType> themesName,
   boolean isSaved,
   boolean isRegistered
 ) {
-  public static ActivityDTO fromEntityToDTO(Activity activity) {
-    Optional<ActivityVoluntary> voluntary = activity
-      .getActivityVoluntaries()
-      .stream()
-      .filter(activityVoluntary -> {
-        String authenticatedUserId = "TODO -->"; // getUserAuthenticated();
-        if (authenticatedUserId == null) {
-          return false;
-        }
-        return activityVoluntary.getVoluntary().getId().equals(authenticatedUserId);
-      })
-      .findFirst();
+  public static ActivityDTO fromEntityToDTO(Activity activity, UUID authenticatedUserId) {
+    Optional<ActivityVoluntary> voluntary = getUserActivityVoluntaryStatus(activity, authenticatedUserId);
 
     return new ActivityDTO(
       activity.getId(),
@@ -42,12 +32,20 @@ public record ActivityDTO(
       activity.getDescription(),
       activity.getActivityImages() != null ? activity.getActivityImages().stream().map(image -> image.getImage().getUrl()).toList() : null,
       activity.getAssociation() != null ? AssociationActivityDTO.getAssociationDTO(activity.getAssociation()) : null,
-      GeolocalisationDTO.getCoordinates(activity),
+      GeolocationDTO.getCoordinates(activity),
       activity.getDate(),
       ActivityVoluntaryDTO.convertToDTO(activity),
       activity.getActivityThemes().stream().map(theme -> theme.getTheme().getName()).toList(),
       voluntary.map(ActivityVoluntary::isIs_saved).orElse(false),
       voluntary.map(ActivityVoluntary::isIs_registered).orElse(false)
     );
+  }
+
+  private static Optional<ActivityVoluntary> getUserActivityVoluntaryStatus(Activity activity, UUID authenticatedUserId) {
+    if (authenticatedUserId == null) {
+      return Optional.empty();
+    }
+
+    return activity.getActivityVoluntaries().stream().filter(av -> av.getVoluntary().getId().equals(authenticatedUserId)).findFirst();
   }
 }

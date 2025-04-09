@@ -10,9 +10,9 @@ import com.back_alasso.Country.Country;
 import com.back_alasso.Country.CountryRepository;
 import com.back_alasso.Exception.EmailAlreadyUsedException;
 import com.back_alasso.Exception.ResourceNotFoundException;
-import com.back_alasso.Geolocalisation.Geolocalisation;
-import com.back_alasso.Geolocalisation.GeolocalisationRepository;
-import com.back_alasso.Geolocalisation.GeolocalisationService;
+import com.back_alasso.Geolocation.Geolocation;
+import com.back_alasso.Geolocation.GeolocationRepository;
+import com.back_alasso.Geolocation.GeolocationService;
 import com.back_alasso.Image.Image;
 import com.back_alasso.Image.ImageRepository;
 import com.back_alasso.Preferences.Preferences;
@@ -35,8 +35,8 @@ public class UserService {
   private final CountryRepository countryRepository;
   private final AddressRepository addressRepository;
   private final PreferencesRepository preferencesRepository;
-  private final GeolocalisationService geolocalisationService;
-  private final GeolocalisationRepository geolocalisationRepository;
+  private final GeolocationService geolocationService;
+  private final GeolocationRepository geolocationRepository;
 
   public UserService(
     UserRepository userRepository,
@@ -47,8 +47,8 @@ public class UserService {
     CountryRepository countryRepository,
     AddressRepository addressRepository,
     PreferencesRepository preferencesRepository,
-    GeolocalisationService geolocalisationService,
-    GeolocalisationRepository geolocalisationRepository
+    GeolocationService geolocationService,
+    GeolocationRepository geolocationRepository
   ) {
     this.userRepository = userRepository;
     this.passwordEncoder = passwordEncoder;
@@ -58,8 +58,8 @@ public class UserService {
     this.countryRepository = countryRepository;
     this.addressRepository = addressRepository;
     this.preferencesRepository = preferencesRepository;
-    this.geolocalisationService = geolocalisationService;
-    this.geolocalisationRepository = geolocalisationRepository;
+    this.geolocationService = geolocationService;
+    this.geolocationRepository = geolocationRepository;
   }
 
   public void checkUserExists(String email) {
@@ -101,13 +101,10 @@ public class UserService {
       null
     );
 
-    Geolocalisation geolocVoluntary = geolocalisationService.getVoluntaryCoordinates(
-      voluntaryRegistrationDTO.city(),
-      voluntaryRegistrationDTO.country()
-    );
+    Geolocation geolocVoluntary = geolocationService.getVoluntaryCoordinates(voluntaryRegistrationDTO.city(), voluntaryRegistrationDTO.country());
 
-    geolocalisationRepository.save(geolocVoluntary);
-    voluntary.setGeolocalisation(geolocVoluntary);
+    geolocationRepository.save(geolocVoluntary);
+    voluntary.setGeolocation(geolocVoluntary);
 
     voluntaryRepository.save(voluntary);
     preferencesRepository.save(new Preferences(voluntary));
@@ -146,10 +143,10 @@ public class UserService {
       null
     );
 
-    Geolocalisation geolocAssociation = geolocalisationService.getCoordinatesWithFullAddress(associationRegistrationDTO.address());
+    Geolocation geolocAssociation = geolocationService.getCoordinatesWithFullAddress(associationRegistrationDTO.address());
 
-    geolocalisationRepository.save(geolocAssociation);
-    association.setGeolocalisation(geolocAssociation);
+    geolocationRepository.save(geolocAssociation);
+    association.setGeolocation(geolocAssociation);
 
     associationRepository.save(association);
     preferencesRepository.save(new Preferences(association));

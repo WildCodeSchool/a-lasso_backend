@@ -1,9 +1,9 @@
-package com.back_alasso.Geolocalisation;
+package com.back_alasso.Geolocation;
 
 import com.back_alasso.Address.Address;
 
 public interface Geolocatable {
   Address getAddress();
 
-  Geolocalisation getGeolocalisation();
+  Geolocation getGeolocation();
 }

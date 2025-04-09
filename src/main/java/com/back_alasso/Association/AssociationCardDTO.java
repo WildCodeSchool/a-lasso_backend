@@ -42,19 +42,21 @@ public record AssociationCardDTO(
         .orElse("defaultAssociationProfileImage.png"),
       association.getSiteURL(),
       association.getStatistic().stream().map(StatisticDTO::fromEntityToDTO).toList(),
-      association
-        .getAssociationFollowers()
-        .stream()
-        .filter(associationFollower -> {
-          // TODO : vérifier use case non connecté que on a bien un false de renvoyer.
-          if (authenticatedUserId == null) {
-            return false;
-          }
-          return associationFollower.getVoluntary().getId().equals(authenticatedUserId);
-        })
-        .findFirst()
-        .map(AssociationFollower::isIs_follow)
-        .orElse(false)
+      AssociationCardDTO.getIsFollow(authenticatedUserId, association)
     );
+  }
+
+  private static boolean getIsFollow(UUID authenticatedUserId, Association association) {
+    if (authenticatedUserId == null) {
+      return false;
+    }
+
+    return association
+      .getAssociationFollowers()
+      .stream()
+      .filter(associationFollower -> associationFollower.getVoluntary().getId().equals(authenticatedUserId))
+      .findFirst()
+      .map(AssociationFollower::isIs_follow)
+      .orElse(false);
   }
 }

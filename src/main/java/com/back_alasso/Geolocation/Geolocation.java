@@ -1,4 +1,4 @@
-package com.back_alasso.Geolocalisation;
+package com.back_alasso.Geolocation;
 
 import com.back_alasso.Activity.Activity;
 import com.back_alasso.User.User;
@@ -7,10 +7,8 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO: revoir pour changer les coordonnées avec Point d'hibernate spacial ?
-
 @Entity
-public class Geolocalisation extends BaseEntity {
+public class Geolocation extends BaseEntity {
 
   @Column(nullable = false)
   private double longitude;
@@ -18,17 +16,17 @@ public class Geolocalisation extends BaseEntity {
   @Column(nullable = false)
   private double latitude;
 
-  @OneToMany(mappedBy = "geolocalisation") // one localisation can be shared by some users
+  @OneToMany(mappedBy = "geolocation") // one localisation can be shared by some users
   private List<User> users = new ArrayList<>();
 
-  @OneToMany(mappedBy = "geolocalisation") // one localisation can be shared by some activities
+  @OneToMany(mappedBy = "geolocation") // one localisation can be shared by some activities
   private List<Activity> activities = new ArrayList<>();
 
   // Necessary to have an empty constructor to instance object.
-  public Geolocalisation() {}
+  public Geolocation() {}
 
   // constructor for activity or user(voluntary or association) 's localisation
-  public Geolocalisation(double longitude, double latitude) {
+  public Geolocation(double longitude, double latitude) {
     this.longitude = longitude;
     this.latitude = latitude;
   }
