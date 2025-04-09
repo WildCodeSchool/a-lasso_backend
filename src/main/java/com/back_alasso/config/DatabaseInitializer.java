@@ -150,13 +150,13 @@ public class DatabaseInitializer {
     // initiate general data which doesn't change.
     Country firstCountry = new Country("France");
     List<Theme> allThemesForActivity = Arrays.asList(
-      new Theme(ThemeNameEnumType.Santé, "/images/Activity/Themes/Theme_Sante.png"),
-      new Theme(ThemeNameEnumType.Nature, "/images/Activity/Themes/Theme_Nature.png"),
-      new Theme(ThemeNameEnumType.Cours, "/images/Activity/Themes/Theme_Cours.png"),
-      new Theme(ThemeNameEnumType.Culture, "/images/Activity/Themes/Theme_Culture.png"),
-      new Theme(ThemeNameEnumType.Culinaire, "/images/Activity/Themes/Theme_Culinaire.png"),
-      new Theme(ThemeNameEnumType.Social, "/images/Activity/Themes/Theme_Social.png"),
-      new Theme(ThemeNameEnumType.Sport, "/images/Activity/Themes/Theme_Sport.png")
+      new Theme(ThemeNameEnumType.Santé, "fa-solid fa-suitcase-medical"),
+      new Theme(ThemeNameEnumType.Nature, "fa-solid fa-tree"),
+      new Theme(ThemeNameEnumType.Cours, "fa-solid fa-graduation-cap"),
+      new Theme(ThemeNameEnumType.Culture, "fa-solid fa-masks-theater"),
+      new Theme(ThemeNameEnumType.Culinaire, "fa-solid fa-bowl-food"),
+      new Theme(ThemeNameEnumType.Social, "fa-solid fa-handshake"),
+      new Theme(ThemeNameEnumType.Sport, "fa-solid fa-volleyball")
     );
 
     // initiate examples of associations
