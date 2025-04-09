@@ -16,14 +16,6 @@ public class CorsConfig implements WebMvcConfigurer {
   @Value("${cors.allowedOrigins}")
   private String allowedOrigins;
 
-  //    @Override
-  //    public void addCorsMappings(CorsRegistry registry) {
-  //        registry.addMapping("/**")
-  //                .allowedOrigins(allowedOrigins)
-  //                .allowedHeaders("Content-Type", "Authorization")
-  //                .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS");
-  //    }
-
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();

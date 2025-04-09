@@ -36,17 +36,23 @@ public class AssociationService {
       .orElse(null);
 
     if (associationfollower != null) {
-      associationfollower.setIs_follow(isFollow);
-      associationFollowerRepository.save(associationfollower);
-      return isFollow;
+      return updateFollowForNewAssociationFollower(associationfollower, isFollow);
     } else {
-      Voluntary voluntary = voluntaryRepository.findById(authenticatedUserId).orElseThrow(() -> new ResourceNotFoundException("Voluntary not found"));
-      Association association = associationRepository
-        .findById(associationId)
-        .orElseThrow(() -> new ResourceNotFoundException("Association not found"));
-      AssociationFollower newAssociationfollower = new AssociationFollower(false, isFollow, voluntary, association);
-      associationFollowerRepository.save(newAssociationfollower);
-      return isFollow;
+      return updateFollowForExistantAssociationFollower(associationId, isFollow, authenticatedUserId);
     }
+  }
+
+  private Boolean updateFollowForNewAssociationFollower(AssociationFollower associationfollower, boolean isFollow) {
+    associationfollower.setIs_follow(isFollow);
+    associationFollowerRepository.save(associationfollower);
+    return isFollow;
+  }
+
+  private Boolean updateFollowForExistantAssociationFollower(UUID associationId, boolean isFollow, UUID authenticatedUser) {
+    Voluntary voluntary = voluntaryRepository.findById(authenticatedUser).orElseThrow(() -> new ResourceNotFoundException("Voluntary not found"));
+    Association association = associationRepository.findById(associationId).orElseThrow(() -> new ResourceNotFoundException("Association not found"));
+    AssociationFollower newAssociationfollower = new AssociationFollower(false, isFollow, voluntary, association);
+    associationFollowerRepository.save(newAssociationfollower);
+    return isFollow;
   }
 }
