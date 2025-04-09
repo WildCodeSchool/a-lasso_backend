@@ -45,6 +45,11 @@ public class ActivityService {
 
   public List<ActivityDTO> getAllActivities() {
     List<Activity> activities = activityRepository.findAll();
+
+    if (activities.isEmpty()) {
+      throw new ResourceNotFoundException("activities not found");
+    }
+
     return activities.stream().map(ActivityDTO::fromEntityToDTO).collect(Collectors.toList());
   }
 
@@ -56,7 +61,6 @@ public class ActivityService {
       activityVoluntaryRepository.save(activityVoluntary);
       return isFavorite;
     } else {
-
       Voluntary voluntary = getVoluntary(authenticatedUser);
       Activity activity = getActivity(activityId);
 
@@ -65,7 +69,6 @@ public class ActivityService {
       return isFavorite;
     }
   }
-
 
   public Boolean updatedRegisterStatus(UUID activityId, boolean isRegistered, UUID authenticatedUser) {
     ActivityVoluntary activityVoluntary = getActivityVoluntary(authenticatedUser, activityId);
@@ -81,5 +84,4 @@ public class ActivityService {
       return isRegistered;
     }
   }
-
 }

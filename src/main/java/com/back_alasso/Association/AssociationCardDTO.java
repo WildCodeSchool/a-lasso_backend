@@ -19,7 +19,7 @@ public record AssociationCardDTO(
   List<StatisticDTO> statistics,
   Boolean isFollow
 ) {
-  public static AssociationCardDTO fromEntityToDTO(Association association) {
+  public static AssociationCardDTO fromEntityToDTO(Association association, UUID authenticatedUserId) {
     return new AssociationCardDTO(
       association.getId(),
       association.getDescription(),
@@ -46,7 +46,7 @@ public record AssociationCardDTO(
         .getAssociationFollowers()
         .stream()
         .filter(associationFollower -> {
-          String authenticatedUserId = "TODO --> "; // getUserAuthentificated();
+          // TODO : vérifier use case non connecté que on a bien un false de renvoyer.
           if (authenticatedUserId == null) {
             return false;
           }

@@ -19,7 +19,7 @@ public record ActivityDTO(
   GeolocalisationDTO location,
   LocalDateTime date,
   ActivityVoluntaryDTO participants,
-  List<ThemeNameEnumType> theme,
+  List<ThemeNameEnumType> themesName,
   boolean isSaved,
   boolean isRegistered
 ) {

@@ -2,7 +2,6 @@ package com.back_alasso.Activity;
 
 import com.back_alasso.ActivityVoluntary.ActivityVoluntaryDTO;
 import com.back_alasso.ActivityVoluntary.ActivityVoluntaryService;
-
 import com.back_alasso.User.UserService;
 import java.util.List;
 import java.util.UUID;
@@ -27,13 +26,6 @@ public class ActivityController {
     this.activityVoluntaryService = activityVoluntaryService;
   }
 
-  private UUID getAuthenticatedUser(UserDetails userDetails) {
-    String authenticatedUserEmail = userDetails.getUsername();
-    UUID authenticatedUserId = userService.findByEmail(authenticatedUserEmail).getId();
-    return authenticatedUserId;
-
-  }
-
   @GetMapping
   public ResponseEntity<List<ActivityDTO>> getAllActivities() {
     List<ActivityDTO> activities = activityService.getAllActivities();
@@ -46,8 +38,7 @@ public class ActivityController {
     @RequestBody UpdateFavoriteRequestDTO request,
     @AuthenticationPrincipal UserDetails userDetails
   ) {
-
-    UUID authenticatedUser = getAuthenticatedUser(userDetails);
+    UUID authenticatedUser = userService.getAuthenticatedUserId(userDetails);
     boolean updatedFavoriteStatus = activityService.updatedFavoriteStatus(activityId, request.isFavorite(), authenticatedUser);
     return ResponseEntity.status(HttpStatus.OK).body(updatedFavoriteStatus);
   }
@@ -58,7 +49,7 @@ public class ActivityController {
     @RequestBody UpdateRegisteredRequestDTO request,
     @AuthenticationPrincipal UserDetails userDetails
   ) {
-    UUID authenticatedUser = getAuthenticatedUser(userDetails);
+    UUID authenticatedUser = userService.getAuthenticatedUserId(userDetails);
     boolean updatedRegisterStatus = activityService.updatedRegisterStatus(activityId, request.isRegistered(), authenticatedUser);
 
     // get fresh data to update frontEnd number of participants
@@ -68,5 +59,4 @@ public class ActivityController {
 
     return ResponseEntity.status(HttpStatus.OK).body(response);
   }
-
 }

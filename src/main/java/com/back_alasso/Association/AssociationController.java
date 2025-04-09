@@ -21,8 +21,9 @@ public class AssociationController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<AssociationCardDTO> getAssociationCard(@PathVariable UUID id) {
-    AssociationCardDTO associationCard = associationService.getAssociation(id);
+  public ResponseEntity<AssociationCardDTO> getAssociationCard(@PathVariable UUID id, @AuthenticationPrincipal UserDetails userDetails) {
+    UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
+    AssociationCardDTO associationCard = associationService.getAssociation(id, authenticatedUserId);
     return ResponseEntity.status(HttpStatus.OK).body(associationCard);
   }
 
@@ -32,9 +33,8 @@ public class AssociationController {
     @RequestBody UpdateFollowRequestDTO request,
     @AuthenticationPrincipal UserDetails userDetails
   ) {
-    String emailAuthentificatedUser = userDetails.getUsername();
-    UUID authenticatedUser = userService.findByEmail(emailAuthentificatedUser).getId();
-    boolean updatedFollowStatus = associationService.updateFollowStatus(associationId, request.isFollow(), authenticatedUser);
+    UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
+    boolean updatedFollowStatus = associationService.updateFollowStatus(associationId, request.isFollow(), authenticatedUserId);
     return ResponseEntity.status(HttpStatus.OK).body(updatedFollowStatus);
   }
 }
