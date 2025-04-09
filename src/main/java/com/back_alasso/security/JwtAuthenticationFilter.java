@@ -31,55 +31,50 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
     throws ServletException, IOException {
-    // Get the request URI
-    String requestURI = request.getRequestURI();
-
-    // First check if it's a public URL (that doesn't need JWT)
-    boolean isPublicUrl = PUBLIC_URLS.stream().anyMatch(pattern -> pathMatcher.match(pattern, requestURI));
-
-    // If public , skip authentication
-    if (isPublicUrl) {
-      String jwt = parseJwt(request);
-      if (jwt != null) {
-        jwtAuthentication(request, response, filterChain);
-        filterChain.doFilter(request, response);
-        return;
-      }
+    if (isPublicUrl(request) && parseJwt(request) == null) {
       filterChain.doFilter(request, response);
       return;
     }
 
-    // For private URLs, process authentication
-    jwtAuthentication(request, response, filterChain);
+    if (!authenticateRequest(request, response)) {
+      return;
+    }
+
     filterChain.doFilter(request, response);
   }
 
-  private void jwtAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) {
-    try {
-      String jwt = parseJwt(request);
-      // If no token is provided, continue (security config will handle access)
-      if (jwt == null) {
-        filterChain.doFilter(request, response);
-      }
+  private boolean isPublicUrl(HttpServletRequest request) {
+    String requestURI = request.getRequestURI();
+    return PUBLIC_URLS.stream().anyMatch(pattern -> pathMatcher.match(pattern, requestURI));
+  }
 
-      boolean isTokenValid = jwtService.validateJwtToken(jwt, response);
+  private boolean authenticateRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    String jwt = parseJwt(request);
+    if (jwt == null) return true;
 
-      // If token is invalid, send error to front to redirect user to auth page
-      if (!isTokenValid) {
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.setContentType("application/json");
-        response.getWriter().write("{\"message\": \"Token invalide - Non Authorisé\", \"error\": \"INVALID_TOKEN\"}");
-        response.getWriter().flush(); // send immediately the response
-      }
-
-      String username = jwtService.extractClaims(jwt).getSubject();
-      UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-      UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-      authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-      SecurityContextHolder.getContext().setAuthentication(authentication);
-    } catch (Exception e) {
-      System.out.println("Cannot set user authentication: " + e);
+    if (!jwtService.validateJwtToken(jwt, response)) {
+      sendUnauthorizedResponse(response);
+      return false;
     }
+
+    setAuthenticationContext(jwt, request);
+    return true;
+  }
+
+  private void setAuthenticationContext(String jwt, HttpServletRequest request) {
+    String username = jwtService.extractClaims(jwt).getSubject();
+    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+  }
+
+  private void sendUnauthorizedResponse(HttpServletResponse response) throws IOException {
+    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+    response.setContentType("application/json");
+    response.getWriter().write("{\"message\": \"Token invalide - Non Authorisé\", \"error\": \"INVALID_TOKEN\"}");
+    response.getWriter().flush();
   }
 
   private String parseJwt(HttpServletRequest request) {
