@@ -33,6 +33,13 @@ public class ActivityController {
     return ResponseEntity.status(HttpStatus.OK).body(activities);
   }
 
+  @GetMapping("/{activityId}/isUserRegisteredToActivity")
+  public ResponseEntity<Boolean> isUserRegisteredToActivity(@PathVariable UUID activityId, @AuthenticationPrincipal UserDetails userDetails) {
+    UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
+    Boolean isRegistered = activityService.isUserRegisteredToActivity(activityId, authenticatedUserId);
+    return ResponseEntity.status(HttpStatus.OK).body(isRegistered);
+  }
+
   @PatchMapping("/{activityId}/updateFavorite")
   public ResponseEntity<Boolean> patchFavoriteStatus(
     @PathVariable UUID activityId,
