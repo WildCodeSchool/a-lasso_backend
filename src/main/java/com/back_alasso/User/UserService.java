@@ -96,7 +96,7 @@ public class UserService {
       voluntaryRegistrationDTO.first_name(),
       voluntaryRegistrationDTO.last_name(),
       profileImage,
-      voluntaryRegistrationDTO.mobile_phone().orElse(""),
+      voluntaryRegistrationDTO.mobile_phone(),
       null,
       null
     );

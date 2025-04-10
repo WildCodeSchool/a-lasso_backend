@@ -1,6 +1,8 @@
 package com.back_alasso.Geolocation;
 
 import com.back_alasso.Address.Address;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -28,23 +30,28 @@ public class GeolocationService {
   }
 
   public Geolocation getCoordinatesWithFullAddress(Address address) {
-    String url =
-      GEOLOC_BASE_URL_OPEN_STREET_MAP +
-      address.getHouse_number() +
-      ',' +
-      address.getStreet_name() +
-      ',' +
-      address.getCity() +
-      ',' +
-      address.getCountry().getName();
+    try {
+      String query = String.format(
+        "%s %s %s %s",
+        address.getHouse_number(),
+        address.getStreet_name(),
+        address.getCity(),
+        address.getCountry().getName()
+      );
 
-    // Send Api External Request to obtain geolocation
-    GeolocDTO[] response = restTemplate.getForObject(url, GeolocDTO[].class);
+      String encodedQuery = URLEncoder.encode(query, "UTF-8");
 
-    if (response != null) {
-      Geolocation geolocation = new Geolocation(response[0].longitude(), response[0].latitude());
-      return geolocation;
+      String url = GEOLOC_BASE_URL_OPEN_STREET_MAP + encodedQuery;
+
+      GeolocDTO[] response = restTemplate.getForObject(url, GeolocDTO[].class);
+
+      if (response != null && response.length > 0) {
+        return new Geolocation(response[0].longitude(), response[0].latitude());
+      } else {
+        return getVoluntaryCoordinates(address.getCity(), address.getCountry().getName());
+      }
+    } catch (UnsupportedEncodingException e) {
+      throw new RuntimeException("Erreur d'encodage de l'adresse", e);
     }
-    throw new RuntimeException("Aucune donnée de géolocalisation trouvée");
   }
 }
