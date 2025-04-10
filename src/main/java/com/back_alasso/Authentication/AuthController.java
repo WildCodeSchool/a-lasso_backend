@@ -6,6 +6,7 @@ import com.back_alasso.User.User;
 import com.back_alasso.User.UserService;
 import com.back_alasso.Voluntary.Voluntary;
 import com.back_alasso.Voluntary.VoluntaryLoginDTO;
+import jakarta.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,7 @@ public class AuthController {
   }
 
   @PostMapping("/register/voluntary")
-  public ResponseEntity<Boolean> register(@RequestBody VoluntaryRegistrationDTO voluntaryRegistrationDTO) {
+  public ResponseEntity<Boolean> register(@Valid @RequestBody VoluntaryRegistrationDTO voluntaryRegistrationDTO) {
     userService.checkUserExists(voluntaryRegistrationDTO.email());
     boolean isRegisteredSuccess = userService.registerVoluntary(voluntaryRegistrationDTO);
 
@@ -33,7 +34,7 @@ public class AuthController {
   }
 
   @PostMapping("/register/association")
-  public ResponseEntity<Boolean> register(@RequestBody AssociationRegistrationDTO associationRegistrationDTO) {
+  public ResponseEntity<Boolean> register(@Valid @RequestBody AssociationRegistrationDTO associationRegistrationDTO) {
     userService.checkUserExists(associationRegistrationDTO.email());
     boolean isRegisteredSuccess = userService.registerAssociation(associationRegistrationDTO);
 
@@ -41,7 +42,7 @@ public class AuthController {
   }
 
   @PostMapping("/login")
-  public ResponseEntity<Map<String, Object>> authenticate(@RequestBody UserLoginDTO userLoginDTO) {
+  public ResponseEntity<Map<String, Object>> authenticate(@Valid @RequestBody UserLoginDTO userLoginDTO) {
     String token = authService.authenticate(userLoginDTO.email(), userLoginDTO.password());
     User user = userService.findByEmail(userLoginDTO.email());
 
