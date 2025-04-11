@@ -121,7 +121,14 @@ public class DatabaseInitializer {
   public static final long FIFTH_ACTIVITY_VOLONTARIES_REQUEST = 10L;
   public static final long SIXTH_ACTIVITY_VOLONTARIES_REQUEST = 30L;
   public static final long SEVENTH_ACTIVITY_VOLONTARIES_REQUEST = 40L;
-  public static final int ACTIVITY_THEME_NUMBER = 5;
+
+  public static final int ACTIVITY_THEME_SANTE = 0;
+  public static final int ACTIVITY_THEME_NATURE = 1;
+  public static final int ACTIVITY_THEME_COURS = 2;
+  public static final int ACTIVITY_THEME_CULTURE = 3;
+  public static final int ACTIVITY_THEME_CULINAIRE = 4;
+  public static final int ACTIVITY_THEME_SOCIAL = 5;
+  public static final int ACTIVITY_THEME_SPORT = 6;
 
   public static final double FIRST_VOLUNTARY_LATITUDE = 47.218637;
   public static final double FIRST_VOLUNTARY_LONGITUDE = -1.554136;
@@ -461,7 +468,7 @@ public class DatabaseInitializer {
       new ActivityImage(imagesTwo.get(NUMBER_ZERO), activities.get(NUMBER_ZERO)),
       new ActivityImage(imagesTwo.get(NUMBER_ONE), activities.get(NUMBER_ZERO)),
       new ActivityImage(imagesTwo.get(NUMBER_TWO), activities.get(NUMBER_ONE)),
-      new ActivityImage(imagesTwo.get(DatabaseInitializer.NUMBER_THREE), activities.get(NUMBER_FIVE)),
+      new ActivityImage(imagesTwo.get(NUMBER_THREE), activities.get(NUMBER_FIVE)),
       new ActivityImage(imagesTwo.get(NUMBER_FOUR), activities.get(NUMBER_FIVE)),
       new ActivityImage(imagesTwo.get(NUMBER_FIVE), activities.get(NUMBER_FOUR)),
       new ActivityImage(imagesTwo.get(NUMBER_SIX), activities.get(NUMBER_FOUR)),
@@ -474,9 +481,18 @@ public class DatabaseInitializer {
     );
 
     List<ActivityTheme> activityThemes = Arrays.asList(
-      new ActivityTheme(activities.get(NUMBER_ZERO), allThemesForActivity.get(NUMBER_ZERO)),
-      new ActivityTheme(activities.get(NUMBER_ZERO), allThemesForActivity.get(ACTIVITY_THEME_NUMBER)),
-      new ActivityTheme(activities.get(NUMBER_ONE), allThemesForActivity.get(NUMBER_ONE))
+      new ActivityTheme(activities.get(NUMBER_ZERO), allThemesForActivity.get(ACTIVITY_THEME_SOCIAL)), // Maraude
+      new ActivityTheme(activities.get(NUMBER_ZERO), allThemesForActivity.get(ACTIVITY_THEME_SANTE)), // Maraude
+      new ActivityTheme(activities.get(NUMBER_ONE), allThemesForActivity.get(ACTIVITY_THEME_NATURE)), // Refuge
+      new ActivityTheme(activities.get(NUMBER_ONE), allThemesForActivity.get(ACTIVITY_THEME_SOCIAL)), // Refuge
+      new ActivityTheme(activities.get(NUMBER_TWO), allThemesForActivity.get(ACTIVITY_THEME_NATURE)), // Plage
+      new ActivityTheme(activities.get(NUMBER_THREE), allThemesForActivity.get(ACTIVITY_THEME_CULINAIRE)), // Cuisine
+      new ActivityTheme(activities.get(NUMBER_THREE), allThemesForActivity.get(ACTIVITY_THEME_SOCIAL)), // Cuisine
+      new ActivityTheme(activities.get(NUMBER_THREE), allThemesForActivity.get(ACTIVITY_THEME_COURS)), // Cuisine
+      new ActivityTheme(activities.get(NUMBER_FOUR), allThemesForActivity.get(ACTIVITY_THEME_CULTURE)), // Écriture
+      new ActivityTheme(activities.get(NUMBER_FIVE), allThemesForActivity.get(ACTIVITY_THEME_NATURE)), // Jardins
+      new ActivityTheme(activities.get(NUMBER_SIX), allThemesForActivity.get(ACTIVITY_THEME_CULTURE)), // Spectacle
+      new ActivityTheme(activities.get(NUMBER_SIX), allThemesForActivity.get(ACTIVITY_THEME_SOCIAL)) // Spectacle
     );
 
     List<Geolocation> activityLocalisations = Arrays.asList(
