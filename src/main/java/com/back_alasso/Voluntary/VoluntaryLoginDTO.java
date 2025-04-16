@@ -9,6 +9,7 @@ import com.back_alasso.Image.Image;
 import java.util.List;
 
 public record VoluntaryLoginDTO(
+  String type,
   String email,
   String first_name,
   String last_name,
@@ -35,6 +36,7 @@ public record VoluntaryLoginDTO(
       .toList();
 
     return new VoluntaryLoginDTO(
+      "voluntary",
       voluntary.getEmail(),
       voluntary.getFirst_name(),
       voluntary.getLast_name(),

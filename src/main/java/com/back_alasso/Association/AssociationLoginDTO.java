@@ -1,11 +1,13 @@
 package com.back_alasso.Association;
 
 import com.back_alasso.Address.Address;
+import com.back_alasso.Exception.ResourceNotFoundException;
 import com.back_alasso.Geolocation.GeolocationLoginDTO;
 import com.back_alasso.Image.ImageEnumType;
 import java.time.LocalDate;
 
 public record AssociationLoginDTO(
+  String type,
   String email,
   String name,
   String description,
@@ -18,7 +20,10 @@ public record AssociationLoginDTO(
   GeolocationLoginDTO geolocation
 ) {
   public static AssociationLoginDTO fromEntityToDTO(Association association) {
+    // f
+
     return new AssociationLoginDTO(
+      "association",
       association.getEmail(),
       association.getName(),
       association.getDescription(),
@@ -32,14 +37,14 @@ public record AssociationLoginDTO(
         .filter(associationImage -> associationImage.getImage().getType() == ImageEnumType.PROFILE_ASSOCIATION)
         .map(associationImage -> associationImage.getImage().getUrl())
         .findFirst()
-        .orElse("defaultAssociationProfileImage.png"),
+        .orElseThrow(() -> new ResourceNotFoundException("Association profile image not found")),
       association
         .getAssociationImages()
         .stream()
         .filter(associationImage -> associationImage.getImage().getType() == ImageEnumType.LOGO)
         .map(associationImage -> associationImage.getImage().getUrl())
         .findFirst()
-        .orElse("defaultAssociationProfileImage.png"),
+        .orElseThrow(() -> new ResourceNotFoundException("Association logo image not found")),
       GeolocationLoginDTO.from(association.getGeolocation())
     );
   }
