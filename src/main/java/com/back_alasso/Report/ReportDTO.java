@@ -16,6 +16,7 @@ public record ReportDTO(
   StatusReportEnumType status,
   String commentaryAdmin,
   LocalDateTime createdAt
+  //        String isReportBy
 ) {
   public static ReportDTO fromEntityToDTO(Report report) {
     User reported = report.getUser_reported();
@@ -30,6 +31,7 @@ public record ReportDTO(
       report.getStatus(),
       report.getCommentary_admin(),
       report.getCreatedAt()
+      //                report.getUser_reporter().getRoles()
     );
   }
 

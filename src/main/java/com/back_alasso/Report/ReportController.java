@@ -36,10 +36,4 @@ public class ReportController {
 
     return ResponseEntity.status(HttpStatus.CREATED).body(isSuccessPostReport);
   }
-
-  @DeleteMapping("/{reportId}")
-  public ResponseEntity<Boolean> deleteReport(@PathVariable UUID reportId, @AuthenticationPrincipal UserDetails userDetails) {
-    Boolean isSuccessDeleteReport = reportService.deleteReport(reportId);
-    return ResponseEntity.status(HttpStatus.OK).body(isSuccessDeleteReport);
-  }
 }

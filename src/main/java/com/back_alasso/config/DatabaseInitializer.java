@@ -610,8 +610,8 @@ public class DatabaseInitializer {
     List<Report> allReports = Arrays.asList(
       new Report(
         StatusReportEnumType.IN_PROGRESS,
-        ReasonReportEnumType.BAD_BEHAVIOR,
-        associations.get(NUMBER_ZERO),
+        ReasonReportEnumType.INAPPROPRIATE_ACTIVITY,
+        voluntaries.get(NUMBER_ZERO),
         voluntaries.get(NUMBER_ZERO),
         voluntaries.get(NUMBER_ONE),
         "Lors de ma participation à l’évènement d’aide au SDF, à plusieurs reprise le référent Mr.Patate à tenu des propos dégradant envers les femmes.",
