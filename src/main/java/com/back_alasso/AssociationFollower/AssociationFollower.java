@@ -12,10 +12,10 @@ import jakarta.persistence.ManyToOne;
 public class AssociationFollower extends BaseEntity {
 
   @Column(nullable = false)
-  private boolean is_notification_active = false;
+  private boolean notification_active = false;
 
   @Column(nullable = false)
-  private boolean is_follow = false;
+  private boolean follow = false;
 
   @ManyToOne
   @JoinColumn(name = "voluntary_id")
@@ -28,27 +28,11 @@ public class AssociationFollower extends BaseEntity {
   // Necessary to have an empty constructor to instance object.
   public AssociationFollower() {}
 
-  public AssociationFollower(boolean is_notification_active, boolean is_follow, Voluntary voluntary, Association association) {
-    this.is_notification_active = is_notification_active;
-    this.is_follow = is_follow;
+  public AssociationFollower(boolean notification_active, boolean follow, Voluntary voluntary, Association association) {
+    this.notification_active = notification_active;
+    this.follow = follow;
     this.voluntary = voluntary;
     this.association = association;
-  }
-
-  public boolean isIs_notification_active() {
-    return is_notification_active;
-  }
-
-  public void setIs_notification_active(boolean is_notification_active) {
-    this.is_notification_active = is_notification_active;
-  }
-
-  public boolean isIs_follow() {
-    return is_follow;
-  }
-
-  public void setIs_follow(boolean is_follow) {
-    this.is_follow = is_follow;
   }
 
   public Voluntary getVoluntary() {
@@ -65,5 +49,21 @@ public class AssociationFollower extends BaseEntity {
 
   public void setAssociation(Association association) {
     this.association = association;
+  }
+
+  public boolean isNotification_active() {
+    return notification_active;
+  }
+
+  public void setNotification_active(boolean notification_active) {
+    this.notification_active = notification_active;
+  }
+
+  public boolean isFollow() {
+    return follow;
+  }
+
+  public void setFollow(boolean follow) {
+    this.follow = follow;
   }
 }

@@ -43,43 +43,48 @@ public class ActivityService {
 
   // service public methods
 
-  public List<ActivityDTO> getAllActivities() {
+  public List<ActivityDTO> getAllActivities(UUID authenticatedUserId) {
     List<Activity> activities = activityRepository.findAll();
-    return activities.stream().map(ActivityDTO::fromEntityToDTO).collect(Collectors.toList());
+
+    if (activities.isEmpty()) {
+      throw new ResourceNotFoundException("activities not found");
+    }
+
+    return activities.stream().map(activity -> ActivityDTO.fromEntityToDTO(activity, authenticatedUserId)).collect(Collectors.toList());
   }
 
-  public Boolean updatedFavoriteStatus(UUID activityId, boolean isFavorite, UUID authenticatedUser) {
-    ActivityVoluntary activityVoluntary = getActivityVoluntary(authenticatedUser, activityId);
+  public ActivityDTO getActivityById(UUID authenticatedUserId, UUID activityId) {
+    Activity activity = activityRepository.findById(activityId).orElseThrow(() -> new ResourceNotFoundException("activity not found"));
+    return ActivityDTO.fromEntityToDTO(activity, authenticatedUserId);
+  }
 
+  public Boolean updatedFavoriteStatus(UUID activityId, boolean isFavorite, UUID authenticatedUserId) {
+    ActivityVoluntary activityVoluntary = getActivityVoluntary(authenticatedUserId, activityId);
     if (activityVoluntary != null) {
-      activityVoluntary.setIs_saved(isFavorite);
+      activityVoluntary.setSaved(isFavorite);
       activityVoluntaryRepository.save(activityVoluntary);
       return isFavorite;
     } else {
-
-      Voluntary voluntary = getVoluntary(authenticatedUser);
+      Voluntary voluntary = getVoluntary(authenticatedUserId);
       Activity activity = getActivity(activityId);
-
       ActivityVoluntary newActivityVoluntary = new ActivityVoluntary(isFavorite, false, voluntary, activity);
       activityVoluntaryRepository.save(newActivityVoluntary);
       return isFavorite;
     }
   }
 
-
-  public Boolean updatedRegisterStatus(UUID activityId, boolean isRegistered, UUID authenticatedUser) {
-    ActivityVoluntary activityVoluntary = getActivityVoluntary(authenticatedUser, activityId);
+  public Boolean updatedRegisterStatus(UUID activityId, boolean isRegistered, UUID authenticatedUserId) {
+    ActivityVoluntary activityVoluntary = getActivityVoluntary(authenticatedUserId, activityId);
     if (activityVoluntary != null) {
-      activityVoluntary.setIs_registered(isRegistered);
+      activityVoluntary.setRegistered(isRegistered);
       activityVoluntaryRepository.save(activityVoluntary);
       return isRegistered;
     } else {
-      Voluntary voluntary = getVoluntary(authenticatedUser);
+      Voluntary voluntary = getVoluntary(authenticatedUserId);
       Activity activity = getActivity(activityId);
       ActivityVoluntary newActivityVoluntary = new ActivityVoluntary(false, isRegistered, voluntary, activity);
       activityVoluntaryRepository.save(newActivityVoluntary);
       return isRegistered;
     }
   }
-
 }

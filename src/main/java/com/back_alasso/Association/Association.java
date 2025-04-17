@@ -3,7 +3,7 @@ package com.back_alasso.Association;
 import com.back_alasso.Address.Address;
 import com.back_alasso.AssociationFollower.AssociationFollower;
 import com.back_alasso.AssociationImage.AssociationImage;
-import com.back_alasso.Geolocalisation.Geolocatable;
+import com.back_alasso.Geolocation.Geolocatable;
 import com.back_alasso.Preferences.Preferences;
 import com.back_alasso.User.AccountEnumType;
 import com.back_alasso.User.User;

@@ -7,13 +7,11 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.HandlerExceptionResolver;
 
 @Service
 public class JwtService {
@@ -23,12 +21,6 @@ public class JwtService {
 
   @Value("${security.jwt.expiration-time}")
   private long jwtExpiration;
-
-  private final HandlerExceptionResolver resolver;
-
-  public JwtService(@Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver) {
-    this.resolver = resolver;
-  }
 
   public String generateToken(UserDetails userDetails) {
     return Jwts.builder()

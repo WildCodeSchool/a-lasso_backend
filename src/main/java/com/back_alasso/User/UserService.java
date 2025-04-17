@@ -4,15 +4,17 @@ import com.back_alasso.Address.Address;
 import com.back_alasso.Address.AddressRepository;
 import com.back_alasso.Association.Association;
 import com.back_alasso.Association.AssociationRepository;
+import com.back_alasso.AssociationImage.AssociationImage;
+import com.back_alasso.AssociationImage.AssociationImageRepository;
 import com.back_alasso.Authentication.AssociationRegistrationDTO;
 import com.back_alasso.Authentication.VoluntaryRegistrationDTO;
 import com.back_alasso.Country.Country;
 import com.back_alasso.Country.CountryRepository;
 import com.back_alasso.Exception.EmailAlreadyUsedException;
 import com.back_alasso.Exception.ResourceNotFoundException;
-import com.back_alasso.Geolocalisation.Geolocalisation;
-import com.back_alasso.Geolocalisation.GeolocalisationRepository;
-import com.back_alasso.Geolocalisation.GeolocalisationService;
+import com.back_alasso.Geolocation.Geolocation;
+import com.back_alasso.Geolocation.GeolocationRepository;
+import com.back_alasso.Geolocation.GeolocationService;
 import com.back_alasso.Image.Image;
 import com.back_alasso.Image.ImageRepository;
 import com.back_alasso.Preferences.Preferences;
@@ -20,6 +22,7 @@ import com.back_alasso.Preferences.PreferencesRepository;
 import com.back_alasso.Voluntary.Voluntary;
 import com.back_alasso.Voluntary.VoluntaryRepository;
 import java.util.*;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -34,8 +37,9 @@ public class UserService {
   private final CountryRepository countryRepository;
   private final AddressRepository addressRepository;
   private final PreferencesRepository preferencesRepository;
-  private final GeolocalisationService geolocalisationService;
-  private final GeolocalisationRepository geolocalisationRepository;
+  private final GeolocationService geolocationService;
+  private final GeolocationRepository geolocationRepository;
+  private final AssociationImageRepository associationImageRepository;
 
   public UserService(
     UserRepository userRepository,
@@ -46,8 +50,9 @@ public class UserService {
     CountryRepository countryRepository,
     AddressRepository addressRepository,
     PreferencesRepository preferencesRepository,
-    GeolocalisationService geolocalisationService,
-    GeolocalisationRepository geolocalisationRepository
+    GeolocationService geolocationService,
+    GeolocationRepository geolocationRepository,
+    AssociationImageRepository associationImageRepository
   ) {
     this.userRepository = userRepository;
     this.passwordEncoder = passwordEncoder;
@@ -57,14 +62,24 @@ public class UserService {
     this.countryRepository = countryRepository;
     this.addressRepository = addressRepository;
     this.preferencesRepository = preferencesRepository;
-    this.geolocalisationService = geolocalisationService;
-    this.geolocalisationRepository = geolocalisationRepository;
+    this.geolocationService = geolocationService;
+    this.geolocationRepository = geolocationRepository;
+    this.associationImageRepository = associationImageRepository;
   }
 
   public void checkUserExists(String email) {
     if (userRepository.existsByEmail(email)) {
       throw new EmailAlreadyUsedException("Cet email est déjà utilisé");
     }
+  }
+
+  public UUID getAuthenticatedUserId(UserDetails userDetails) {
+    if (userDetails == null) {
+      return null;
+    }
+    String authenticatedUserEmail = userDetails.getUsername();
+    UUID authenticatedUserId = findByEmail(authenticatedUserEmail).getId();
+    return authenticatedUserId;
   }
 
   public boolean registerVoluntary(VoluntaryRegistrationDTO voluntaryRegistrationDTO) {
@@ -86,18 +101,15 @@ public class UserService {
       voluntaryRegistrationDTO.first_name(),
       voluntaryRegistrationDTO.last_name(),
       profileImage,
-      voluntaryRegistrationDTO.mobile_phone().orElse(""),
+      voluntaryRegistrationDTO.mobile_phone(),
       null,
       null
     );
 
-    Geolocalisation geolocVoluntary = geolocalisationService.getVoluntaryCoordinates(
-      voluntaryRegistrationDTO.city(),
-      voluntaryRegistrationDTO.country()
-    );
+    Geolocation geolocVoluntary = geolocationService.getVoluntaryCoordinates(voluntaryRegistrationDTO.city(), voluntaryRegistrationDTO.country());
 
-    geolocalisationRepository.save(geolocVoluntary);
-    voluntary.setGeolocalisation(geolocVoluntary);
+    geolocationRepository.save(geolocVoluntary);
+    voluntary.setGeolocation(geolocVoluntary);
 
     voluntaryRepository.save(voluntary);
     preferencesRepository.save(new Preferences(voluntary));
@@ -106,6 +118,14 @@ public class UserService {
   }
 
   public boolean registerAssociation(AssociationRegistrationDTO associationRegistrationDTO) {
+    Image logoImage = imageRepository
+      .findFirstByUrl("/images/Association/defaultAvatar.png")
+      .orElseThrow(() -> new RuntimeException("Image non trouvé"));
+
+    Image profileImage = imageRepository
+      .findFirstByUrl("/images/Association/defaultAssociationProfileImage.png")
+      .orElseThrow(() -> new RuntimeException("Image non trouvé"));
+
     Country country = countryRepository
       .findFirstByName(associationRegistrationDTO.address().getCountry().getName())
       .orElse(countryRepository.save(new Country(associationRegistrationDTO.address().getCountry().getName())));
@@ -136,13 +156,20 @@ public class UserService {
       null
     );
 
-    Geolocalisation geolocAssociation = geolocalisationService.getCoordinatesWithFullAddress(associationRegistrationDTO.address());
+    Geolocation geolocAssociation = geolocationService.getCoordinatesWithFullAddress(associationRegistrationDTO.address());
 
-    geolocalisationRepository.save(geolocAssociation);
-    association.setGeolocalisation(geolocAssociation);
+    geolocationRepository.save(geolocAssociation);
+    association.setGeolocation(geolocAssociation);
 
-    associationRepository.save(association);
+    Association createdAssociation = associationRepository.save(association);
     preferencesRepository.save(new Preferences(association));
+
+    List<AssociationImage> associationImages = Arrays.asList(
+      new AssociationImage(logoImage, createdAssociation),
+      new AssociationImage(profileImage, createdAssociation)
+    );
+
+    associationImageRepository.saveAll(associationImages);
     return true;
   }
 

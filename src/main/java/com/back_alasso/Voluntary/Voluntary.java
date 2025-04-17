@@ -1,5 +1,6 @@
 package com.back_alasso.Voluntary;
 
+import com.back_alasso.ActivityVoluntary.ActivityVoluntary;
 import com.back_alasso.AssociationFollower.AssociationFollower;
 import com.back_alasso.Country.Country;
 import com.back_alasso.Image.Image;
@@ -40,6 +41,9 @@ public class Voluntary extends User {
 
   @OneToMany(mappedBy = "voluntary")
   private List<AssociationFollower> associationFollowers;
+
+  @OneToMany(mappedBy = "voluntary")
+  private List<ActivityVoluntary> activityVoluntaries;
 
   // Necessary to have an empty constructor to instance object.
   public Voluntary() {
@@ -124,5 +128,13 @@ public class Voluntary extends User {
 
   public void setMobile_phone(String mobile_phone) {
     this.mobile_phone = mobile_phone;
+  }
+
+  public List<ActivityVoluntary> getActivityVoluntaries() {
+    return activityVoluntaries;
+  }
+
+  public void setActivityVoluntaries(List<ActivityVoluntary> activityVoluntaries) {
+    this.activityVoluntaries = activityVoluntaries;
   }
 }

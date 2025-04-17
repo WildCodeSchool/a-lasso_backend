@@ -12,10 +12,10 @@ import jakarta.persistence.ManyToOne;
 public class ActivityVoluntary extends BaseEntity {
 
   @Column(nullable = false)
-  private boolean is_saved;
+  private boolean saved;
 
   @Column(nullable = false)
-  private boolean is_registered;
+  private boolean registered;
 
   @ManyToOne
   @JoinColumn(name = "voluntary_id")
@@ -28,9 +28,9 @@ public class ActivityVoluntary extends BaseEntity {
   // Necessary to have an empty constructor to instance object.
   public ActivityVoluntary() {}
 
-  public ActivityVoluntary(boolean is_saved, boolean is_registered, Voluntary voluntary, Activity activity) {
-    this.is_saved = is_saved;
-    this.is_registered = is_registered;
+  public ActivityVoluntary(boolean saved, boolean registered, Voluntary voluntary, Activity activity) {
+    this.saved = saved;
+    this.registered = registered;
     this.voluntary = voluntary;
     this.activity = activity;
   }
@@ -51,19 +51,19 @@ public class ActivityVoluntary extends BaseEntity {
     this.activity = activity;
   }
 
-  public boolean isIs_saved() {
-    return is_saved;
+  public boolean isSaved() {
+    return saved;
   }
 
-  public void setIs_saved(boolean is_saved) {
-    this.is_saved = is_saved;
+  public void setSaved(boolean saved) {
+    this.saved = saved;
   }
 
-  public boolean isIs_registered() {
-    return is_registered;
+  public boolean isRegistered() {
+    return registered;
   }
 
-  public void setIs_registered(boolean is_registered) {
-    this.is_registered = is_registered;
+  public void setRegistered(boolean registered) {
+    this.registered = registered;
   }
 }
