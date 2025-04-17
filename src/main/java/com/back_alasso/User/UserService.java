@@ -4,6 +4,8 @@ import com.back_alasso.Address.Address;
 import com.back_alasso.Address.AddressRepository;
 import com.back_alasso.Association.Association;
 import com.back_alasso.Association.AssociationRepository;
+import com.back_alasso.AssociationImage.AssociationImage;
+import com.back_alasso.AssociationImage.AssociationImageRepository;
 import com.back_alasso.Authentication.AssociationRegistrationDTO;
 import com.back_alasso.Authentication.VoluntaryRegistrationDTO;
 import com.back_alasso.Country.Country;
@@ -37,6 +39,7 @@ public class UserService {
   private final PreferencesRepository preferencesRepository;
   private final GeolocationService geolocationService;
   private final GeolocationRepository geolocationRepository;
+  private final AssociationImageRepository associationImageRepository;
 
   public UserService(
     UserRepository userRepository,
@@ -48,7 +51,8 @@ public class UserService {
     AddressRepository addressRepository,
     PreferencesRepository preferencesRepository,
     GeolocationService geolocationService,
-    GeolocationRepository geolocationRepository
+    GeolocationRepository geolocationRepository,
+    AssociationImageRepository associationImageRepository
   ) {
     this.userRepository = userRepository;
     this.passwordEncoder = passwordEncoder;
@@ -60,6 +64,7 @@ public class UserService {
     this.preferencesRepository = preferencesRepository;
     this.geolocationService = geolocationService;
     this.geolocationRepository = geolocationRepository;
+    this.associationImageRepository = associationImageRepository;
   }
 
   public void checkUserExists(String email) {
@@ -113,6 +118,14 @@ public class UserService {
   }
 
   public boolean registerAssociation(AssociationRegistrationDTO associationRegistrationDTO) {
+    Image logoImage = imageRepository
+      .findFirstByUrl("/images/Association/defaultAvatar.png")
+      .orElseThrow(() -> new RuntimeException("Image non trouvé"));
+
+    Image profileImage = imageRepository
+      .findFirstByUrl("/images/Association/defaultAssociationProfileImage.png")
+      .orElseThrow(() -> new RuntimeException("Image non trouvé"));
+
     Country country = countryRepository
       .findFirstByName(associationRegistrationDTO.address().getCountry().getName())
       .orElse(countryRepository.save(new Country(associationRegistrationDTO.address().getCountry().getName())));
@@ -148,8 +161,15 @@ public class UserService {
     geolocationRepository.save(geolocAssociation);
     association.setGeolocation(geolocAssociation);
 
-    associationRepository.save(association);
+    Association createdAssociation = associationRepository.save(association);
     preferencesRepository.save(new Preferences(association));
+
+    List<AssociationImage> associationImages = Arrays.asList(
+      new AssociationImage(logoImage, createdAssociation),
+      new AssociationImage(profileImage, createdAssociation)
+    );
+
+    associationImageRepository.saveAll(associationImages);
     return true;
   }
 

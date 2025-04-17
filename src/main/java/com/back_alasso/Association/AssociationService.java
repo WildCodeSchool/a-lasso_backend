@@ -43,7 +43,7 @@ public class AssociationService {
   }
 
   private Boolean updateFollowForNewAssociationFollower(AssociationFollower associationfollower, boolean isFollow) {
-    associationfollower.setIs_follow(isFollow);
+    associationfollower.setFollow(isFollow);
     associationFollowerRepository.save(associationfollower);
     return isFollow;
   }

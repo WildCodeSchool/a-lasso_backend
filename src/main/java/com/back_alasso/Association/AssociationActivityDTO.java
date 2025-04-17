@@ -15,7 +15,7 @@ public record AssociationActivityDTO(UUID id, String name, String logo, boolean 
         .filter(i -> i.getImage().getType().name().equals("LOGO"))
         .map(i -> i.getImage().getUrl())
         .collect(Collectors.joining()),
-      association.getAssociationFollowers().stream().anyMatch(a -> a.getAssociation().getId().equals(association.getId()) && a.isIs_follow()),
+      association.getAssociationFollowers().stream().anyMatch(a -> a.getAssociation().getId().equals(association.getId()) && a.isFollow()),
       GeolocationDTO.getCoordinates(association)
     );
   }

@@ -1,6 +1,6 @@
 package com.back_alasso.Theme;
 
-import java.util.List;
+import java.util.Set;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,8 +18,8 @@ public class ThemeController {
   }
 
   @GetMapping
-  public ResponseEntity<List<ThemeDTO>> getAllThemes() {
-    List<ThemeDTO> themes = themeService.getAllActivitiesThemes();
+  public ResponseEntity<Set<ThemeDTO>> getAllThemes() {
+    Set<ThemeDTO> themes = themeService.getAllActivitiesThemes();
     return ResponseEntity.status(HttpStatus.OK).body(themes);
   }
 }

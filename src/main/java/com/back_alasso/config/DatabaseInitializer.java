@@ -228,6 +228,11 @@ public class DatabaseInitializer {
       new Address(FIFTH_HOUSE_NUMBER, "rue de la République", null, "69002", "LYON", firstCountry)
     );
 
+    List<Image> associationLogos = List.of(
+      new Image("/images/Association/defaultAvatar.png", ImageEnumType.LOGO),
+      new Image("/images/Association/defaultAssociationProfileImage.png", ImageEnumType.PROFILE_ASSOCIATION)
+    );
+
     List<Image> images = Arrays.asList(
       new Image("/images/Association/croixRouge.png", ImageEnumType.PROFILE_ASSOCIATION),
       new Image("/images/Association/logoCroixRouge.png", ImageEnumType.LOGO),
@@ -604,6 +609,7 @@ public class DatabaseInitializer {
       themeRepository.saveAll(allThemesForActivity);
 
       // save associations
+      imageRepository.saveAll(associationLogos);
       imageRepository.saveAll(images);
       addressRepository.saveAll(associationAddresses);
       geolocationRepository.saveAll(associationLocalisations);

@@ -33,6 +33,13 @@ public class ActivityController {
     return ResponseEntity.status(HttpStatus.OK).body(activities);
   }
 
+  @GetMapping("/{activityId}")
+  public ResponseEntity<ActivityDTO> getActivityById(@AuthenticationPrincipal UserDetails userDetails, @PathVariable UUID activityId) {
+    UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
+    ActivityDTO activity = activityService.getActivityById(authenticatedUserId, activityId);
+    return ResponseEntity.status(HttpStatus.OK).body(activity);
+  }
+
   @PatchMapping("/{activityId}/updateFavorite")
   public ResponseEntity<Boolean> patchFavoriteStatus(
     @PathVariable UUID activityId,

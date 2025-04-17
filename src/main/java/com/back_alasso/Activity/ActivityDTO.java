@@ -36,8 +36,8 @@ public record ActivityDTO(
       activity.getDate(),
       ActivityVoluntaryDTO.convertToDTO(activity),
       activity.getActivityThemes().stream().map(theme -> theme.getTheme().getName()).toList(),
-      voluntary.map(ActivityVoluntary::isIs_saved).orElse(false),
-      voluntary.map(ActivityVoluntary::isIs_registered).orElse(false)
+      voluntary.map(ActivityVoluntary::isSaved).orElse(false),
+      voluntary.map(ActivityVoluntary::isRegistered).orElse(false)
     );
   }
 
