@@ -256,7 +256,7 @@ public class DatabaseInitializer {
         "La Croix-Rouge française agit pour protéger et relever sans condition, les personnes en situation de vulnérabilité et construire avec elles leur résilience.",
         "Henry DUNANT",
         LocalDate.of(FIRST_ASSO_YEAR_FOUNDED, FIRST_ASSO_MONTH_FOUNDED, FIRST_ASSO_DAY_FOUNDED),
-        "LA CROIX ROUGE",
+        "La Croix Rouge",
         associationAddresses.get(NUMBER_ZERO),
         null,
         new HashSet<>(List.of(UserEnumType.ROLE_ASSOCIATION)),
@@ -284,7 +284,7 @@ public class DatabaseInitializer {
         "Association dédiée à la protection de l'environnement en milieu urbain.",
         "Alice VERT",
         LocalDate.of(THIRD_ASSO_YEAR_FOUNDED, Month.MARCH, NUMBER_FOURTEEN),
-        "URBAN NATURE",
+        "Urban Nature",
         associationAddresses.get(NUMBER_TWO),
         null,
         new HashSet<>(List.of(UserEnumType.ROLE_ASSOCIATION)),
@@ -298,7 +298,7 @@ public class DatabaseInitializer {
         "Aide sociale et éducative pour les jeunes en difficulté.",
         "Bertrand JEUNE",
         LocalDate.of(FOURTH_ASSO_YEAR_FOUNDED, Month.SEPTEMBER, NUMBER_TWENTY),
-        "JEUNES SOLIDAIRES",
+        "Jeunes Solidaires",
         associationAddresses.get(NUMBER_THREE),
         null,
         new HashSet<>(List.of(UserEnumType.ROLE_ASSOCIATION)),
@@ -312,7 +312,7 @@ public class DatabaseInitializer {
         "Promotion culturelle à travers des ateliers et expositions artistiques.",
         "Chloé ARTS",
         LocalDate.of(FIFTH_ASSO_YEAR_FOUNDED, Month.JUNE, NUMBER_EIGHTEEN),
-        "CULTUR'ART",
+        "Cultur'Art",
         associationAddresses.get(NUMBER_FOUR),
         null,
         new HashSet<>(List.of(UserEnumType.ROLE_ASSOCIATION)),
@@ -596,16 +596,21 @@ public class DatabaseInitializer {
     );
 
     List<UserMessage> allUserMessages = Arrays.asList(
-      new UserMessage(true, voluntaries.get(NUMBER_ZERO), allMessageFirstActivity.get(NUMBER_ZERO)),
-      new UserMessage(true, voluntaries.get(NUMBER_ZERO), allMessageFirstActivity.get(NUMBER_ONE)),
-      new UserMessage(false, voluntaries.get(NUMBER_ZERO), allMessageFirstActivity.get(NUMBER_TWO))
+      // Pour le volontaire
+      new UserMessage(true, voluntaries.get(0), allMessageFirstActivity.get(0)),
+      new UserMessage(true, voluntaries.get(0), allMessageFirstActivity.get(1)),
+      new UserMessage(false, voluntaries.get(0), allMessageFirstActivity.get(NUMBER_TWO)),
+      // Pour l'association
+      new UserMessage(true, associations.get(0), allMessageFirstActivity.get(0)),
+      new UserMessage(true, associations.get(0), allMessageFirstActivity.get(1)),
+      new UserMessage(true, associations.get(0), allMessageFirstActivity.get(NUMBER_TWO))
     );
 
     // initiate reports
     List<Report> allReports = Arrays.asList(
       new Report(
         StatusReportEnumType.IN_PROGRESS,
-        ReasonReportEnumType.RULE_VIOLATION,
+        ReasonReportEnumType.INAPPROPRIATE_ACTIVITY,
         voluntaries.get(NUMBER_ZERO),
         associations.get(NUMBER_ZERO),
         voluntaries.get(NUMBER_ONE),
