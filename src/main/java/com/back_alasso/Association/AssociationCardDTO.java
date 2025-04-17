@@ -56,7 +56,7 @@ public record AssociationCardDTO(
       .stream()
       .filter(associationFollower -> associationFollower.getVoluntary().getId().equals(authenticatedUserId))
       .findFirst()
-      .map(AssociationFollower::isIs_follow)
+      .map(AssociationFollower::isFollow)
       .orElse(false);
   }
 }

@@ -25,7 +25,7 @@ public record VoluntaryLoginDTO(
     List<AssociationFollowerDTO> followed = voluntary
       .getAssociationFollowers()
       .stream()
-      .filter(AssociationFollower::isIs_follow)
+      .filter(AssociationFollower::isFollow)
       .map(AssociationFollowerDTO::fromEntityToDTO)
       .toList();
 

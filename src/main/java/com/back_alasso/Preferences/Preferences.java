@@ -8,13 +8,13 @@ import jakarta.persistence.*;
 public class Preferences extends BaseEntity {
 
   @Column(nullable = false)
-  private boolean is_dark_theme_selected = false;
+  private boolean dark_theme_selected = false;
 
   @Column(nullable = false)
-  private boolean is_push_notification_active_mail = true;
+  private boolean push_notification_active_mail = true;
 
   @Column(nullable = false)
-  private boolean is_push_notification_active_mobile = false;
+  private boolean push_notification_active_mobile = false;
 
   @OneToOne
   @JoinColumn(name = "user_id", unique = true)
@@ -29,35 +29,35 @@ public class Preferences extends BaseEntity {
   // Necessary to have an empty constructor to instance object.
   public Preferences() {}
 
-  public boolean isIs_dark_theme_selected() {
-    return is_dark_theme_selected;
-  }
-
-  public void setIs_dark_theme_selected(boolean is_dark_theme_selected) {
-    this.is_dark_theme_selected = is_dark_theme_selected;
-  }
-
-  public boolean isIs_push_notification_active_mail() {
-    return is_push_notification_active_mail;
-  }
-
-  public void setIs_push_notification_active_mail(boolean is_push_notification_active_mail) {
-    this.is_push_notification_active_mail = is_push_notification_active_mail;
-  }
-
-  public boolean isIs_push_notification_active_mobile() {
-    return is_push_notification_active_mobile;
-  }
-
-  public void setIs_push_notification_active_mobile(boolean is_push_notification_active_mobile) {
-    this.is_push_notification_active_mobile = is_push_notification_active_mobile;
-  }
-
   public User getUser() {
     return user;
   }
 
   public void setUser(User user) {
     this.user = user;
+  }
+
+  public boolean isDark_theme_selected() {
+    return dark_theme_selected;
+  }
+
+  public void setDark_theme_selected(boolean dark_theme_selected) {
+    this.dark_theme_selected = dark_theme_selected;
+  }
+
+  public boolean isPush_notification_active_mail() {
+    return push_notification_active_mail;
+  }
+
+  public void setPush_notification_active_mail(boolean push_notification_active_mail) {
+    this.push_notification_active_mail = push_notification_active_mail;
+  }
+
+  public boolean isPush_notification_active_mobile() {
+    return push_notification_active_mobile;
+  }
+
+  public void setPush_notification_active_mobile(boolean push_notification_active_mobile) {
+    this.push_notification_active_mobile = push_notification_active_mobile;
   }
 }

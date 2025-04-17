@@ -53,10 +53,15 @@ public class ActivityService {
     return activities.stream().map(activity -> ActivityDTO.fromEntityToDTO(activity, authenticatedUserId)).collect(Collectors.toList());
   }
 
+  public ActivityDTO getActivityById(UUID authenticatedUserId, UUID activityId) {
+    Activity activity = activityRepository.findById(activityId).orElseThrow(() -> new ResourceNotFoundException("activity not found"));
+    return ActivityDTO.fromEntityToDTO(activity, authenticatedUserId);
+  }
+
   public Boolean updatedFavoriteStatus(UUID activityId, boolean isFavorite, UUID authenticatedUserId) {
     ActivityVoluntary activityVoluntary = getActivityVoluntary(authenticatedUserId, activityId);
     if (activityVoluntary != null) {
-      activityVoluntary.setIs_saved(isFavorite);
+      activityVoluntary.setSaved(isFavorite);
       activityVoluntaryRepository.save(activityVoluntary);
       return isFavorite;
     } else {
@@ -71,7 +76,7 @@ public class ActivityService {
   public Boolean updatedRegisterStatus(UUID activityId, boolean isRegistered, UUID authenticatedUserId) {
     ActivityVoluntary activityVoluntary = getActivityVoluntary(authenticatedUserId, activityId);
     if (activityVoluntary != null) {
-      activityVoluntary.setIs_registered(isRegistered);
+      activityVoluntary.setRegistered(isRegistered);
       activityVoluntaryRepository.save(activityVoluntary);
       return isRegistered;
     } else {
