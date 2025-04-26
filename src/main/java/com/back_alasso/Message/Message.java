@@ -2,12 +2,11 @@ package com.back_alasso.Message;
 
 import com.back_alasso.Activity.Activity;
 import com.back_alasso.User.User;
+import com.back_alasso.UserMessage.UserMessage;
 import com.back_alasso.core.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 public class Message extends BaseEntity {
@@ -27,6 +26,9 @@ public class Message extends BaseEntity {
   @ManyToOne
   @JoinColumn(name = "activity_id")
   private Activity activity;
+
+  @OneToMany(mappedBy = "message")
+  private List<UserMessage> userMessages;
 
   // Necessary to have an empty constructor to instance object.
   public Message() {}
@@ -68,5 +70,13 @@ public class Message extends BaseEntity {
 
   public void setDate(LocalDateTime date) {
     this.date = date;
+  }
+
+  public List<UserMessage> getUserMessages() {
+    return userMessages;
+  }
+
+  public void setUserMessages(List<UserMessage> userMessages) {
+    this.userMessages = userMessages;
   }
 }

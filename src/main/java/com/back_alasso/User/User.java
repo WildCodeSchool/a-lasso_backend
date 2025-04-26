@@ -5,6 +5,7 @@ import com.back_alasso.Message.Message;
 import com.back_alasso.Preferences.Preferences;
 import com.back_alasso.Report.Report;
 import com.back_alasso.Statistic.Statistic;
+import com.back_alasso.UserMessage.UserMessage;
 import com.back_alasso.core.BaseEntity;
 import jakarta.persistence.*;
 import java.util.Collection;
@@ -41,6 +42,9 @@ public class User extends BaseEntity implements UserDetails {
 
   @OneToMany(mappedBy = "user")
   private List<Message> messages;
+
+  @OneToMany(mappedBy = "user")
+  private List<UserMessage> userMessages;
 
   @OneToMany(mappedBy = "user_reporter")
   private List<Report> reportsMade; // reports where the user is the reporter
@@ -202,5 +206,13 @@ public class User extends BaseEntity implements UserDetails {
 
   public void setRoles(Set<UserEnumType> roles) {
     this.roles = roles;
+  }
+
+  public List<UserMessage> getUserMessages() {
+    return userMessages;
+  }
+
+  public void setUserMessages(List<UserMessage> userMessages) {
+    this.userMessages = userMessages;
   }
 }
