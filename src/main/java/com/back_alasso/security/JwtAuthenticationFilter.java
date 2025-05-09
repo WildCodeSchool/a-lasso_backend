@@ -58,7 +58,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     if (
       isAssociationUrl(request) &&
-      authentication.getAuthorities().stream().noneMatch(auth -> auth.getAuthority().equals(UserEnumType.ROLE_ASSOCIATION))
+      authentication.getAuthorities().stream().noneMatch(auth -> auth.getAuthority().equals(UserEnumType.ROLE_ASSOCIATION.name()))
     ) {
       sendUnauthorizedResponse(response);
       return false;

@@ -1,18 +1,31 @@
 package com.back_alasso.Activity;
 
+import com.back_alasso.ActivityImage.ActivityImage;
+import com.back_alasso.ActivityImage.ActivityImageRepository;
+import com.back_alasso.ActivityTheme.ActivityTheme;
+import com.back_alasso.ActivityTheme.ActivityThemeRepository;
 import com.back_alasso.ActivityVoluntary.ActivityVoluntary;
 import com.back_alasso.ActivityVoluntary.ActivityVoluntaryRepository;
 import com.back_alasso.Address.Address;
 import com.back_alasso.Address.AddressRepository;
 import com.back_alasso.Association.Association;
 import com.back_alasso.Association.AssociationRepository;
+import com.back_alasso.Country.Country;
+import com.back_alasso.Country.CountryRepository;
 import com.back_alasso.Exception.ResourceNotFoundException;
+import com.back_alasso.Geolocation.Geolocation;
+import com.back_alasso.Geolocation.GeolocationRepository;
+import com.back_alasso.Geolocation.GeolocationService;
+import com.back_alasso.Image.Image;
+import com.back_alasso.Image.ImageEnumType;
+import com.back_alasso.Image.ImageRepository;
+import com.back_alasso.Theme.Theme;
 import com.back_alasso.Theme.ThemeRepository;
 import com.back_alasso.Voluntary.Voluntary;
 import com.back_alasso.Voluntary.VoluntaryRepository;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
@@ -25,7 +38,13 @@ public class ActivityService {
   private final ActivityVoluntaryRepository activityVoluntaryRepository;
   private final AssociationRepository associationRepository;
   private final ThemeRepository themeRepository;
+  private final ActivityThemeRepository activityThemeRepository;
   private final AddressRepository addressRepository;
+  private final GeolocationRepository geolocationRepository;
+  private final GeolocationService geolocationService;
+  private final ImageRepository imageRepository;
+  private final ActivityImageRepository activityImageRepository;
+  private final CountryRepository countryRepository;
 
   public ActivityService(
     ActivityRepository activityRepository,
@@ -33,14 +52,26 @@ public class ActivityService {
     ActivityVoluntaryRepository activityVoluntaryRepository,
     AssociationRepository associationRepository,
     ThemeRepository themeRepository,
-    AddressRepository addressRepository
+    ActivityThemeRepository activityThemeRepository,
+    AddressRepository addressRepository,
+    GeolocationRepository geolocationRepository,
+    GeolocationService geolocationService,
+    ImageRepository imageRepository,
+    ActivityImageRepository activityImageRepository,
+    CountryRepository countryRepository
   ) {
     this.activityRepository = activityRepository;
     this.voluntaryRepository = voluntaryRepository;
     this.activityVoluntaryRepository = activityVoluntaryRepository;
     this.associationRepository = associationRepository;
     this.themeRepository = themeRepository;
+    this.activityThemeRepository = activityThemeRepository;
     this.addressRepository = addressRepository;
+    this.geolocationRepository = geolocationRepository;
+    this.geolocationService = geolocationService;
+    this.imageRepository = imageRepository;
+    this.activityImageRepository = activityImageRepository;
+    this.countryRepository = countryRepository;
   }
 
   // service private shared methods
@@ -76,32 +107,78 @@ public class ActivityService {
 
   public ActivityDTO addNewActivity(AddNewActivityDTO newActivityDTO, UUID authenticatedUser) {
     Association association = associationRepository
-      .findById(newActivityDTO.associationId())
+      .findById(authenticatedUser)
       .orElseThrow(() -> new ResourceNotFoundException("association not found"));
 
-    Address address = new Address(null, "null", null, newActivityDTO.zipCode(), newActivityDTO.City(), null);
-    addressRepository.save(address);
+    List<Image> images = newActivityDTO
+      .images()
+      .stream()
+      .map(imgDto -> {
+        String base64 = imgDto.base64();
+        if (base64.startsWith("data:")) {
+          base64 = base64.substring(base64.indexOf(",") + 1);
+        }
+
+        byte[] imageDataBlob = Base64.getDecoder().decode(base64);
+        Image image = new Image();
+        image.setData(imageDataBlob);
+        image.setType(ImageEnumType.ACTIVITY);
+        image.setUrl("");
+        return image;
+      })
+      .toList();
+
+    List<Image> savedImages = imageRepository.saveAll(images);
+
+    Optional<Country> countryFromDataBase = countryRepository.findFirstByName(newActivityDTO.country());
+    Country country = countryFromDataBase.orElseGet(() -> countryRepository.save(new Country(newActivityDTO.country())));
+
+    Address address = new Address(
+      newActivityDTO.houseNumber(),
+      newActivityDTO.streetName(),
+      null,
+      newActivityDTO.zipCode(),
+      newActivityDTO.city(),
+      country
+    );
+    Address savedAddress = addressRepository.save(address);
+
+    Geolocation geolocation = geolocationService.getCoordinatesWithFullAddress(address);
+    Geolocation savedGeolocation = geolocationRepository.save(geolocation);
 
     Activity newActivity = new Activity(
       newActivityDTO.title(),
-      LocalDateTime.parse("2025-12-22 04:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
+      newActivityDTO.dateTime(),
       newActivityDTO.description(),
-      newActivityDTO.volontaries_request(),
+      newActivityDTO.requestedVolunteers(),
       association,
-      address,
+      savedAddress,
       null,
       null
     );
+
+    newActivity.setGeolocation(savedGeolocation);
+
     Activity savedActivity = activityRepository.save(newActivity);
 
-    //        List<Theme> themes = themeRepository.findAllByNameIn(newActivityDTO.themes()).orElseThrow(() -> new ResourceNotFoundException("association not found"));
-    //
-    //        List<ActivityTheme> activityThemes = themes.stream()
-    //                .map(theme -> new ActivityTheme(savedActivity, theme))
-    //                .collect(Collectors.toList());
-    //        themeRepository.saveAll(activityThemes);
+    List<Theme> themes = themeRepository.findAllByNameIn(newActivityDTO.themes());
+    if (themes.isEmpty()) {
+      throw new ResourceNotFoundException("Themes not found");
+    }
+    List<ActivityTheme> activityThemes = themes.stream().map(theme -> new ActivityTheme(savedActivity, theme)).toList();
 
-    // Images
+    activityThemeRepository.saveAll(activityThemes);
+
+    List<ActivityImage> activityImages = savedImages.stream().map(image -> new ActivityImage(image, savedActivity)).toList();
+
+    activityImageRepository.saveAll(activityImages);
+
+    // Reload to fetch themes and images
+
+    // Activity savedActivityReloaded = activityRepository.findById(savedActivity.getId()).orElseThrow();
+
+    savedActivity.setActivityThemes(activityThemes);
+    savedActivity.setActivityImages(activityImages);
 
     return ActivityDTO.fromEntityToDTO(savedActivity, authenticatedUser);
   }
