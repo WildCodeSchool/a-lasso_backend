@@ -6,7 +6,9 @@ import com.back_alasso.AssociationFollower.AssociationFollowerDTO;
 import com.back_alasso.Country.Country;
 import com.back_alasso.Geolocation.GeolocationLoginDTO;
 import com.back_alasso.Image.Image;
+import com.back_alasso.UserMessage.UserMessageNotificationDTO;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public record VoluntaryLoginDTO(
   String type,
@@ -19,6 +21,7 @@ public record VoluntaryLoginDTO(
   Image avatar,
   List<AssociationFollowerDTO> followedAssociations,
   List<ActivityVoluntaryLoginDTO> activitiesUserInfos,
+  List<UserMessageNotificationDTO> messageNotifications,
   GeolocationLoginDTO geolocation
 ) {
   public static VoluntaryLoginDTO fromEntityToDTO(Voluntary voluntary) {
@@ -35,6 +38,16 @@ public record VoluntaryLoginDTO(
       .map(ActivityVoluntaryLoginDTO::fromEntityToDTO)
       .toList();
 
+    List<UserMessageNotificationDTO> messageNotifications = voluntary
+      .getUserMessages()
+      .stream()
+      .filter(userMessage -> !userMessage.isRead())
+      .collect(Collectors.groupingBy(userMessage -> userMessage.getMessage().getActivity(), Collectors.counting()))
+      .entrySet()
+      .stream()
+      .map(entry -> new UserMessageNotificationDTO(entry.getKey().getId(), entry.getKey().getTitle(), entry.getValue().intValue()))
+      .toList();
+
     return new VoluntaryLoginDTO(
       "voluntary",
       voluntary.getEmail(),
@@ -46,6 +59,7 @@ public record VoluntaryLoginDTO(
       voluntary.getAvatar(),
       followed,
       activitiesUserInfos,
+      messageNotifications,
       GeolocationLoginDTO.from(voluntary.getGeolocation())
     );
   }

@@ -38,6 +38,8 @@ import com.back_alasso.Theme.ThemeNameEnumType;
 import com.back_alasso.Theme.ThemeRepository;
 import com.back_alasso.User.AccountEnumType;
 import com.back_alasso.User.UserEnumType;
+import com.back_alasso.UserMessage.UserMessage;
+import com.back_alasso.UserMessage.UserMessageRepository;
 import com.back_alasso.Voluntary.Voluntary;
 import com.back_alasso.Voluntary.VoluntaryRepository;
 import java.time.LocalDate;
@@ -166,6 +168,7 @@ public class DatabaseInitializer {
   private final ActivityVoluntaryRepository activityVoluntaryRepository;
   private final MessageRepository messageRepository;
   private final ReportRepository reportRepository;
+  private final UserMessageRepository userMessageRepository;
 
   public DatabaseInitializer(
     CountryRepository countryRepository,
@@ -184,7 +187,8 @@ public class DatabaseInitializer {
     AssociationFollowerRepository associationFollowerRepository,
     ActivityVoluntaryRepository activityVoluntaryRepository,
     MessageRepository messageRepository,
-    ReportRepository reportRepository
+    ReportRepository reportRepository,
+    UserMessageRepository userMessageRepository
   ) {
     this.countryRepository = countryRepository;
     this.addressRepository = addressRepository;
@@ -203,6 +207,7 @@ public class DatabaseInitializer {
     this.activityVoluntaryRepository = activityVoluntaryRepository;
     this.messageRepository = messageRepository;
     this.reportRepository = reportRepository;
+    this.userMessageRepository = userMessageRepository;
   }
 
   @Bean
@@ -566,7 +571,7 @@ public class DatabaseInitializer {
     voluntaries.get(NUMBER_ZERO).setGeolocation(voluntaryLocalisations.get(NUMBER_ZERO));
     voluntaries.get(NUMBER_ONE).setGeolocation(voluntaryLocalisations.get(NUMBER_ZERO));
 
-    // save messages between associations and voluntaries for a specific activity
+    // initiate messages between associations and voluntaries for a specific activity
     List<Message> allMessageFirstActivity = Arrays.asList(
       new Message(
         "Bonjour à tous, merci de participer !",
@@ -590,6 +595,12 @@ public class DatabaseInitializer {
       )
     );
 
+    List<UserMessage> allUserMessages = Arrays.asList(
+      new UserMessage(true, voluntaries.get(NUMBER_ZERO), allMessageFirstActivity.get(NUMBER_ZERO)),
+      new UserMessage(true, voluntaries.get(NUMBER_ZERO), allMessageFirstActivity.get(NUMBER_ONE)),
+      new UserMessage(false, voluntaries.get(NUMBER_ZERO), allMessageFirstActivity.get(NUMBER_TWO))
+    );
+
     // initiate reports
     List<Report> allReports = Arrays.asList(
       new Report(
@@ -598,7 +609,7 @@ public class DatabaseInitializer {
         voluntaries.get(NUMBER_ZERO),
         associations.get(NUMBER_ZERO),
         voluntaries.get(NUMBER_ONE),
-        "Lors de ma participation à l’évenement d’aide au SDF, à plusieurs reprise le référent Mr.Patate à tenu des propos dégrant envers les femmes.",
+        "Lors de ma participation à l’évènement d’aide au SDF, à plusieurs reprise le référent Mr.Patate à tenu des propos dégradant envers les femmes.",
         "Ce retour concorde avec les 3 précédents."
       )
     );
@@ -636,6 +647,9 @@ public class DatabaseInitializer {
 
       // save messages of activity between associations and voluntaries
       messageRepository.saveAll(allMessageFirstActivity);
+
+      // save userMessages
+      userMessageRepository.saveAll(allUserMessages);
 
       // save reports
       reportRepository.saveAll(allReports);

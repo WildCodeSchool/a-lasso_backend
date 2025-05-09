@@ -4,7 +4,10 @@ import com.back_alasso.Address.Address;
 import com.back_alasso.Exception.ResourceNotFoundException;
 import com.back_alasso.Geolocation.GeolocationLoginDTO;
 import com.back_alasso.Image.ImageEnumType;
+import com.back_alasso.UserMessage.UserMessageNotificationDTO;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public record AssociationLoginDTO(
   String type,
@@ -17,10 +20,19 @@ public record AssociationLoginDTO(
   Address address,
   String associationProfileImageURL,
   String associationLogoImage,
-  GeolocationLoginDTO geolocation
+  GeolocationLoginDTO geolocation,
+  List<UserMessageNotificationDTO> messageNotifications
 ) {
   public static AssociationLoginDTO fromEntityToDTO(Association association) {
-    // f
+    List<UserMessageNotificationDTO> messageNotifications = association
+      .getUserMessages()
+      .stream()
+      .filter(userMessage -> !userMessage.isRead())
+      .collect(Collectors.groupingBy(userMessage -> userMessage.getMessage().getActivity(), Collectors.counting()))
+      .entrySet()
+      .stream()
+      .map(entry -> new UserMessageNotificationDTO(entry.getKey().getId(), entry.getKey().getTitle(), entry.getValue().intValue()))
+      .toList();
 
     return new AssociationLoginDTO(
       "association",
@@ -45,7 +57,8 @@ public record AssociationLoginDTO(
         .map(associationImage -> associationImage.getImage().getUrl())
         .findFirst()
         .orElseThrow(() -> new ResourceNotFoundException("Association logo image not found")),
-      GeolocationLoginDTO.from(association.getGeolocation())
+      GeolocationLoginDTO.from(association.getGeolocation()),
+      messageNotifications
     );
   }
 }
