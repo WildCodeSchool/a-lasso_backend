@@ -1,18 +1,19 @@
 package com.back_alasso.Activity;
 
 import com.back_alasso.Theme.ThemeNameEnumType;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 public record AddNewActivityDTO(
-  UUID associationId,
   List<ImageNewActivityDTO> images,
   String title,
-  Long volontaries_request,
-  String date,
-  String hour,
+  Long requestedVolunteers,
+  LocalDateTime dateTime,
+  Integer houseNumber,
+  String streetName,
   String zipCode,
-  String City,
+  String city,
+  String country,
   List<ThemeNameEnumType> themes,
   String description
 ) {}

@@ -11,10 +11,10 @@ public class Address extends BaseEntity {
   public static final int ZIPCODE_MAX_LENGTH = 20;
   public static final int CITY_MAX_LENGTH = 100;
 
-  @Column(nullable = false)
+  @Column(nullable = true)
   private Integer house_number;
 
-  @Column(nullable = false, length = STREET_MAX_LENGTH)
+  @Column(nullable = true, length = STREET_MAX_LENGTH)
   private String street_name;
 
   @Enumerated(EnumType.STRING)
