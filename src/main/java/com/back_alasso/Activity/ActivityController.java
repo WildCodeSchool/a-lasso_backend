@@ -68,7 +68,7 @@ public class ActivityController {
     return ResponseEntity.status(HttpStatus.OK).body(response);
   }
 
-  @PostMapping
+  @PostMapping("/publish")
   public ResponseEntity<ActivityDTO> publish(@RequestBody AddNewActivityDTO newActivityDTO, @AuthenticationPrincipal UserDetails userDetails) {
     String emailAuthenticatedUser = userDetails.getUsername();
     UUID authenticatedUser = userService.findByEmail(emailAuthenticatedUser).getId();

@@ -5,8 +5,11 @@ import com.back_alasso.ActivityVoluntary.ActivityVoluntaryDTO;
 import com.back_alasso.Association.AssociationActivityDTO;
 import com.back_alasso.Geolocation.GeolocationDTO;
 import com.back_alasso.Theme.ThemeNameEnumType;
+
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 public record ActivityDTO(
   UUID id,
@@ -17,10 +20,12 @@ public record ActivityDTO(
   GeolocationDTO location,
   LocalDateTime date,
   ActivityVoluntaryDTO participants,
-  List<ThemeNameEnumType> themesName
+  List<ThemeNameEnumType> themesName,
+  boolean isSaved,
+  boolean isRegistered
 ) {
-  public static ActivityDTO fromEntityToDTO(Activity activity, UUID authenticatedUserId) {
-    Optional<ActivityVoluntary> voluntary = getUserActivityVoluntaryStatus(activity, authenticatedUserId);
+    public static ActivityDTO fromEntityToDTO(Activity activity, UUID authenticatedUserId) {
+        Optional<ActivityVoluntary> voluntary = getUserActivityVoluntaryStatus(activity, authenticatedUserId);
 
     return new ActivityDTO(
       activity.getId(),
@@ -31,7 +36,9 @@ public record ActivityDTO(
       GeolocationDTO.getCoordinates(activity),
       activity.getDate(),
       ActivityVoluntaryDTO.convertToDTO(activity),
-      activity.getActivityThemes().stream().map(theme -> theme.getTheme().getName()).toList()
+      activity.getActivityThemes().stream().map(theme -> theme.getTheme().getName()).toList(),
+      voluntary.map(ActivityVoluntary::isSaved).orElse(false),
+      voluntary.map(ActivityVoluntary::isRegistered).orElse(false)
     );
   }
 
@@ -40,6 +47,6 @@ public record ActivityDTO(
       return Optional.empty();
     }
 
-    return activity.getActivityVoluntaries().stream().filter(av -> av.getVoluntary().getId().equals(authenticatedUserId)).findFirst();
-  }
+        return activity.getActivityVoluntaries().stream().filter(av -> av.getVoluntary().getId().equals(authenticatedUserId)).findFirst();
+    }
 }
