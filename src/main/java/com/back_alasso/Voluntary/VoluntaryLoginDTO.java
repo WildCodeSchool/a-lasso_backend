@@ -22,7 +22,7 @@ public record VoluntaryLoginDTO(
   Image avatar,
   List<AssociationFollowerDTO> followedAssociations,
   List<ActivityVoluntaryLoginDTO> activitiesUserInfos,
-  NotificationDTO notifications,
+  NotificationDTO notification,
   GeolocationLoginDTO geolocation
 ) {
   public static VoluntaryLoginDTO fromEntityToDTO(Voluntary voluntary, Integer reportsInProgress) {

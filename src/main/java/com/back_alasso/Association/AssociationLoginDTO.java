@@ -22,7 +22,7 @@ public record AssociationLoginDTO(
   String associationProfileImageURL,
   String associationLogoImage,
   GeolocationLoginDTO geolocation,
-  NotificationDTO notifications
+  NotificationDTO notification
 ) {
   public static AssociationLoginDTO fromEntityToDTO(Association association) {
     List<UserMessageNotificationDTO> messageNotifications = association

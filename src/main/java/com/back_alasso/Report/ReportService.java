@@ -22,10 +22,6 @@ public class ReportService {
   public List<ReportDTO> getAllReports() {
     List<Report> reports = reportRepository.findAll();
 
-    if (reports.isEmpty()) {
-      throw new ResourceNotFoundException("reports not found");
-    }
-
     return reports.stream().map(report -> ReportDTO.fromEntityToDTO(report)).collect(Collectors.toList());
   }
 
@@ -44,6 +40,12 @@ public class ReportService {
     );
 
     reportRepository.save(report);
+    return true;
+  }
+
+  public Boolean deleteReport(UUID reportId) {
+    Report reportToDelete = reportRepository.findById(reportId).orElseThrow(() -> new ResourceNotFoundException("Report not found"));
+    reportRepository.delete(reportToDelete);
     return true;
   }
 }
