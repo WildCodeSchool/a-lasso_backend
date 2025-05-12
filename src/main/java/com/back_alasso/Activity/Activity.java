@@ -29,7 +29,7 @@ public class Activity extends BaseEntity implements Geolocatable {
   private String description;
 
   @Column(nullable = false)
-  private Long volontaries_request;
+  private Long voluntaries_request;
 
   @ManyToOne
   @JoinColumn(name = "association_id")
@@ -62,7 +62,7 @@ public class Activity extends BaseEntity implements Geolocatable {
     String title,
     LocalDateTime date,
     String description,
-    Long volontaries_request,
+    Long voluntaries_request,
     Association association,
     Address address,
     List<ActivityImage> activityImages,
@@ -71,7 +71,7 @@ public class Activity extends BaseEntity implements Geolocatable {
     this.title = title;
     this.date = date;
     this.description = description;
-    this.volontaries_request = volontaries_request;
+    this.voluntaries_request = voluntaries_request;
     this.association = association;
     this.address = address;
     this.activityImages = activityImages;
@@ -94,12 +94,12 @@ public class Activity extends BaseEntity implements Geolocatable {
     this.description = description;
   }
 
-  public Long getVolontaries_request() {
-    return volontaries_request;
+  public Long getVoluntaries_request() {
+    return voluntaries_request;
   }
 
-  public void setVolontaries_request(Long volontaries_request) {
-    this.volontaries_request = volontaries_request;
+  public void setVoluntaries_request(Long voluntaries_request) {
+    this.voluntaries_request = voluntaries_request;
   }
 
   public Association getAssociation() {

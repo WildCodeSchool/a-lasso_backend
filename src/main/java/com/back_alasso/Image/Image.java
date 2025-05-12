@@ -9,6 +9,10 @@ public class Image extends BaseEntity {
   @Column(nullable = false)
   private String url;
 
+  @Lob
+  @Column(name = "data", columnDefinition = "LONGBLOB")
+  private byte[] data; // For blob storage
+
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)
   private ImageEnumType type;
@@ -35,5 +39,13 @@ public class Image extends BaseEntity {
 
   public void setType(ImageEnumType type) {
     this.type = type;
+  }
+
+  public byte[] getData() {
+    return data;
+  }
+
+  public void setData(byte[] data) {
+    this.data = data;
   }
 }

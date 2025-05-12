@@ -7,15 +7,13 @@ import com.back_alasso.Geolocation.GeolocationDTO;
 import com.back_alasso.Theme.ThemeNameEnumType;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public record ActivityDTO(
         UUID id,
         String title,
         String description,
-        List<String> images,
+        List<ActivityImagesResponseDTO> images,
         AssociationActivityDTO association,
         GeolocationDTO location,
         LocalDateTime date,
@@ -29,7 +27,7 @@ public record ActivityDTO(
                 activity.getId(),
                 activity.getTitle(),
                 activity.getDescription(),
-                activity.getActivityImages() != null ? activity.getActivityImages().stream().map(image -> image.getImage().getUrl()).toList() : null,
+                ActivityImageMapper.toResponseDTOs(activity.getActivityImages()),
                 activity.getAssociation() != null ? AssociationActivityDTO.getAssociationDTO(activity.getAssociation()) : null,
                 GeolocationDTO.getCoordinates(activity),
                 activity.getDate(),
@@ -38,10 +36,10 @@ public record ActivityDTO(
         );
     }
 
-    private static Optional<ActivityVoluntary> getUserActivityVoluntaryStatus(Activity activity, UUID authenticatedUserId) {
-        if (authenticatedUserId == null) {
-            return Optional.empty();
-        }
+  private static Optional<ActivityVoluntary> getUserActivityVoluntaryStatus(Activity activity, UUID authenticatedUserId) {
+    if (authenticatedUserId == null || activity.getActivityVoluntaries() == null) {
+      return Optional.empty();
+    }
 
         return activity.getActivityVoluntaries().stream().filter(av -> av.getVoluntary().getId().equals(authenticatedUserId)).findFirst();
     }
