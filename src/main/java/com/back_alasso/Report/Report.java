@@ -14,10 +14,10 @@ public class Report extends BaseEntity {
   public static final int COMMENTARY_ADMIN_MAX_LENGTH = 1000;
 
   @Column(length = MESSAGE_REPORTER_MAX_LENGTH)
-  private String message_reporter;
+  private String messageReporter;
 
   @Column(length = COMMENTARY_ADMIN_MAX_LENGTH)
-  private String commentary_admin;
+  private String commentaryAdmin;
 
   @Column(nullable = false)
   private StatusReportEnumType status;
@@ -26,16 +26,16 @@ public class Report extends BaseEntity {
   private ReasonReportEnumType reason;
 
   @ManyToOne
-  @JoinColumn(name = "user_reported_id")
-  private User user_reported;
+  @JoinColumn(name = "userReportedId")
+  private User userReported;
 
   @ManyToOne
-  @JoinColumn(name = "user_reporter_id")
-  private User user_reporter;
+  @JoinColumn(name = "userReporterId")
+  private User userReporter;
 
   @ManyToOne
-  @JoinColumn(name = "user_admin_id")
-  private User user_admin;
+  @JoinColumn(name = "userAdminId")
+  private User userAdmin;
 
   // Necessary to have an empty constructor to instance object.
   public Report() {}
@@ -43,35 +43,35 @@ public class Report extends BaseEntity {
   public Report(
     StatusReportEnumType status,
     ReasonReportEnumType reason,
-    User user_reported,
-    User user_reporter,
-    User user_admin,
-    String message_reporter,
-    String commentary_admin
+    User userReported,
+    User userReporter,
+    User userAdmin,
+    String messageReporter,
+    String commentaryAdmin
   ) {
     this.status = status;
     this.reason = reason;
-    this.user_reported = user_reported;
-    this.user_reporter = user_reporter;
-    this.user_admin = user_admin;
-    this.message_reporter = message_reporter;
-    this.commentary_admin = commentary_admin;
+    this.userReported = userReported;
+    this.userReporter = userReporter;
+    this.userAdmin = userAdmin;
+    this.messageReporter = messageReporter;
+    this.commentaryAdmin = commentaryAdmin;
   }
 
-  public String getMessage_reporter() {
-    return message_reporter;
+  public String getMessageReporter() {
+    return messageReporter;
   }
 
-  public void setMessage_reporter(String message_reporter) {
-    this.message_reporter = message_reporter;
+  public void setMessageReporter(String messageReporter) {
+    this.messageReporter = messageReporter;
   }
 
-  public String getCommentary_admin() {
-    return commentary_admin;
+  public String getCommentaryAdmin() {
+    return commentaryAdmin;
   }
 
-  public void setCommentary_admin(String commentary_admin) {
-    this.commentary_admin = commentary_admin;
+  public void setCommentaryAdmin(String commentaryAdmin) {
+    this.commentaryAdmin = commentaryAdmin;
   }
 
   public StatusReportEnumType getStatus() {
@@ -90,27 +90,27 @@ public class Report extends BaseEntity {
     this.reason = reason;
   }
 
-  public User getUser_reported() {
-    return user_reported;
+  public User getUserReported() {
+    return userReported;
   }
 
-  public void setUser_reported(User user_reported) {
-    this.user_reported = user_reported;
+  public void setUserReported(User userReported) {
+    this.userReported = userReported;
   }
 
-  public User getUser_reporter() {
-    return user_reporter;
+  public User getUserReporter() {
+    return userReporter;
   }
 
-  public void setUser_reporter(User user_reporter) {
-    this.user_reporter = user_reporter;
+  public void setUserReporter(User userReporter) {
+    this.userReporter = userReporter;
   }
 
-  public User getUser_admin() {
-    return user_admin;
+  public User getUserAdmin() {
+    return userAdmin;
   }
 
-  public void setUser_admin(User user_admin) {
-    this.user_admin = user_admin;
+  public void setUserAdmin(User userAdmin) {
+    this.userAdmin = userAdmin;
   }
 }

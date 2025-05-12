@@ -6,9 +6,8 @@ import com.back_alasso.Country.Country;
 import com.back_alasso.Geolocation.GeolocationLoginDTO;
 import com.back_alasso.Image.DTO.ImageResponseDTO;
 import com.back_alasso.shared.NotificationDTO;
-
-import java.util.List;
 import java.time.LocalDate;
+import java.util.List;
 
 public record VoluntaryLoginResponseDTO(
   String type,
