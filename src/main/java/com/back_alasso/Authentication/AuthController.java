@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -67,5 +69,21 @@ public class AuthController {
     }
 
     return ResponseEntity.status(HttpStatus.OK).body(response);
+  }
+
+  @PatchMapping("/change-password")
+  public ResponseEntity<?> changePassword(@RequestBody PasswordChangeDTO dto, @AuthenticationPrincipal UserDetails userDetails) {
+    try {
+      userService.changePassword(userDetails.getUsername(), dto.getOldPassword(), dto.getNewPassword());
+      return ResponseEntity.ok().build();
+    } catch (IllegalArgumentException e) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", e.getMessage()));
+    }
+  }
+
+  @DeleteMapping("/delete-account")
+  public ResponseEntity<Void> deleteAccount(@AuthenticationPrincipal UserDetails userDetails) {
+    userService.deleteUser(userDetails.getUsername());
+    return ResponseEntity.noContent().build();
   }
 }

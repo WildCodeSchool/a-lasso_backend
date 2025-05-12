@@ -8,5 +8,5 @@ public class SecurityConstants {
     Arrays.asList("/auth/**", "/themes", "/activities", "/activities/{id}", "/association/{id}", "/images/**")
   );
 
-  public static final Set<String> ASSOCIATION_URLS = new HashSet<>(Arrays.asList("/activities/publish"));
+  public static final Set<String> ASSOCIATION_URLS = new HashSet<>(Arrays.asList("/activities/delete/{id}", "/activities/publish"));
 }

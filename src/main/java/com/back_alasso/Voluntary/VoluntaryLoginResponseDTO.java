@@ -6,6 +6,7 @@ import com.back_alasso.Country.Country;
 import com.back_alasso.Geolocation.GeolocationLoginDTO;
 import com.back_alasso.Image.DTO.ImageResponseDTO;
 import com.back_alasso.UserMessage.UserMessageNotificationDTO;
+import java.time.LocalDate;
 import java.util.List;
 
 public record VoluntaryLoginResponseDTO(
@@ -20,5 +21,6 @@ public record VoluntaryLoginResponseDTO(
   List<AssociationFollowerDTO> followedAssociations,
   List<ActivityVoluntaryLoginDTO> activitiesUserInfos,
   List<UserMessageNotificationDTO> messageNotifications,
-  GeolocationLoginDTO geolocation
+  GeolocationLoginDTO geolocation,
+  LocalDate createdAt
 ) {}

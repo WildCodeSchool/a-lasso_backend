@@ -40,27 +40,27 @@ public class User extends BaseEntity implements UserDetails {
   @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private Preferences preferences;
 
-  @OneToMany(mappedBy = "user")
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Message> messages;
 
-  @OneToMany(mappedBy = "user")
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<UserMessage> userMessages;
 
-  @OneToMany(mappedBy = "user_reporter")
-  private List<Report> reportsMade; // reports where the user is the reporter
+  @OneToMany(mappedBy = "user_reporter", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Report> reportsMade;
 
-  @OneToMany(mappedBy = "user_reported")
-  private List<Report> reportsReceived; // reports where the user is the reported
+  @OneToMany(mappedBy = "user_reported", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Report> reportsReceived;
 
-  @OneToMany(mappedBy = "user_admin")
-  private List<Report> reportsHandled; // reports where the user is the admin
+  @OneToMany(mappedBy = "user_admin", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Report> reportsHandled;
+
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Statistic> statistic;
 
   @ManyToOne
   @JoinColumn(name = "geolocation_id")
   private Geolocation geolocation;
-
-  @OneToMany(mappedBy = "user")
-  private List<Statistic> statistic;
 
   // Necessary to have an empty constructor to instance object.
   public User() {}

@@ -27,6 +27,7 @@ import com.back_alasso.Theme.ThemeNameEnumType;
 import com.back_alasso.Theme.ThemeRepository;
 import com.back_alasso.Voluntary.Voluntary;
 import com.back_alasso.Voluntary.VoluntaryRepository;
+import jakarta.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
@@ -227,5 +228,16 @@ public class ActivityService {
       activityVoluntaryRepository.save(newActivityVoluntary);
       return isRegistered;
     }
+  }
+
+  @Transactional
+  public void deleteActivity(UUID activityId, UUID authenticatedUserId) {
+    Activity activity = activityRepository.findById(activityId).orElseThrow(() -> new ResourceNotFoundException("Activity not found"));
+
+    if (!activity.getAssociation().getId().equals(authenticatedUserId)) {
+      throw new SecurityException("You are not allowed to delete this activity");
+    }
+
+    activityRepository.delete(activity);
   }
 }
