@@ -1,4 +1,4 @@
-package com.back_alasso.Voluntary;
+package com.back_alasso.Voluntary.DTO;
 
 import com.back_alasso.ActivityVoluntary.DTO.ActivityVoluntaryLoginResponseDTO;
 import com.back_alasso.AssociationFollower.AssociationFollowerDTO;
@@ -22,5 +22,6 @@ public record VoluntaryLoginResponseDTO(
   List<ActivityVoluntaryLoginResponseDTO> activitiesUserInfos,
   NotificationDTO notification,
   GeolocationLoginDTO geolocation,
-  LocalDate createdAt
+  LocalDate createdAt,
+  LocalDate birth_date
 ) {}

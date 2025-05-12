@@ -46,6 +46,16 @@ public class ActivityController {
     return ResponseEntity.status(HttpStatus.OK).body(activity);
   }
 
+  @GetMapping("/association/{associationId}")
+  public ResponseEntity<List<ActivityResponseDTO>> getActivitiesByAssociation(
+    @PathVariable UUID associationId,
+    @AuthenticationPrincipal UserDetails userDetails
+  ) {
+    UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
+    List<ActivityResponseDTO> activities = activityService.getActivitiesByAssociationId(associationId, authenticatedUserId);
+    return ResponseEntity.ok(activities);
+  }
+
   @PatchMapping("/{activityId}/updateFavorite")
   public ResponseEntity<Boolean> patchFavoriteStatus(
     @PathVariable UUID activityId,

@@ -17,4 +17,6 @@ public interface ActivityRepository extends JpaRepository<Activity, UUID> {
     """
   )
   List<Voluntary> findVolunteersByActivityId(@Param("activityId") UUID activityId);
+
+  List<Activity> findByAssociationId(UUID associationId);
 }

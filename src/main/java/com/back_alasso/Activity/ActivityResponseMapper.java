@@ -4,7 +4,7 @@ import com.back_alasso.Activity.DTO.ActivityResponseDTO;
 import com.back_alasso.ActivityVoluntary.ActivityVoluntary;
 import com.back_alasso.ActivityVoluntary.DTO.ActivityParticipantsRequestDTO;
 import com.back_alasso.Address.DTO.AddressResponseDTO;
-import com.back_alasso.Association.DTO.AssociationActivityDTO;
+import com.back_alasso.Association.DTO.AssociationActivityRequestDTO;
 import com.back_alasso.Geolocation.DTO.GeolocationRequestDTO;
 import com.back_alasso.Image.ImageEnumType;
 import com.back_alasso.Image.ImageMapper;
@@ -36,7 +36,7 @@ public class ActivityResponseMapper {
       activity.getDescription(),
       AddressResponseDTO.fromEntityToDTO(activity.getAddress()),
       imageMapper.toResponseDTOs(imageIds, ImageEnumType.ACTIVITY),
-      activity.getAssociation() != null ? AssociationActivityDTO.getAssociationDTO(activity.getAssociation()) : null,
+      activity.getAssociation() != null ? AssociationActivityRequestDTO.getAssociationDTO(activity.getAssociation()) : null,
       GeolocationRequestDTO.getCoordinates(activity),
       activity.getDate(),
       ActivityParticipantsRequestDTO.convertToDTO(activity),

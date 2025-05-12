@@ -9,6 +9,7 @@ import com.back_alasso.User.AccountEnumType;
 import com.back_alasso.User.User;
 import com.back_alasso.User.UserEnumType;
 import jakarta.persistence.*;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -30,6 +31,9 @@ public class Voluntary extends User {
 
   @Column(nullable = true, length = PHONE_MAX_LENGTH)
   private String mobile_phone;
+
+  @Column(nullable = true)
+  private LocalDate birth_date;
 
   @ManyToOne
   @JoinColumn(name = "country_id")
@@ -61,7 +65,8 @@ public class Voluntary extends User {
     Image avatar,
     String mobile_phone,
     List<AssociationFollower> associationFollowers,
-    Preferences preferences
+    Preferences preferences,
+    LocalDate birth_date
   ) {
     super(roles, account_status, hashed_password, email, preferences);
     this.city = city;
@@ -71,6 +76,7 @@ public class Voluntary extends User {
     this.avatar = avatar;
     this.mobile_phone = mobile_phone;
     this.associationFollowers = associationFollowers;
+    this.birth_date = birth_date;
   }
 
   public String getCity() {
@@ -135,5 +141,13 @@ public class Voluntary extends User {
 
   public void setActivityVoluntaries(List<ActivityVoluntary> activityVoluntaries) {
     this.activityVoluntaries = activityVoluntaries;
+  }
+
+  public LocalDate getBirth_date() {
+    return birth_date;
+  }
+
+  public void setBirth_date(LocalDate birth_date) {
+    this.birth_date = birth_date;
   }
 }

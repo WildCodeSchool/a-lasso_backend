@@ -152,6 +152,13 @@ public class DatabaseInitializer {
   public static final int NUMBER_TWENTY = 20;
   public static final int NUMBER_FOURTEEN = 14;
 
+  public static final int BIRTHDAY_DAY_ONE = 5;
+  public static final int BIRTHDAY_MONTH_ONE = 10;
+  public static final int BIRTHDAY_YEAR_ONE = 1994;
+  public static final int BIRTHDAY_DAY_TWO = 1;
+  public static final int BIRTHDAY_MONTH_TWO = 3;
+  public static final int BIRTHDAY_YEAR_TWO = 1987;
+
   private final CountryRepository countryRepository;
   private final AddressRepository addressRepository;
   private final AssociationRepository associationRepository;
@@ -544,7 +551,8 @@ public class DatabaseInitializer {
         voluntaryAvatars.get(NUMBER_ZERO),
         "+33612345678",
         null,
-        null
+        null,
+        LocalDate.of(BIRTHDAY_YEAR_ONE, BIRTHDAY_MONTH_ONE, BIRTHDAY_DAY_ONE)
       ),
       new Voluntary(
         new HashSet<>(List.of(UserEnumType.ROLE_ADMIN, UserEnumType.ROLE_VOLUNTARY)),
@@ -558,7 +566,8 @@ public class DatabaseInitializer {
         voluntaryAvatars.get(NUMBER_ZERO),
         "+33612345678",
         null,
-        null
+        null,
+        LocalDate.of(BIRTHDAY_YEAR_TWO, BIRTHDAY_MONTH_TWO, BIRTHDAY_DAY_TWO)
       )
     );
 

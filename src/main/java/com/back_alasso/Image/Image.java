@@ -13,6 +13,12 @@ public class Image extends BaseEntity {
   @Column(nullable = false)
   private String url;
 
+  @Column(nullable = true)
+  private String filename;
+
+  @Column(nullable = true)
+  private String format;
+
   @Lob
   @Column(name = "data", columnDefinition = "LONGBLOB")
   private byte[] data; // For blob storage

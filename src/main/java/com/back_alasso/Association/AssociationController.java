@@ -1,9 +1,6 @@
 package com.back_alasso.Association;
 
-import com.back_alasso.Association.DTO.AssociationCardResponseDTO;
-import com.back_alasso.Association.DTO.AssociationDescriptionRequestDTO;
-import com.back_alasso.Association.DTO.AssociationGeneralInfoRequestDTO;
-import com.back_alasso.Association.DTO.UpdateFollowRequestDTO;
+import com.back_alasso.Association.DTO.*;
 import com.back_alasso.Image.DTO.ImageResponseDTO;
 import com.back_alasso.Statistic.StatisticDTO;
 import com.back_alasso.User.UserService;
@@ -15,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/association")
@@ -28,10 +26,17 @@ public class AssociationController {
     this.userService = userService;
   }
 
+  @GetMapping("/me")
+  public ResponseEntity<AssociationLoginResponseDTO> getMyAssociation(@AuthenticationPrincipal UserDetails userDetails) {
+    UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
+    AssociationLoginResponseDTO association = associationService.getMyAssociation(authenticatedUserId);
+    return ResponseEntity.status(HttpStatus.OK).body(association);
+  }
+
   @GetMapping("/{id}")
   public ResponseEntity<AssociationCardResponseDTO> getAssociationCard(@PathVariable UUID id, @AuthenticationPrincipal UserDetails userDetails) {
     UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
-    AssociationCardResponseDTO associationCard = associationService.getAssociation(id, authenticatedUserId);
+    AssociationCardResponseDTO associationCard = associationService.getAssociationCard(id, authenticatedUserId);
     return ResponseEntity.status(HttpStatus.OK).body(associationCard);
   }
 
@@ -42,10 +47,8 @@ public class AssociationController {
     @RequestParam int limit
   ) {
     UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
-
     List<ImageResponseDTO> activitiesImages = associationService.getExistingActivityPictures(authenticatedUserId, offset, limit);
-
-    return ResponseEntity.ok(activitiesImages);
+    return ResponseEntity.status(HttpStatus.OK).body(activitiesImages);
   }
 
   @PatchMapping("/{associationId}/updateFollow")
@@ -59,36 +62,40 @@ public class AssociationController {
     return ResponseEntity.status(HttpStatus.OK).body(updatedFollowStatus);
   }
 
-  @PutMapping("/{id}/general-info")
+  @PutMapping("/me/general-info")
   public ResponseEntity<Void> updateGeneralInformation(
-    @PathVariable UUID id,
     @Valid @RequestBody AssociationGeneralInfoRequestDTO associationGeneralInfoDTO,
     @AuthenticationPrincipal UserDetails userDetails
   ) {
     UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
-    associationService.updateGeneralInfo(id, associationGeneralInfoDTO, authenticatedUserId);
+    associationService.updateGeneralInfo(authenticatedUserId, associationGeneralInfoDTO);
     return ResponseEntity.status(HttpStatus.OK).build();
   }
 
-  @PutMapping("/{id}/description")
+  @PutMapping("/me/description")
   public ResponseEntity<Void> updateDescription(
-    @PathVariable UUID id,
     @Valid @RequestBody AssociationDescriptionRequestDTO descriptionDTO,
     @AuthenticationPrincipal UserDetails userDetails
   ) {
     UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
-    associationService.updateDescription(id, descriptionDTO.description(), authenticatedUserId);
+    associationService.updateDescription(authenticatedUserId, descriptionDTO.description());
     return ResponseEntity.status(HttpStatus.OK).build();
   }
 
-  @PutMapping("/{id}/statistics")
+  @PutMapping("/me/statistics")
   public ResponseEntity<Void> updateAssociationStatistics(
-    @PathVariable UUID id,
     @Valid @RequestBody List<StatisticDTO> statistics,
     @AuthenticationPrincipal UserDetails userDetails
   ) {
     UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
-    associationService.updateStatistics(id, statistics, authenticatedUserId);
+    associationService.updateStatistics(authenticatedUserId, statistics);
+    return ResponseEntity.status(HttpStatus.OK).build();
+  }
+
+  @PostMapping("/me/logo")
+  public ResponseEntity<Void> uploadMyLogo(@RequestParam("logo") MultipartFile logoFile, @AuthenticationPrincipal UserDetails userDetails) {
+    UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
+    associationService.uploadLogo(authenticatedUserId, logoFile);
     return ResponseEntity.status(HttpStatus.OK).build();
   }
 }
