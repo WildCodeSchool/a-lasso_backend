@@ -1,0 +1,45 @@
+package com.back_alasso.Report;
+
+import com.back_alasso.User.UserService;
+import java.util.List;
+import java.util.UUID;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/report")
+public class ReportController {
+
+  public final ReportService reportService;
+  public final UserService userService;
+
+  public ReportController(ReportService reportService, UserService userService) {
+    this.reportService = reportService;
+    this.userService = userService;
+  }
+
+  @GetMapping
+  public ResponseEntity<List<ReportDTO>> getAllReports() {
+    List<ReportDTO> reports = reportService.getAllReports();
+
+    return ResponseEntity.status(HttpStatus.OK).body(reports);
+  }
+
+  @PostMapping
+  public ResponseEntity<Boolean> createReport(@RequestBody ReportCreationDTO reportCreation, @AuthenticationPrincipal UserDetails userDetails) {
+    UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
+
+    Boolean isSuccessPostReport = reportService.createReport(reportCreation, authenticatedUserId);
+
+    return ResponseEntity.status(HttpStatus.CREATED).body(isSuccessPostReport);
+  }
+
+  @DeleteMapping("/{reportId}")
+  public ResponseEntity<Boolean> deleteReport(@PathVariable UUID reportId, @AuthenticationPrincipal UserDetails userDetails) {
+    Boolean isSuccessDeleteReport = reportService.deleteReport(reportId);
+    return ResponseEntity.status(HttpStatus.OK).body(isSuccessDeleteReport);
+  }
+}

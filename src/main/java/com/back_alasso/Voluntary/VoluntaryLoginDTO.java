@@ -7,6 +7,7 @@ import com.back_alasso.Country.Country;
 import com.back_alasso.Geolocation.GeolocationLoginDTO;
 import com.back_alasso.Image.Image;
 import com.back_alasso.UserMessage.UserMessageNotificationDTO;
+import com.back_alasso.shared.NotificationDTO;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,10 +22,10 @@ public record VoluntaryLoginDTO(
   Image avatar,
   List<AssociationFollowerDTO> followedAssociations,
   List<ActivityVoluntaryLoginDTO> activitiesUserInfos,
-  List<UserMessageNotificationDTO> messageNotifications,
+  NotificationDTO notification,
   GeolocationLoginDTO geolocation
 ) {
-  public static VoluntaryLoginDTO fromEntityToDTO(Voluntary voluntary) {
+  public static VoluntaryLoginDTO fromEntityToDTO(Voluntary voluntary, Integer reportsInProgress) {
     List<AssociationFollowerDTO> followed = voluntary
       .getAssociationFollowers()
       .stream()
@@ -48,6 +49,8 @@ public record VoluntaryLoginDTO(
       .map(entry -> new UserMessageNotificationDTO(entry.getKey().getId(), entry.getKey().getTitle(), entry.getValue().intValue()))
       .toList();
 
+    NotificationDTO notifications = new NotificationDTO(messageNotifications, reportsInProgress);
+
     return new VoluntaryLoginDTO(
       "voluntary",
       voluntary.getEmail(),
@@ -59,7 +62,7 @@ public record VoluntaryLoginDTO(
       voluntary.getAvatar(),
       followed,
       activitiesUserInfos,
-      messageNotifications,
+      notifications,
       GeolocationLoginDTO.from(voluntary.getGeolocation())
     );
   }

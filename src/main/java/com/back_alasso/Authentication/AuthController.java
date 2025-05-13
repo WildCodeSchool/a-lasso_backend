@@ -2,7 +2,10 @@ package com.back_alasso.Authentication;
 
 import com.back_alasso.Association.Association;
 import com.back_alasso.Association.AssociationLoginDTO;
+import com.back_alasso.Report.ReportRepository;
+import com.back_alasso.Report.StatusReportEnumType;
 import com.back_alasso.User.User;
+import com.back_alasso.User.UserEnumType;
 import com.back_alasso.User.UserService;
 import com.back_alasso.Voluntary.Voluntary;
 import com.back_alasso.Voluntary.VoluntaryLoginDTO;
@@ -19,10 +22,12 @@ public class AuthController {
 
   private final UserService userService;
   private final AuthService authService;
+  private final ReportRepository reportRepository;
 
-  public AuthController(UserService userService, AuthService authService) {
+  public AuthController(UserService userService, AuthService authService, ReportRepository reportRepository) {
     this.userService = userService;
     this.authService = authService;
+    this.reportRepository = reportRepository;
   }
 
   @PostMapping("/register/voluntary")
@@ -50,7 +55,10 @@ public class AuthController {
     response.put("token", token);
 
     if (user instanceof Voluntary voluntary) {
-      response.put("user", VoluntaryLoginDTO.fromEntityToDTO(voluntary));
+      Boolean isAdmin = voluntary.getRoles().contains(UserEnumType.ROLE_ADMIN);
+      Integer reportsInProgress = isAdmin ? reportRepository.countByStatus(StatusReportEnumType.IN_PROGRESS) : null;
+
+      response.put("user", VoluntaryLoginDTO.fromEntityToDTO(voluntary, reportsInProgress));
     } else if (user instanceof Association association) {
       response.put("user", AssociationLoginDTO.fromEntityToDTO(association));
     } else {
