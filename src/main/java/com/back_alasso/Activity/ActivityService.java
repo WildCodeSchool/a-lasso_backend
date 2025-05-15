@@ -41,7 +41,6 @@ public class ActivityService {
   private final ActivityThemeRepository activityThemeRepository;
   private final AddressRepository addressRepository;
   private final GeolocationRepository geolocationRepository;
-  private final GeolocationService geolocationService;
   private final ImageRepository imageRepository;
   private final ActivityImageRepository activityImageRepository;
   private final CountryRepository countryRepository;
@@ -68,7 +67,6 @@ public class ActivityService {
     this.activityThemeRepository = activityThemeRepository;
     this.addressRepository = addressRepository;
     this.geolocationRepository = geolocationRepository;
-    this.geolocationService = geolocationService;
     this.imageRepository = imageRepository;
     this.activityImageRepository = activityImageRepository;
     this.countryRepository = countryRepository;
@@ -130,20 +128,20 @@ public class ActivityService {
 
     List<Image> savedImages = imageRepository.saveAll(images);
 
-    Optional<Country> countryFromDataBase = countryRepository.findFirstByName(newActivityDTO.country());
-    Country country = countryFromDataBase.orElseGet(() -> countryRepository.save(new Country(newActivityDTO.country())));
+    Optional<Country> countryFromDataBase = countryRepository.findFirstByName(newActivityDTO.address().country());
+    Country country = countryFromDataBase.orElseGet(() -> countryRepository.save(new Country(newActivityDTO.address().country())));
 
     Address address = new Address(
-      newActivityDTO.houseNumber(),
-      newActivityDTO.streetName(),
-      null,
-      newActivityDTO.zipCode(),
-      newActivityDTO.city(),
+      newActivityDTO.address().houseNumber(),
+      newActivityDTO.address().streetName(),
+      newActivityDTO.address().zipCode(),
+      newActivityDTO.address().city(),
       country
     );
+
     Address savedAddress = addressRepository.save(address);
 
-    Geolocation geolocation = geolocationService.getCoordinatesWithFullAddress(address);
+    Geolocation geolocation = new Geolocation(newActivityDTO.address().lon(), newActivityDTO.address().lat());
     Geolocation savedGeolocation = geolocationRepository.save(geolocation);
 
     Activity newActivity = new Activity(

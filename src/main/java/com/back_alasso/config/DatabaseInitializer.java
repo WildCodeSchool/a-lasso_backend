@@ -56,19 +56,19 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class DatabaseInitializer {
 
-  public static final int FIRST_HOUSE_NUMBER = 10;
-  public static final int SECOND_HOUSE_NUMBER = 61;
-  public static final int HOUSE_NUMBER_NICE = 30;
-  public static final int HOUSE_NUMBER_LILLE = 14;
-  public static final int HOUSE_NUMBER_BORDEAUX = 5;
+  public static final String FIRST_HOUSE_NUMBER = "10";
+  public static final String SECOND_HOUSE_NUMBER = "61";
+  public static final String HOUSE_NUMBER_NICE = "30";
+  public static final String HOUSE_NUMBER_LILLE = "14";
+  public static final String HOUSE_NUMBER_BORDEAUX = "5";
   public static final int FIRST_ASSO_YEAR_FOUNDED = 1864;
-  public static final int HOUSE_NUMBER_NANCY = 8;
+  public static final String HOUSE_NUMBER_NANCY = "8";
   public static final int FIRST_ASSO_MONTH_FOUNDED = 8;
   public static final int FIRST_ASSO_DAY_FOUNDED = 25;
   public static final int SECOND_ASSO_YEAR_FOUNDED = 1845;
-  public static final int THIRD_HOUSE_NUMBER = 25;
-  public static final int FOURTH_HOUSE_NUMBER = 14;
-  public static final int FIFTH_HOUSE_NUMBER = 78;
+  public static final String THIRD_HOUSE_NUMBER = "25";
+  public static final String FOURTH_HOUSE_NUMBER = "14";
+  public static final String FIFTH_HOUSE_NUMBER = "78";
   public static final int THIRD_ASSO_YEAR_FOUNDED = 1985;
   public static final int FOURTH_ASSO_YEAR_FOUNDED = 1999;
   public static final int FIFTH_ASSO_YEAR_FOUNDED = 2008;
@@ -226,11 +226,11 @@ public class DatabaseInitializer {
 
     // initiate examples of associations
     List<Address> associationAddresses = Arrays.asList(
-      new Address(FIRST_HOUSE_NUMBER, "rue d'Athènes", null, "44300", "NANTES", firstCountry),
-      new Address(SECOND_HOUSE_NUMBER, "chemin de Gralan", null, "44470", "CARQUEFOU", firstCountry),
-      new Address(THIRD_HOUSE_NUMBER, "avenue des Champs-Élysées", null, "75008", "PARIS", firstCountry),
-      new Address(FOURTH_HOUSE_NUMBER, "rue Saint-Jean", null, "54000", "NANCY", firstCountry),
-      new Address(FIFTH_HOUSE_NUMBER, "rue de la République", null, "69002", "LYON", firstCountry)
+      new Address(FIRST_HOUSE_NUMBER, "rue d'Athènes", "44300", "NANTES", firstCountry),
+      new Address(SECOND_HOUSE_NUMBER, "chemin de Gralan", "44470", "CARQUEFOU", firstCountry),
+      new Address(THIRD_HOUSE_NUMBER, "avenue des Champs-Élysées", "75008", "PARIS", firstCountry),
+      new Address(FOURTH_HOUSE_NUMBER, "rue Saint-Jean", "54000", "NANCY", firstCountry),
+      new Address(FIFTH_HOUSE_NUMBER, "rue de la République", "69002", "LYON", firstCountry)
     );
 
     List<Image> associationLogos = List.of(
@@ -392,13 +392,13 @@ public class DatabaseInitializer {
     );
 
     List<Address> activityAddresses = Arrays.asList(
-      new Address(FIRST_HOUSE_NUMBER, "rue du bonheur", null, "44300", "NANTES", firstCountry), // maraude
-      new Address(SECOND_HOUSE_NUMBER, "chemin de Gralan", null, "44470", "CARQUEFOU", firstCountry), // refuge SPA
-      new Address(HOUSE_NUMBER_NICE, "Promenade des Anglais", null, "06000", "NICE", firstCountry), // plage Nice
-      new Address(HOUSE_NUMBER_LILLE, "Rue Nationale", null, "59000", "LILLE", firstCountry), // cuisine solidaire Lille
-      new Address(HOUSE_NUMBER_NANCY, "Place Stanislas", null, "54000", "NANCY", firstCountry), // atelier écriture Nancy
-      new Address(HOUSE_NUMBER_BORDEAUX, "Rue Sainte-Catherine", null, "33000", "BORDEAUX", firstCountry), // jardins urbains Bordeaux
-      new Address(FIRST_HOUSE_NUMBER, "Rue Victor Hugo", null, "69002", "LYON", firstCountry) // spectacle Lyon
+      new Address(FIRST_HOUSE_NUMBER, "rue du bonheur", "44300", "NANTES", firstCountry), // maraude
+      new Address(SECOND_HOUSE_NUMBER, "chemin de Gralan", "44470", "CARQUEFOU", firstCountry), // refuge SPA
+      new Address(HOUSE_NUMBER_NICE, "Promenade des Anglais", "06000", "NICE", firstCountry), // plage Nice
+      new Address(HOUSE_NUMBER_LILLE, "Rue Nationale", "59000", "LILLE", firstCountry), // cuisine solidaire Lille
+      new Address(HOUSE_NUMBER_NANCY, "Place Stanislas", "54000", "NANCY", firstCountry), // atelier écriture Nancy
+      new Address(HOUSE_NUMBER_BORDEAUX, "Rue Sainte-Catherine", "33000", "BORDEAUX", firstCountry), // jardins urbains Bordeaux
+      new Address(FIRST_HOUSE_NUMBER, "Rue Victor Hugo", "69002", "LYON", firstCountry) // spectacle Lyon
     );
 
     List<Activity> activities = Arrays.asList(

@@ -12,14 +12,10 @@ public class Address extends BaseEntity {
   public static final int CITY_MAX_LENGTH = 100;
 
   @Column(nullable = true)
-  private Integer house_number;
+  private String house_number;
 
   @Column(nullable = true, length = STREET_MAX_LENGTH)
   private String street_name;
-
-  @Enumerated(EnumType.STRING)
-  @Column(nullable = true)
-  private AddressSuffixEnumType adress_suffix;
 
   @Column(nullable = false, length = ZIPCODE_MAX_LENGTH)
   private String zipCode;
@@ -34,20 +30,19 @@ public class Address extends BaseEntity {
   // Necessary to have an empty constructor to instance object.
   public Address() {}
 
-  public Address(Integer house_number, String street_name, AddressSuffixEnumType adress_suffix, String zipCode, String city, Country country) {
+  public Address(String house_number, String street_name, String zipCode, String city, Country country) {
     this.house_number = house_number;
     this.street_name = street_name;
-    this.adress_suffix = adress_suffix;
     this.zipCode = zipCode;
     this.city = city;
     this.country = country;
   }
 
-  public Integer getHouse_number() {
+  public String getHouse_number() {
     return house_number;
   }
 
-  public void setHouse_number(Integer house_number) {
+  public void setHouse_number(String house_number) {
     this.house_number = house_number;
   }
 
@@ -57,14 +52,6 @@ public class Address extends BaseEntity {
 
   public void setStreet_name(String street_name) {
     this.street_name = street_name;
-  }
-
-  public AddressSuffixEnumType getAdress_suffix() {
-    return adress_suffix;
-  }
-
-  public void setAdress_suffix(AddressSuffixEnumType adress_suffix) {
-    this.adress_suffix = adress_suffix;
   }
 
   public String getZipCode() {
