@@ -127,16 +127,15 @@ public class UserService {
       .orElseThrow(() -> new RuntimeException("Image non trouvé"));
 
     Country country = countryRepository
-      .findFirstByName(associationRegistrationDTO.address().getCountry().getName())
-      .orElse(countryRepository.save(new Country(associationRegistrationDTO.address().getCountry().getName())));
+      .findFirstByName(associationRegistrationDTO.address().country())
+      .orElse(countryRepository.save(new Country(associationRegistrationDTO.address().country())));
 
     Address address = addressRepository.save(
       new Address(
-        associationRegistrationDTO.address().getHouse_number(),
-        associationRegistrationDTO.address().getStreet_name(),
-        associationRegistrationDTO.address().getAdress_suffix(),
-        associationRegistrationDTO.address().getZipCode(),
-        associationRegistrationDTO.address().getCity(),
+        associationRegistrationDTO.address().houseNumber(),
+        associationRegistrationDTO.address().streetName(),
+        associationRegistrationDTO.address().zipCode(),
+        associationRegistrationDTO.address().city(),
         country
       )
     );
@@ -156,7 +155,7 @@ public class UserService {
       null
     );
 
-    Geolocation geolocAssociation = geolocationService.getCoordinatesWithFullAddress(associationRegistrationDTO.address());
+    Geolocation geolocAssociation = new Geolocation(associationRegistrationDTO.address().lon(), associationRegistrationDTO.address().lat());
 
     geolocationRepository.save(geolocAssociation);
     association.setGeolocation(geolocAssociation);
