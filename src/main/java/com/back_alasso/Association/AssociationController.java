@@ -32,12 +32,16 @@ public class AssociationController {
   }
 
   @GetMapping("/activities-images")
-  public ResponseEntity<List<ImageResponseDTO>> getExistingActivityPictures(@AuthenticationPrincipal UserDetails userDetails) {
+  public ResponseEntity<List<ImageResponseDTO>> getExistingActivityPictures(
+    @AuthenticationPrincipal UserDetails userDetails,
+    @RequestParam int offset,
+    @RequestParam int limit
+  ) {
     UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
 
-    List<ImageResponseDTO> activitiesImages = associationService.getExistingActivityPictures(authenticatedUserId);
+    List<ImageResponseDTO> activitiesImages = associationService.getExistingActivityPictures(authenticatedUserId, offset, limit);
 
-    return ResponseEntity.status(HttpStatus.OK).body(activitiesImages);
+    return ResponseEntity.ok(activitiesImages);
   }
 
   @PatchMapping("/{associationId}/updateFollow")

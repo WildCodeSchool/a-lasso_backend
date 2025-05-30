@@ -1,9 +1,10 @@
 package com.back_alasso.Association;
 
+import com.back_alasso.ActivityImage.ActivityImage;
+import com.back_alasso.ActivityImage.ActivityImageRepository;
 import com.back_alasso.Association.DTO.AssociationCardResponseDTO;
 import com.back_alasso.AssociationFollower.AssociationFollower;
 import com.back_alasso.AssociationFollower.AssociationFollowerRepository;
-import com.back_alasso.AssociationImage.AssociationImage;
 import com.back_alasso.AssociationImage.AssociationImageRepository;
 import com.back_alasso.Exception.ResourceNotFoundException;
 import com.back_alasso.Image.DTO.ImageResponseDTO;
@@ -13,6 +14,9 @@ import com.back_alasso.Voluntary.Voluntary;
 import com.back_alasso.Voluntary.VoluntaryRepository;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,6 +28,7 @@ public class AssociationService {
   private final AssociationImageRepository associationImageRepository;
   private final AssociationCardResponseMapper associationCardResponseMapper;
   private final ImageMapper imageMapper;
+  private final ActivityImageRepository activityImageRepository;
 
   public AssociationService(
     AssociationRepository associationRepository,
@@ -31,7 +36,8 @@ public class AssociationService {
     AssociationFollowerRepository associationFollowerRepository,
     AssociationImageRepository associationImageRepository,
     AssociationCardResponseMapper associationCardResponseMapper,
-    ImageMapper imageMapper
+    ImageMapper imageMapper,
+    ActivityImageRepository activityImageRepository
   ) {
     this.associationRepository = associationRepository;
     this.associationFollowerRepository = associationFollowerRepository;
@@ -39,6 +45,7 @@ public class AssociationService {
     this.associationImageRepository = associationImageRepository;
     this.associationCardResponseMapper = associationCardResponseMapper;
     this.imageMapper = imageMapper;
+    this.activityImageRepository = activityImageRepository;
   }
 
   public AssociationCardResponseDTO getAssociation(UUID id, UUID authenticatedUserId) {
@@ -72,11 +79,13 @@ public class AssociationService {
     return isFollow;
   }
 
-  public List<ImageResponseDTO> getExistingActivityPictures(UUID associationId) {
-    List<AssociationImage> associationImages = associationImageRepository.findByAssociation_id(associationId);
+  public List<ImageResponseDTO> getExistingActivityPictures(UUID associationId, int offset, int limit) {
+    Pageable pageable = PageRequest.of(offset / limit, limit);
 
-    List<UUID> imagesId = associationImages.stream().map(associationImage -> associationImage.getId()).toList();
+    Page<ActivityImage> pagedImages = activityImageRepository.findByActivity_Association_Id(associationId, pageable);
 
-    return imageMapper.toResponseDTOs(imagesId, ImageEnumType.ACTIVITY);
+    List<UUID> imageIds = pagedImages.getContent().stream().map(activityImage -> activityImage.getImage().getId()).toList();
+
+    return imageMapper.toResponseDTOs(imageIds, ImageEnumType.ACTIVITY);
   }
 }
