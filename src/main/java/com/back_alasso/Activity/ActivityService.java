@@ -1,5 +1,7 @@
 package com.back_alasso.Activity;
 
+import com.back_alasso.Activity.DTO.ActivityCreationRequestDTO;
+import com.back_alasso.Activity.DTO.ActivityResponseDTO;
 import com.back_alasso.ActivityImage.ActivityImage;
 import com.back_alasso.ActivityImage.ActivityImageRepository;
 import com.back_alasso.ActivityTheme.ActivityTheme;
@@ -44,6 +46,7 @@ public class ActivityService {
   private final ImageRepository imageRepository;
   private final ActivityImageRepository activityImageRepository;
   private final CountryRepository countryRepository;
+  private final ActivityResponseMapper activityResponseMapper;
 
   public ActivityService(
     ActivityRepository activityRepository,
@@ -57,7 +60,8 @@ public class ActivityService {
     GeolocationService geolocationService,
     ImageRepository imageRepository,
     ActivityImageRepository activityImageRepository,
-    CountryRepository countryRepository
+    CountryRepository countryRepository,
+    ActivityResponseMapper activityResponseMapper
   ) {
     this.activityRepository = activityRepository;
     this.voluntaryRepository = voluntaryRepository;
@@ -70,6 +74,7 @@ public class ActivityService {
     this.imageRepository = imageRepository;
     this.activityImageRepository = activityImageRepository;
     this.countryRepository = countryRepository;
+    this.activityResponseMapper = activityResponseMapper;
   }
 
   // service private shared methods
@@ -88,22 +93,23 @@ public class ActivityService {
 
   // service public methods
 
-  public List<ActivityDTO> getAllActivities(UUID authenticatedUserId) {
+  public List<ActivityResponseDTO> getAllActivities(UUID authenticatedUserId) {
     List<Activity> activities = activityRepository.findAll();
 
     if (activities.isEmpty()) {
       throw new ResourceNotFoundException("activities not found");
     }
 
-    return activities.stream().map(activity -> ActivityDTO.fromEntityToDTO(activity, authenticatedUserId)).collect(Collectors.toList());
+    return activities.stream().map(activity -> activityResponseMapper.fromEntityToDTO(activity, authenticatedUserId)).collect(Collectors.toList());
   }
 
-  public ActivityDTO getActivityById(UUID authenticatedUserId, UUID activityId) {
+  public ActivityResponseDTO getActivityById(UUID authenticatedUserId, UUID activityId) {
     Activity activity = activityRepository.findById(activityId).orElseThrow(() -> new ResourceNotFoundException("activity not found"));
-    return ActivityDTO.fromEntityToDTO(activity, authenticatedUserId);
+
+    return activityResponseMapper.fromEntityToDTO(activity, authenticatedUserId);
   }
 
-  public ActivityDTO addNewActivity(AddNewActivityDTO newActivityDTO, UUID authenticatedUser) {
+  public ActivityResponseDTO addNewActivity(ActivityCreationRequestDTO newActivityDTO, UUID authenticatedUser) {
     Association association = associationRepository
       .findById(authenticatedUser)
       .orElseThrow(() -> new ResourceNotFoundException("association not found"));
@@ -171,14 +177,10 @@ public class ActivityService {
 
     activityImageRepository.saveAll(activityImages);
 
-    // Reload to fetch themes and images
-
-    // Activity savedActivityReloaded = activityRepository.findById(savedActivity.getId()).orElseThrow();
-
     savedActivity.setActivityThemes(activityThemes);
     savedActivity.setActivityImages(activityImages);
 
-    return ActivityDTO.fromEntityToDTO(savedActivity, authenticatedUser);
+    return activityResponseMapper.fromEntityToDTO(savedActivity, authenticatedUser);
   }
 
   public Boolean updatedFavoriteStatus(UUID activityId, boolean isFavorite, UUID authenticatedUserId) {

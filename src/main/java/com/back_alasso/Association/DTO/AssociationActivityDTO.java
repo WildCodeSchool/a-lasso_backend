@@ -1,5 +1,6 @@
-package com.back_alasso.Association;
+package com.back_alasso.Association.DTO;
 
+import com.back_alasso.Association.Association;
 import com.back_alasso.Geolocation.GeolocationDTO;
 import java.util.UUID;
 import java.util.stream.Collectors;

@@ -1,5 +1,6 @@
 package com.back_alasso.Activity;
 
+import com.back_alasso.Activity.DTO.*;
 import com.back_alasso.ActivityVoluntary.ActivityVoluntaryDTO;
 import com.back_alasso.ActivityVoluntary.ActivityVoluntaryService;
 import com.back_alasso.User.UserService;
@@ -27,16 +28,16 @@ public class ActivityController {
   }
 
   @GetMapping
-  public ResponseEntity<List<ActivityDTO>> getAllActivities(@AuthenticationPrincipal UserDetails userDetails) {
+  public ResponseEntity<List<ActivityResponseDTO>> getAllActivities(@AuthenticationPrincipal UserDetails userDetails) {
     UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
-    List<ActivityDTO> activities = activityService.getAllActivities(authenticatedUserId);
+    List<ActivityResponseDTO> activities = activityService.getAllActivities(authenticatedUserId);
     return ResponseEntity.status(HttpStatus.OK).body(activities);
   }
 
   @GetMapping("/{activityId}")
-  public ResponseEntity<ActivityDTO> getActivityById(@AuthenticationPrincipal UserDetails userDetails, @PathVariable UUID activityId) {
+  public ResponseEntity<ActivityResponseDTO> getActivityById(@AuthenticationPrincipal UserDetails userDetails, @PathVariable UUID activityId) {
     UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
-    ActivityDTO activity = activityService.getActivityById(authenticatedUserId, activityId);
+    ActivityResponseDTO activity = activityService.getActivityById(authenticatedUserId, activityId);
     return ResponseEntity.status(HttpStatus.OK).body(activity);
   }
 
@@ -69,11 +70,14 @@ public class ActivityController {
   }
 
   @PostMapping("/publish")
-  public ResponseEntity<ActivityDTO> publish(@RequestBody AddNewActivityDTO newActivityDTO, @AuthenticationPrincipal UserDetails userDetails) {
+  public ResponseEntity<ActivityResponseDTO> publish(
+    @RequestBody ActivityCreationRequestDTO newActivityDTO,
+    @AuthenticationPrincipal UserDetails userDetails
+  ) {
     String emailAuthenticatedUser = userDetails.getUsername();
     UUID authenticatedUser = userService.findByEmail(emailAuthenticatedUser).getId();
 
-    ActivityDTO savedActivity = activityService.addNewActivity(newActivityDTO, authenticatedUser);
+    ActivityResponseDTO savedActivity = activityService.addNewActivity(newActivityDTO, authenticatedUser);
     return ResponseEntity.status(HttpStatus.CREATED).body(savedActivity);
   }
 }

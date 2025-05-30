@@ -3,29 +3,29 @@ package com.back_alasso.Voluntary;
 import com.back_alasso.ActivityVoluntary.ActivityVoluntaryLoginDTO;
 import com.back_alasso.AssociationFollower.AssociationFollower;
 import com.back_alasso.AssociationFollower.AssociationFollowerDTO;
-import com.back_alasso.Country.Country;
 import com.back_alasso.Geolocation.GeolocationLoginDTO;
-import com.back_alasso.Image.Image;
+import com.back_alasso.Image.DTO.ImageResponseDTO;
+import com.back_alasso.Image.ImageEnumType;
+import com.back_alasso.Image.ImageMapper;
 import com.back_alasso.UserMessage.UserMessageNotificationDTO;
-import com.back_alasso.shared.NotificationDTO;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.stereotype.Component;
 
-public record VoluntaryLoginDTO(
-  String type,
-  String email,
-  String first_name,
-  String last_name,
-  String mobile_phone,
-  String city,
-  Country country,
-  Image avatar,
-  List<AssociationFollowerDTO> followedAssociations,
-  List<ActivityVoluntaryLoginDTO> activitiesUserInfos,
-  NotificationDTO notification,
-  GeolocationLoginDTO geolocation
-) {
-  public static VoluntaryLoginDTO fromEntityToDTO(Voluntary voluntary, Integer reportsInProgress) {
+@Component
+public class VoluntaryLoginResponseMapper {
+
+  private final ImageMapper imageMapper;
+
+  public VoluntaryLoginResponseMapper(ImageMapper imageMapper) {
+    this.imageMapper = imageMapper;
+  }
+
+  public VoluntaryLoginResponseDTO fromEntityToDTO(Voluntary voluntary) {
+    ImageResponseDTO avatar = voluntary.getAvatar() != null
+      ? imageMapper.toResponseDTOs(List.of(voluntary.getAvatar().getId()), ImageEnumType.AVATAR).stream().findFirst().orElse(null)
+      : null;
+
     List<AssociationFollowerDTO> followed = voluntary
       .getAssociationFollowers()
       .stream()
@@ -49,9 +49,7 @@ public record VoluntaryLoginDTO(
       .map(entry -> new UserMessageNotificationDTO(entry.getKey().getId(), entry.getKey().getTitle(), entry.getValue().intValue()))
       .toList();
 
-    NotificationDTO notifications = new NotificationDTO(messageNotifications, reportsInProgress);
-
-    return new VoluntaryLoginDTO(
+    return new VoluntaryLoginResponseDTO(
       "voluntary",
       voluntary.getEmail(),
       voluntary.getFirst_name(),
@@ -59,10 +57,10 @@ public record VoluntaryLoginDTO(
       voluntary.getMobile_phone(),
       voluntary.getCity(),
       voluntary.getCountry(),
-      voluntary.getAvatar(),
+      avatar,
       followed,
       activitiesUserInfos,
-      notifications,
+      messageNotifications,
       GeolocationLoginDTO.from(voluntary.getGeolocation())
     );
   }
