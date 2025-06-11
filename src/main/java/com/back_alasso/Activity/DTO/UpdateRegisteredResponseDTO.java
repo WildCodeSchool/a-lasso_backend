@@ -1,4 +1,4 @@
-package com.back_alasso.Activity;
+package com.back_alasso.Activity.DTO;
 
 import com.back_alasso.ActivityVoluntary.ActivityVoluntaryDTO;
 
