@@ -61,7 +61,8 @@ public class VoluntaryLoginResponseMapper {
       followed,
       activitiesUserInfos,
       messageNotifications,
-      GeolocationLoginDTO.from(voluntary.getGeolocation())
+      GeolocationLoginDTO.from(voluntary.getGeolocation()),
+      voluntary.getCreatedAt().toLocalDate()
     );
   }
 }

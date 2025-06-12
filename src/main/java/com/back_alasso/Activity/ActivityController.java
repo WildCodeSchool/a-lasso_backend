@@ -80,4 +80,11 @@ public class ActivityController {
     ActivityResponseDTO savedActivity = activityService.addNewActivity(newActivityDTO, authenticatedUser);
     return ResponseEntity.status(HttpStatus.CREATED).body(savedActivity);
   }
+
+  @DeleteMapping("/delete/{activityId}")
+  public ResponseEntity<Void> deleteActivity(@PathVariable UUID activityId, @AuthenticationPrincipal UserDetails userDetails) {
+    UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
+    activityService.deleteActivity(activityId, authenticatedUserId);
+    return ResponseEntity.noContent().build();
+  }
 }

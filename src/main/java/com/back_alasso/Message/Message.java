@@ -27,7 +27,7 @@ public class Message extends BaseEntity {
   @JoinColumn(name = "activity_id")
   private Activity activity;
 
-  @OneToMany(mappedBy = "message")
+  @OneToMany(mappedBy = "message", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<UserMessage> userMessages;
 
   // Necessary to have an empty constructor to instance object.

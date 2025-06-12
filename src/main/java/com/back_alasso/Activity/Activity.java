@@ -39,16 +39,16 @@ public class Activity extends BaseEntity implements Geolocatable {
   @JoinColumn(name = "adress_id")
   private Address address;
 
-  @OneToMany(mappedBy = "activity")
+  @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<ActivityImage> activityImages;
 
-  @OneToMany(mappedBy = "activity")
+  @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<ActivityTheme> activityThemes;
 
-  @OneToMany(mappedBy = "activity")
+  @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<ActivityVoluntary> activityVoluntaries;
 
-  @OneToMany(mappedBy = "activity")
+  @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Message> messages;
 
   @ManyToOne

@@ -73,6 +73,23 @@ public class UserService {
     }
   }
 
+  public void changePassword(String email, String oldPassword, String newPassword) {
+    User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Utilisateur non trouvé"));
+
+    if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+      throw new IllegalArgumentException("Ancien mot de passe incorrect");
+    }
+
+    user.setHashed_password(passwordEncoder.encode(newPassword));
+    userRepository.save(user);
+  }
+
+  public void deleteUser(String email) {
+    User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Utilisateur non trouvé"));
+    preferencesRepository.delete(user.getPreferences());
+    userRepository.delete(user);
+  }
+
   public UUID getAuthenticatedUserId(UserDetails userDetails) {
     if (userDetails == null) {
       return null;

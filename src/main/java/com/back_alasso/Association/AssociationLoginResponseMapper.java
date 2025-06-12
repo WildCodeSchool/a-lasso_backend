@@ -6,7 +6,9 @@ import com.back_alasso.Geolocation.GeolocationLoginDTO;
 import com.back_alasso.Image.DTO.ImageResponseDTO;
 import com.back_alasso.Image.ImageEnumType;
 import com.back_alasso.Image.ImageMapper;
+import com.back_alasso.Statistic.StatisticDTO;
 import com.back_alasso.UserMessage.UserMessageNotificationDTO;
+import com.back_alasso.shared.NotificationDTO;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -56,7 +58,10 @@ public class AssociationLoginResponseMapper {
       .map(entry -> new UserMessageNotificationDTO(entry.getKey().getId(), entry.getKey().getTitle(), entry.getValue().intValue()))
       .toList();
 
+    NotificationDTO notifications = new NotificationDTO(messageNotifications, null);
+
     return new AssociationLoginResponseDTO(
+      association.getId(),
       "association",
       association.getEmail(),
       association.getName(),
@@ -68,7 +73,10 @@ public class AssociationLoginResponseMapper {
       profileImage,
       logoImage,
       GeolocationLoginDTO.from(association.getGeolocation()),
-      messageNotifications
+      messageNotifications,
+      association.getCreatedAt().toLocalDate(),
+      notifications,
+      association.getStatistics().stream().map(StatisticDTO::fromEntityToDTO).toList()
     );
   }
 }

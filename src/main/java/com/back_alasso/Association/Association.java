@@ -1,10 +1,12 @@
 package com.back_alasso.Association;
 
+import com.back_alasso.Activity.Activity;
 import com.back_alasso.Address.Address;
 import com.back_alasso.AssociationFollower.AssociationFollower;
 import com.back_alasso.AssociationImage.AssociationImage;
 import com.back_alasso.Geolocation.Geolocatable;
 import com.back_alasso.Preferences.Preferences;
+import com.back_alasso.Statistic.Statistic;
 import com.back_alasso.User.AccountEnumType;
 import com.back_alasso.User.User;
 import com.back_alasso.User.UserEnumType;
@@ -40,11 +42,17 @@ public class Association extends User implements Geolocatable {
   @JoinColumn(name = "adress_id")
   private Address address;
 
-  @OneToMany(mappedBy = "association")
+  @OneToMany(mappedBy = "association", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<AssociationImage> associationImages;
 
-  @OneToMany(mappedBy = "association")
+  @OneToMany(mappedBy = "association", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<AssociationFollower> associationFollowers;
+
+  @OneToMany(mappedBy = "association", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Activity> activities;
+
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Statistic> statistics;
 
   // Necessary to have an empty constructor to instance object.
   public Association() {
@@ -145,5 +153,21 @@ public class Association extends User implements Geolocatable {
 
   public void setSiteURL(String siteURL) {
     this.siteURL = siteURL;
+  }
+
+  public List<Activity> getActivities() {
+    return activities;
+  }
+
+  public void setActivities(List<Activity> activities) {
+    this.activities = activities;
+  }
+
+  public List<Statistic> getStatistics() {
+    return statistics;
+  }
+
+  public void setStatistics(List<Statistic> statistics) {
+    this.statistics = statistics;
   }
 }

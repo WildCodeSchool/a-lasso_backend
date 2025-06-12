@@ -1,8 +1,11 @@
 package com.back_alasso.Association;
 
 import com.back_alasso.Association.DTO.AssociationCardResponseDTO;
+import com.back_alasso.Association.DTO.AssociationDescriptionDTO;
+import com.back_alasso.Association.DTO.AssociationGeneralInfoDTO;
 import com.back_alasso.Association.DTO.UpdateFollowRequestDTO;
 import com.back_alasso.Image.DTO.ImageResponseDTO;
+import com.back_alasso.Statistic.StatisticDTO;
 import com.back_alasso.User.UserService;
 import java.util.List;
 import java.util.UUID;
@@ -53,5 +56,38 @@ public class AssociationController {
     UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
     boolean updatedFollowStatus = associationService.updateFollowStatus(associationId, request.isFollow(), authenticatedUserId);
     return ResponseEntity.status(HttpStatus.OK).body(updatedFollowStatus);
+  }
+
+  @PutMapping("/{id}/general-info")
+  public ResponseEntity<Void> updateGeneralInformation(
+    @PathVariable UUID id,
+    @RequestBody AssociationGeneralInfoDTO associationGeneralInfoDTO,
+    @AuthenticationPrincipal UserDetails userDetails
+  ) {
+    UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
+    associationService.updateGeneralInfo(id, associationGeneralInfoDTO, authenticatedUserId);
+    return ResponseEntity.status(HttpStatus.OK).build();
+  }
+
+  @PutMapping("/{id}/description")
+  public ResponseEntity<Void> updateDescription(
+    @PathVariable UUID id,
+    @RequestBody AssociationDescriptionDTO descriptionDTO,
+    @AuthenticationPrincipal UserDetails userDetails
+  ) {
+    UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
+    associationService.updateDescription(id, descriptionDTO.description(), authenticatedUserId);
+    return ResponseEntity.status(HttpStatus.OK).build();
+  }
+
+  @PutMapping("/{id}/statistics")
+  public ResponseEntity<Void> updateAssociationStatistics(
+    @PathVariable UUID id,
+    @RequestBody List<StatisticDTO> statistics,
+    @AuthenticationPrincipal UserDetails userDetails
+  ) {
+    UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
+    associationService.updateStatistics(id, statistics, authenticatedUserId);
+    return ResponseEntity.status(HttpStatus.OK).build();
   }
 }
