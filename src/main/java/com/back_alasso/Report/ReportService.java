@@ -19,8 +19,14 @@ public class ReportService {
     this.userService = userService;
   }
 
-  public List<ReportDTO> getAllReports() {
-    List<Report> reports = reportRepository.findAll();
+  public List<ReportDTO> getAllReportsInProgress() {
+    List<Report> reports = reportRepository.findByStatus(StatusReportEnumType.IN_PROGRESS);
+
+    return reports.stream().map(report -> ReportDTO.fromEntityToDTO(report)).collect(Collectors.toList());
+  }
+
+  public List<ReportDTO> getAllReportsOfReportedId(UUID reportedId) {
+    List<Report> reports = reportRepository.findByUserReportedId(reportedId);
 
     return reports.stream().map(report -> ReportDTO.fromEntityToDTO(report)).collect(Collectors.toList());
   }
@@ -43,9 +49,15 @@ public class ReportService {
     return true;
   }
 
-  public Boolean deleteReport(UUID reportId) {
-    Report reportToDelete = reportRepository.findById(reportId).orElseThrow(() -> new ResourceNotFoundException("Report not found"));
-    reportRepository.delete(reportToDelete);
+  public Boolean updateReport(ReportDTO updateReport) {
+    Report reportToUpdate = reportRepository
+      .findById(updateReport.reportId())
+      .orElseThrow(() -> new ResourceNotFoundException("Report to update not found"));
+
+    reportToUpdate.setCommentaryAdmin(updateReport.commentaryAdmin());
+    reportToUpdate.setStatus(updateReport.status());
+
+    reportRepository.save(reportToUpdate);
     return true;
   }
 }

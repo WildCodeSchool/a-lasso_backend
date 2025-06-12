@@ -46,13 +46,13 @@ public class User extends BaseEntity implements UserDetails {
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<UserMessage> userMessages;
 
-  @OneToMany(mappedBy = "user_reporter", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "userReporter", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Report> reportsMade;
 
-  @OneToMany(mappedBy = "user_reported", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "userReported", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Report> reportsReceived;
 
-  @OneToMany(mappedBy = "user_admin", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "userAdmin", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Report> reportsHandled;
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -18,17 +18,17 @@ public record ReportDTO(
   LocalDateTime createdAt
 ) {
   public static ReportDTO fromEntityToDTO(Report report) {
-    User reported = report.getUser_reported();
-    User reporter = report.getUser_reporter();
+    User reported = report.getUserReported();
+    User reporter = report.getUserReporter();
 
     return new ReportDTO(
       report.getId(),
-      new ReportUser(report.getUser_reported().getId(), getDisplayName(reported), getUserType(reported)),
-      new ReportUser(report.getUser_reporter().getId(), getDisplayName(reporter), getUserType(reporter)),
-      report.getMessage_reporter(),
+      new ReportUser(report.getUserReported().getId(), getDisplayName(reported), getUserType(reported)),
+      new ReportUser(report.getUserReporter().getId(), getDisplayName(reporter), getUserType(reporter)),
+      report.getMessageReporter(),
       report.getReason(),
       report.getStatus(),
-      report.getCommentary_admin(),
+      report.getCommentaryAdmin(),
       report.getCreatedAt()
     );
   }

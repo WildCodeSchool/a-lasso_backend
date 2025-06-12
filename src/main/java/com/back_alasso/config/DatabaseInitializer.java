@@ -615,7 +615,25 @@ public class DatabaseInitializer {
         voluntaries.get(NUMBER_ZERO),
         voluntaries.get(NUMBER_ONE),
         "Lors de ma participation à l’évènement d’aide au SDF, à plusieurs reprise le référent Mr.Patate à tenu des propos dégradant envers les femmes.",
-        "Ce retour concorde avec les 3 précédents."
+        null
+      ),
+      new Report(
+        StatusReportEnumType.CLOSED,
+        ReasonReportEnumType.BAD_BEHAVIOR,
+        associations.get(NUMBER_ZERO),
+        voluntaries.get(NUMBER_ZERO),
+        voluntaries.get(NUMBER_ONE),
+        "M. Patate l'animateur est réellement problématique dans ses propos !",
+        "Pas assez d'informations ou de détails pour décider d'une pénalisation de l'association."
+      ),
+      new Report(
+        StatusReportEnumType.IN_PROGRESS,
+        ReasonReportEnumType.BAD_BEHAVIOR,
+        voluntaries.get(NUMBER_ZERO),
+        voluntaries.get(NUMBER_ZERO),
+        voluntaries.get(NUMBER_ONE),
+        "Le volontaire a été irrespectueux et insultant !! Nous avons dû faire intervenir la police!!",
+        null
       )
     );
 

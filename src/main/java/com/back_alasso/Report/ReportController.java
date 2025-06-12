@@ -22,8 +22,15 @@ public class ReportController {
   }
 
   @GetMapping
-  public ResponseEntity<List<ReportDTO>> getAllReports() {
-    List<ReportDTO> reports = reportService.getAllReports();
+  public ResponseEntity<List<ReportDTO>> getAllReportsInProgress() {
+    List<ReportDTO> reports = reportService.getAllReportsInProgress();
+
+    return ResponseEntity.status(HttpStatus.OK).body(reports);
+  }
+
+  @GetMapping("/{reportedId}")
+  public ResponseEntity<List<ReportDTO>> getAllReportsOfReportedId(@PathVariable UUID reportedId) {
+    List<ReportDTO> reports = reportService.getAllReportsOfReportedId(reportedId);
 
     return ResponseEntity.status(HttpStatus.OK).body(reports);
   }
@@ -37,9 +44,10 @@ public class ReportController {
     return ResponseEntity.status(HttpStatus.CREATED).body(isSuccessPostReport);
   }
 
-  @DeleteMapping("/{reportId}")
-  public ResponseEntity<Boolean> deleteReport(@PathVariable UUID reportId, @AuthenticationPrincipal UserDetails userDetails) {
-    Boolean isSuccessDeleteReport = reportService.deleteReport(reportId);
-    return ResponseEntity.status(HttpStatus.OK).body(isSuccessDeleteReport);
+  @PutMapping
+  public ResponseEntity<Boolean> updateReport(@RequestBody ReportDTO updateReport) {
+    Boolean hasUpdatedReportSuccessfully = reportService.updateReport(updateReport);
+
+    return ResponseEntity.status(HttpStatus.OK).body(hasUpdatedReportSuccessfully);
   }
 }
