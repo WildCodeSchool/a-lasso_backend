@@ -13,6 +13,7 @@ import com.back_alasso.Country.CountryRepository;
 import com.back_alasso.Exception.EmailAlreadyUsedException;
 import com.back_alasso.Exception.ResourceNotFoundException;
 import com.back_alasso.Geolocation.Geolocation;
+import com.back_alasso.Geolocation.GeolocationDTO;
 import com.back_alasso.Geolocation.GeolocationRepository;
 import com.back_alasso.Geolocation.GeolocationService;
 import com.back_alasso.Image.Image;
@@ -123,7 +124,8 @@ public class UserService {
       null
     );
 
-    Geolocation geolocVoluntary = geolocationService.getVoluntaryCoordinates(voluntaryRegistrationDTO.city(), voluntaryRegistrationDTO.country());
+    GeolocationDTO geolocDto = geolocationService.getVoluntaryCoordinates(voluntaryRegistrationDTO.city(), voluntaryRegistrationDTO.country());
+    Geolocation geolocVoluntary = new Geolocation(geolocDto.longitude(), geolocDto.latitude());
 
     geolocationRepository.save(geolocVoluntary);
     voluntary.setGeolocation(geolocVoluntary);
