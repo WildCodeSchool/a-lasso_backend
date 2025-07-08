@@ -6,7 +6,6 @@ import com.back_alasso.Association.DTO.AssociationActivityDTO;
 import com.back_alasso.Geolocation.GeolocationDTO;
 import com.back_alasso.Image.DTO.ImageResponseDTO;
 import com.back_alasso.Theme.ThemeNameEnumType;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;

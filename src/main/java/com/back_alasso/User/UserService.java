@@ -13,6 +13,7 @@ import com.back_alasso.Country.CountryRepository;
 import com.back_alasso.Exception.EmailAlreadyUsedException;
 import com.back_alasso.Exception.ResourceNotFoundException;
 import com.back_alasso.Geolocation.Geolocation;
+import com.back_alasso.Geolocation.GeolocationDTO;
 import com.back_alasso.Geolocation.GeolocationRepository;
 import com.back_alasso.Geolocation.GeolocationService;
 import com.back_alasso.Image.Image;
@@ -21,9 +22,7 @@ import com.back_alasso.Preferences.Preferences;
 import com.back_alasso.Preferences.PreferencesRepository;
 import com.back_alasso.Voluntary.Voluntary;
 import com.back_alasso.Voluntary.VoluntaryRepository;
-
 import java.util.*;
-
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -31,172 +30,176 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final VoluntaryRepository voluntaryRepository;
-    private final AssociationRepository associationRepository;
-    private final ImageRepository imageRepository;
-    private final CountryRepository countryRepository;
-    private final AddressRepository addressRepository;
-    private final PreferencesRepository preferencesRepository;
-    private final GeolocationService geolocationService;
-    private final GeolocationRepository geolocationRepository;
-    private final AssociationImageRepository associationImageRepository;
+  private final UserRepository userRepository;
+  private final PasswordEncoder passwordEncoder;
+  private final VoluntaryRepository voluntaryRepository;
+  private final AssociationRepository associationRepository;
+  private final ImageRepository imageRepository;
+  private final CountryRepository countryRepository;
+  private final AddressRepository addressRepository;
+  private final PreferencesRepository preferencesRepository;
+  private final GeolocationService geolocationService;
+  private final GeolocationRepository geolocationRepository;
+  private final AssociationImageRepository associationImageRepository;
 
-    public UserService(
-            UserRepository userRepository,
-            PasswordEncoder passwordEncoder,
-            VoluntaryRepository voluntaryRepository,
-            AssociationRepository associationRepository,
-            ImageRepository imageRepository,
-            CountryRepository countryRepository,
-            AddressRepository addressRepository,
-            PreferencesRepository preferencesRepository,
-            GeolocationService geolocationService,
-            GeolocationRepository geolocationRepository,
-            AssociationImageRepository associationImageRepository
-    ) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.voluntaryRepository = voluntaryRepository;
-        this.associationRepository = associationRepository;
-        this.imageRepository = imageRepository;
-        this.countryRepository = countryRepository;
-        this.addressRepository = addressRepository;
-        this.preferencesRepository = preferencesRepository;
-        this.geolocationService = geolocationService;
-        this.geolocationRepository = geolocationRepository;
-        this.associationImageRepository = associationImageRepository;
+  public UserService(
+    UserRepository userRepository,
+    PasswordEncoder passwordEncoder,
+    VoluntaryRepository voluntaryRepository,
+    AssociationRepository associationRepository,
+    ImageRepository imageRepository,
+    CountryRepository countryRepository,
+    AddressRepository addressRepository,
+    PreferencesRepository preferencesRepository,
+    GeolocationService geolocationService,
+    GeolocationRepository geolocationRepository,
+    AssociationImageRepository associationImageRepository
+  ) {
+    this.userRepository = userRepository;
+    this.passwordEncoder = passwordEncoder;
+    this.voluntaryRepository = voluntaryRepository;
+    this.associationRepository = associationRepository;
+    this.imageRepository = imageRepository;
+    this.countryRepository = countryRepository;
+    this.addressRepository = addressRepository;
+    this.preferencesRepository = preferencesRepository;
+    this.geolocationService = geolocationService;
+    this.geolocationRepository = geolocationRepository;
+    this.associationImageRepository = associationImageRepository;
+  }
+
+  public void checkUserExists(String email) {
+    if (userRepository.existsByEmail(email)) {
+      throw new EmailAlreadyUsedException("Cet email est déjà utilisé");
     }
+  }
 
-    public void checkUserExists(String email) {
-        if (userRepository.existsByEmail(email)) {
-            throw new EmailAlreadyUsedException("Cet email est déjà utilisé");
-        }
-    }
-
-    public void changePassword(String email, String oldPassword, String newPassword) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Utilisateur non trouvé"));
+  public void changePassword(String email, String oldPassword, String newPassword) {
+    User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Utilisateur non trouvé"));
 
     if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
       throw new IllegalArgumentException("Identifiants incorrects");
     }
 
-        user.setHashed_password(passwordEncoder.encode(newPassword));
-        userRepository.save(user);
+    user.setHashed_password(passwordEncoder.encode(newPassword));
+    userRepository.save(user);
+  }
+
+  public void deleteUser(String email) {
+    User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Utilisateur non trouvé"));
+    preferencesRepository.delete(user.getPreferences());
+    userRepository.delete(user);
+  }
+
+  public UUID getAuthenticatedUserId(UserDetails userDetails) {
+    if (userDetails == null) {
+      return null;
     }
+    String authenticatedUserEmail = userDetails.getUsername();
+    UUID authenticatedUserId = findByEmail(authenticatedUserEmail).getId();
+    return authenticatedUserId;
+  }
 
-    public void deleteUser(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Utilisateur non trouvé"));
-        preferencesRepository.delete(user.getPreferences());
-        userRepository.delete(user);
-    }
+  public boolean registerVoluntary(VoluntaryRegistrationDTO voluntaryRegistrationDTO) {
+    Image profileImage = imageRepository
+      .findFirstByUrl("/images/Voluntary/defaultAvatar.png")
+      .orElseThrow(() -> new RuntimeException("Image non trouvé"));
 
-    public UUID getAuthenticatedUserId(UserDetails userDetails) {
-        if (userDetails == null) {
-            return null;
-        }
-        String authenticatedUserEmail = userDetails.getUsername();
-        UUID authenticatedUserId = findByEmail(authenticatedUserEmail).getId();
-        return authenticatedUserId;
-    }
+    Country country = countryRepository
+      .findFirstByName(voluntaryRegistrationDTO.country())
+      .orElseThrow(() -> new RuntimeException("Pays non trouvé"));
 
-    public boolean registerVoluntary(VoluntaryRegistrationDTO voluntaryRegistrationDTO) {
-        Image profileImage = imageRepository
-                .findFirstByUrl("/images/Voluntary/defaultAvatar.png")
-                .orElseThrow(() -> new RuntimeException("Image non trouvé"));
+    Voluntary voluntary = new Voluntary(
+      new HashSet<>(List.of(UserEnumType.ROLE_VOLUNTARY)),
+      AccountEnumType.ACTIVE,
+      passwordEncoder.encode(voluntaryRegistrationDTO.password()),
+      voluntaryRegistrationDTO.email(),
+      voluntaryRegistrationDTO.city(),
+      country,
+      voluntaryRegistrationDTO.first_name(),
+      voluntaryRegistrationDTO.last_name(),
+      profileImage,
+      voluntaryRegistrationDTO.mobile_phone(),
+      null,
+      null
+    );
 
-        Country country = countryRepository
-                .findFirstByName(voluntaryRegistrationDTO.country())
-                .orElseThrow(() -> new RuntimeException("Pays non trouvé"));
+    GeolocationDTO geolocDto = geolocationService.getVoluntaryCoordinates(voluntaryRegistrationDTO.city(), voluntaryRegistrationDTO.country());
+    Geolocation geolocVoluntary = new Geolocation(geolocDto.longitude(), geolocDto.latitude());
 
-        Voluntary voluntary = new Voluntary(
-                new HashSet<>(List.of(UserEnumType.ROLE_VOLUNTARY)),
-                AccountEnumType.ACTIVE,
-                passwordEncoder.encode(voluntaryRegistrationDTO.password()),
-                voluntaryRegistrationDTO.email(),
-                voluntaryRegistrationDTO.city(),
-                country,
-                voluntaryRegistrationDTO.first_name(),
-                voluntaryRegistrationDTO.last_name(),
-                profileImage,
-                voluntaryRegistrationDTO.mobile_phone(),
-                null,
-                null
-        );
+    geolocationRepository.save(geolocVoluntary);
+    voluntary.setGeolocation(geolocVoluntary);
 
-        Geolocation geolocVoluntary = geolocationService.getVoluntaryCoordinates(voluntaryRegistrationDTO.city(), voluntaryRegistrationDTO.country());
+    voluntaryRepository.save(voluntary);
+    preferencesRepository.save(new Preferences(voluntary));
 
-        geolocationRepository.save(geolocVoluntary);
-        voluntary.setGeolocation(geolocVoluntary);
+    return true;
+  }
 
-        voluntaryRepository.save(voluntary);
-        preferencesRepository.save(new Preferences(voluntary));
+  public boolean registerAssociation(AssociationRegistrationDTO associationRegistrationDTO) {
+    Image logoImage = imageRepository
+      .findFirstByUrl("/images/Association/defaultAvatar.png")
+      .orElseThrow(() -> new RuntimeException("Image non trouvé"));
 
-        return true;
-    }
+    Image profileImage = imageRepository
+      .findFirstByUrl("/images/Association/defaultAssociationProfileImage.png")
+      .orElseThrow(() -> new RuntimeException("Image non trouvé"));
 
-    public boolean registerAssociation(AssociationRegistrationDTO associationRegistrationDTO) {
-        Image logoImage = imageRepository
-                .findFirstByUrl("/images/Association/defaultAvatar.png")
-                .orElseThrow(() -> new RuntimeException("Image non trouvé"));
+    Country country = countryRepository
+      .findFirstByName(associationRegistrationDTO.address().country())
+      .orElse(countryRepository.save(new Country(associationRegistrationDTO.address().country())));
 
-        Image profileImage = imageRepository
-                .findFirstByUrl("/images/Association/defaultAssociationProfileImage.png")
-                .orElseThrow(() -> new RuntimeException("Image non trouvé"));
+    Address address = addressRepository.save(
+      new Address(
+        associationRegistrationDTO.address().houseNumber(),
+        associationRegistrationDTO.address().streetName(),
+        associationRegistrationDTO.address().zipCode(),
+        associationRegistrationDTO.address().city(),
+        country,
+        ""
+      )
+    );
 
-        Country country = countryRepository
-                .findFirstByName(associationRegistrationDTO.address().country())
-                .orElse(countryRepository.save(new Country(associationRegistrationDTO.address().country())));
+    Association association = new Association(
+      "",
+      "",
+      null,
+      associationRegistrationDTO.name(),
+      address,
+      null,
+      new HashSet<>(List.of(UserEnumType.ROLE_ASSOCIATION)),
+      AccountEnumType.ACTIVE,
+      passwordEncoder.encode(associationRegistrationDTO.password()),
+      associationRegistrationDTO.email(),
+      null,
+      null
+    );
 
-        Address address = addressRepository.save(
-                new Address(
-                        associationRegistrationDTO.address().houseNumber(),
-                        associationRegistrationDTO.address().streetName(),
-                        associationRegistrationDTO.address().zipCode(),
-                        associationRegistrationDTO.address().city(),
-                        country,
-                        ""
-                )
-        );
+    Geolocation geolocAssociation = new Geolocation(
+      associationRegistrationDTO.location().longitude(),
+      associationRegistrationDTO.location().latitude()
+    );
 
-        Association association = new Association(
-                "",
-                "",
-                null,
-                associationRegistrationDTO.name(),
-                address,
-                null,
-                new HashSet<>(List.of(UserEnumType.ROLE_ASSOCIATION)),
-                AccountEnumType.ACTIVE,
-                passwordEncoder.encode(associationRegistrationDTO.password()),
-                associationRegistrationDTO.email(),
-                null,
-                null
-        );
+    geolocationRepository.save(geolocAssociation);
+    association.setGeolocation(geolocAssociation);
 
-        Geolocation geolocAssociation = new Geolocation(associationRegistrationDTO.location().longitude(), associationRegistrationDTO.location().latitude());
+    Association createdAssociation = associationRepository.save(association);
+    preferencesRepository.save(new Preferences(association));
 
-        geolocationRepository.save(geolocAssociation);
-        association.setGeolocation(geolocAssociation);
+    List<AssociationImage> associationImages = Arrays.asList(
+      new AssociationImage(logoImage, createdAssociation),
+      new AssociationImage(profileImage, createdAssociation)
+    );
 
-        Association createdAssociation = associationRepository.save(association);
-        preferencesRepository.save(new Preferences(association));
+    associationImageRepository.saveAll(associationImages);
+    return true;
+  }
 
-        List<AssociationImage> associationImages = Arrays.asList(
-                new AssociationImage(logoImage, createdAssociation),
-                new AssociationImage(profileImage, createdAssociation)
-        );
+  public User findById(UUID id) {
+    return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Utilisateur non trouvé"));
+  }
 
-        associationImageRepository.saveAll(associationImages);
-        return true;
-    }
-
-    public User findById(UUID id) {
-        return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Utilisateur non trouvé"));
-    }
-
-    public User findByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Utilisateur non trouvé"));
-    }
+  public User findByEmail(String email) {
+    return userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Utilisateur non trouvé"));
+  }
 }

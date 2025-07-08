@@ -1,4 +1,3 @@
 package com.back_alasso.Activity.DTO;
 
-public interface OnPublish {
-}
+public interface OnPublish {}

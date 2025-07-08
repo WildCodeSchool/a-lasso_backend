@@ -1,57 +1,37 @@
 package com.back_alasso.Geolocation;
 
-import com.back_alasso.Address.Address;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
 public class GeolocationService {
 
-  private final String GEOLOC_BASE_URL_OPEN_STREET_MAP = "https://nominatim.openstreetmap.org/search?format=json&q=";
+  private final String GEOLOC_BASE_URL_GOUV = "https://api-adresse.data.gouv.fr/search/?q=";
   private final RestTemplate restTemplate;
 
   public GeolocationService(RestTemplate restTemplate) {
     this.restTemplate = restTemplate;
   }
 
-  public Geolocation getVoluntaryCoordinates(String city, String country) {
-    String url = GEOLOC_BASE_URL_OPEN_STREET_MAP + city + ',' + country;
+  public GeolocationDTO getVoluntaryCoordinates(String city, String country) {
+    String query = String.format("%s, %s", city, country);
+    String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
+    String url = GEOLOC_BASE_URL_GOUV + encodedQuery + "&limit=1";
 
-    // Send Api External Request to obtain geolocation
-    GeolocDTO[] response = restTemplate.getForObject(url, GeolocDTO[].class);
+    GouvGeolocDTO response = restTemplate.getForObject(url, GouvGeolocDTO.class);
 
-    if (response != null) {
-      Geolocation voluntaryGeolocation = new Geolocation(response[0].longitude(), response[0].latitude());
-      return voluntaryGeolocation;
-    }
-    throw new RuntimeException("Aucune donnée de géolocalisation trouvée pour " + city + ", " + country);
-  }
+    if (response != null && response.features() != null && !response.features().isEmpty()) {
+      GouvGeolocDTO.Feature feature = response.features().get(0);
+      List<Double> coords = feature.geometry().coordinates();
+      double lon = coords.get(0);
+      double lat = coords.get(1);
 
-  public Geolocation getCoordinatesWithFullAddress(Address address) {
-    try {
-      String query = String.format(
-        "%s %s %s %s",
-        address.getHouse_number(),
-        address.getStreet_name(),
-        address.getCity(),
-        address.getCountry().getName()
-      );
-
-      String encodedQuery = URLEncoder.encode(query, "UTF-8");
-
-      String url = GEOLOC_BASE_URL_OPEN_STREET_MAP + encodedQuery;
-
-      GeolocDTO[] response = restTemplate.getForObject(url, GeolocDTO[].class);
-
-      if (response != null && response.length > 0) {
-        return new Geolocation(response[0].longitude(), response[0].latitude());
-      } else {
-        return getVoluntaryCoordinates(address.getCity(), address.getCountry().getName());
-      }
-    } catch (UnsupportedEncodingException e) {
-      throw new RuntimeException("Erreur d'encodage de l'adresse", e);
+      return new GeolocationDTO(lon, lat);
+    } else {
+      throw new RuntimeException("Aucune donnée de géolocalisation trouvée pour " + city + ", " + country);
     }
   }
 }

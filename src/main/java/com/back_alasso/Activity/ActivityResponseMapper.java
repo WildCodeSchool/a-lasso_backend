@@ -8,26 +8,24 @@ import com.back_alasso.Association.DTO.AssociationActivityDTO;
 import com.back_alasso.Geolocation.GeolocationDTO;
 import com.back_alasso.Image.ImageEnumType;
 import com.back_alasso.Image.ImageMapper;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ActivityResponseMapper {
 
-    private final ImageMapper imageMapper;
+  private final ImageMapper imageMapper;
 
-    @Autowired
-    public ActivityResponseMapper(ImageMapper imageMapper) {
-        this.imageMapper = imageMapper;
-    }
+  @Autowired
+  public ActivityResponseMapper(ImageMapper imageMapper) {
+    this.imageMapper = imageMapper;
+  }
 
-    public ActivityResponseDTO fromEntityToDTO(Activity activity, UUID authenticatedUserId) {
-        Optional<ActivityVoluntary> voluntary = getUserActivityVoluntaryStatus(activity, authenticatedUserId);
+  public ActivityResponseDTO fromEntityToDTO(Activity activity, UUID authenticatedUserId) {
+    Optional<ActivityVoluntary> voluntary = getUserActivityVoluntaryStatus(activity, authenticatedUserId);
 
         List<UUID> imageIds = activity.getActivityImages().stream().map(activityImage -> activityImage.getImage().getId()).toList();
 
@@ -47,11 +45,11 @@ public class ActivityResponseMapper {
     );
   }
 
-    private static Optional<ActivityVoluntary> getUserActivityVoluntaryStatus(Activity activity, UUID authenticatedUserId) {
-        if (authenticatedUserId == null || activity.getActivityVoluntaries() == null) {
-            return Optional.empty();
-        }
-
-        return activity.getActivityVoluntaries().stream().filter(av -> av.getVoluntary().getId().equals(authenticatedUserId)).findFirst();
+  private static Optional<ActivityVoluntary> getUserActivityVoluntaryStatus(Activity activity, UUID authenticatedUserId) {
+    if (authenticatedUserId == null || activity.getActivityVoluntaries() == null) {
+      return Optional.empty();
     }
+
+    return activity.getActivityVoluntaries().stream().filter(av -> av.getVoluntary().getId().equals(authenticatedUserId)).findFirst();
+  }
 }
