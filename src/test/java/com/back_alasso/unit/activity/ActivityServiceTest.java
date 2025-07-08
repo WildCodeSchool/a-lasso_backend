@@ -20,6 +20,7 @@ import com.back_alasso.Theme.ThemeRepository;
 import com.back_alasso.User.AccountEnumType;
 import com.back_alasso.User.UserEnumType;
 import com.back_alasso.Voluntary.VoluntaryRepository;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,7 +35,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static com.back_alasso.config.DatabaseInitializer.*;
+
 import static org.mockito.Mockito.when;
+
+import com.back_alasso.Activity.DTO.ActivityStatusEnumType;
 
 public class ActivityServiceTest {
 
@@ -53,7 +57,7 @@ public class ActivityServiceTest {
     CountryRepository countryRepository = Mockito.mock(CountryRepository.class);
     ActivityResponseMapper activityResponseMapper = Mockito.mock(ActivityResponseMapper.class);
 
-    Address associationAddress = new Address(FIRST_HOUSE_NUMBER, "rue d'Athènes", "44300", "NANTES", new Country("France"));
+    Address associationAddress = new Address(FIRST_HOUSE_NUMBER, "rue d'Athènes", "44300", "NANTES", new Country("France"),"");
 
     Association associationMock = new Association(
             "La Croix-Rouge française agit pour protéger et relever sans condition, les personnes en situation de vulnérabilité et construire avec elles leur résilience.",
@@ -71,6 +75,7 @@ public class ActivityServiceTest {
     );
 
     Activity activityMock = new Activity(
+            ActivityStatusEnumType.published,
             "Test title Activity",
             LocalDateTime.parse("2025-12-22 04:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
             "description test",
