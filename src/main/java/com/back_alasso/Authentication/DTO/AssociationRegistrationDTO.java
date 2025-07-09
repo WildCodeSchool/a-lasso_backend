@@ -1,4 +1,4 @@
-package com.back_alasso.Authentication;
+package com.back_alasso.Authentication.DTO;
 
 import static com.back_alasso.Authentication.ValidationConstants.*;
 

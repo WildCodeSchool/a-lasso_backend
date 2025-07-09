@@ -15,9 +15,9 @@ public class ActivityVoluntaryService {
     this.activityRepository = activityRepository;
   }
 
-  public ActivityVoluntaryDTO getActivityVoluntary(UUID activityId) {
+  public ActivityParticipantsRequestDTO getActivityVoluntary(UUID activityId) {
     Activity activity = activityRepository.findById(activityId).orElseThrow(() -> new ResourceNotFoundException("Activity not found"));
 
-    return ActivityVoluntaryDTO.convertToDTO(activity);
+    return ActivityParticipantsRequestDTO.convertToDTO(activity);
   }
 }

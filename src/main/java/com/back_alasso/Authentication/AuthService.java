@@ -38,14 +38,13 @@ public class AuthService {
     return jwtService.generateToken((UserDetails) authentication.getPrincipal());
   }
 
-  public boolean addUserToResponse(User user, Map<String, Object> response) {
+  public void addUserToResponse(User user, Map<String, Object> response) {
     if (user instanceof Voluntary voluntary) {
       response.put("user", voluntaryLoginResponseMapper.fromEntityToDTO(voluntary));
-      return true;
     } else if (user instanceof Association association) {
       response.put("user", associationLoginResponseMapper.fromEntityToDTO(association));
-      return true;
+    } else {
+      throw new IllegalArgumentException("Unsupported user type");
     }
-    return false;
   }
 }

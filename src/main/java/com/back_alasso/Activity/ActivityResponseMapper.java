@@ -1,8 +1,8 @@
 package com.back_alasso.Activity;
 
 import com.back_alasso.Activity.DTO.ActivityResponseDTO;
+import com.back_alasso.ActivityVoluntary.ActivityParticipantsRequestDTO;
 import com.back_alasso.ActivityVoluntary.ActivityVoluntary;
-import com.back_alasso.ActivityVoluntary.ActivityVoluntaryDTO;
 import com.back_alasso.Association.DTO.AssociationActivityDTO;
 import com.back_alasso.Geolocation.GeolocationDTO;
 import com.back_alasso.Image.ImageEnumType;
@@ -36,7 +36,7 @@ public class ActivityResponseMapper {
       activity.getAssociation() != null ? AssociationActivityDTO.getAssociationDTO(activity.getAssociation()) : null,
       GeolocationDTO.getCoordinates(activity),
       activity.getDate(),
-      ActivityVoluntaryDTO.convertToDTO(activity),
+      ActivityParticipantsRequestDTO.convertToDTO(activity),
       activity.getActivityThemes().stream().map(theme -> theme.getTheme().getName()).toList()
     );
   }

@@ -13,12 +13,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-@Inheritance(strategy = InheritanceType.JOINED) // Use separate tables for each entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class User extends BaseEntity implements UserDetails {
 
   public static final int EMAIL_MAX_LENGTH = 320;
@@ -62,9 +67,7 @@ public class User extends BaseEntity implements UserDetails {
   @JoinColumn(name = "geolocation_id")
   private Geolocation geolocation;
 
-  // Necessary to have an empty constructor to instance object.
-  public User() {}
-
+  // Custom constructor without collections (optional)
   public User(Set<UserEnumType> roles, AccountEnumType account_status, String hashed_password, String email, Preferences preferences) {
     this.roles = roles;
     this.account_status = account_status;
@@ -90,129 +93,21 @@ public class User extends BaseEntity implements UserDetails {
 
   @Override
   public boolean isAccountNonExpired() {
-    // return true - TODO complete
     return UserDetails.super.isAccountNonExpired();
   }
 
   @Override
   public boolean isAccountNonLocked() {
-    // return true - TODO complete
     return UserDetails.super.isAccountNonLocked();
   }
 
   @Override
   public boolean isCredentialsNonExpired() {
-    // return true - TODO complete
     return UserDetails.super.isCredentialsNonExpired();
   }
 
   @Override
   public boolean isEnabled() {
-    // return true - TODO complete
     return UserDetails.super.isEnabled();
-  }
-
-  public AccountEnumType getAccount_status() {
-    return account_status;
-  }
-
-  public void setAccount_status(AccountEnumType account_status) {
-    this.account_status = account_status;
-  }
-
-  public String getHashed_password() {
-    return hashed_password;
-  }
-
-  public void setHashed_password(String hashed_password) {
-    this.hashed_password = hashed_password;
-  }
-
-  public String getEmail() {
-    return email;
-  }
-
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
-  public Preferences getPreferences() {
-    return preferences;
-  }
-
-  public void setPreferences(Preferences preferences) {
-    this.preferences = preferences;
-  }
-
-  public List<Message> getMessage() {
-    return messages;
-  }
-
-  public void setMessage(List<Message> messages) {
-    this.messages = messages;
-  }
-
-  public List<Message> getMessages() {
-    return messages;
-  }
-
-  public void setMessages(List<Message> messages) {
-    this.messages = messages;
-  }
-
-  public List<Report> getReportsMade() {
-    return reportsMade;
-  }
-
-  public void setReportsMade(List<Report> reportsMade) {
-    this.reportsMade = reportsMade;
-  }
-
-  public List<Report> getReportsReceived() {
-    return reportsReceived;
-  }
-
-  public void setReportsReceived(List<Report> reportsReceived) {
-    this.reportsReceived = reportsReceived;
-  }
-
-  public List<Report> getReportsHandled() {
-    return reportsHandled;
-  }
-
-  public void setReportsHandled(List<Report> reportsHandled) {
-    this.reportsHandled = reportsHandled;
-  }
-
-  public Geolocation getGeolocation() {
-    return geolocation;
-  }
-
-  public void setGeolocation(Geolocation geolocation) {
-    this.geolocation = geolocation;
-  }
-
-  public List<Statistic> getStatistic() {
-    return statistic;
-  }
-
-  public void setStatistic(List<Statistic> statistic) {
-    this.statistic = statistic;
-  }
-
-  public Set<UserEnumType> getRoles() {
-    return roles;
-  }
-
-  public void setRoles(Set<UserEnumType> roles) {
-    this.roles = roles;
-  }
-
-  public List<UserMessage> getUserMessages() {
-    return userMessages;
-  }
-
-  public void setUserMessages(List<UserMessage> userMessages) {
-    this.userMessages = userMessages;
   }
 }

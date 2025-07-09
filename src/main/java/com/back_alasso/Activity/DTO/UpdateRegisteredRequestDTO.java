@@ -1,3 +1,5 @@
 package com.back_alasso.Activity.DTO;
 
-public record UpdateRegisteredRequestDTO(Boolean isRegistered) {}
+import jakarta.validation.constraints.NotNull;
+
+public record UpdateRegisteredRequestDTO(@NotNull(message = "Le nouvel état doit être renseigné") Boolean isRegistered) {}

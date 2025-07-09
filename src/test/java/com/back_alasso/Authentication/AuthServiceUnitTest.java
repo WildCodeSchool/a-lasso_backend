@@ -33,7 +33,7 @@ class AuthServiceUnitTest {
     @BeforeEach
     void setUp() {
         response = new HashMap<>();
-        this.authService = new AuthService(
+        authService = new AuthService(
                 jwtServiceMock,
                 authenticationManagerMock,
                 voluntaryLoginResponseMapperMock,
@@ -42,42 +42,35 @@ class AuthServiceUnitTest {
     }
 
     @Test
-    void addUserToResponse_shouldReturnTrueAndAddVoluntary() {
-        Voluntary userVoluntaryMock = mock(Voluntary.class);
-
+    void addUserToResponse_shouldAddVoluntaryDTO() {
+        Voluntary voluntaryMock = mock(Voluntary.class);
         VoluntaryLoginResponseDTO expectedDTO = mock(VoluntaryLoginResponseDTO.class);
 
-        when(voluntaryLoginResponseMapperMock.fromEntityToDTO(userVoluntaryMock)).thenReturn(expectedDTO);
+        when(voluntaryLoginResponseMapperMock.fromEntityToDTO(voluntaryMock)).thenReturn(expectedDTO);
 
-        boolean result = authService.addUserToResponse(userVoluntaryMock, response);
+        authService.addUserToResponse(voluntaryMock, response);
 
-        assertTrue(result);
         assertEquals(expectedDTO, response.get("user"));
-
     }
 
     @Test
-    void addUserToResponse_shouldReturnTrueAndAddAssociation() {
-        Association userAssociationMock = mock(Association.class);
-
+    void addUserToResponse_shouldAddAssociationDTO() {
+        Association associationMock = mock(Association.class);
         AssociationLoginResponseDTO expectedDTO = mock(AssociationLoginResponseDTO.class);
 
-        when(associationLoginResponseMapperMock.fromEntityToDTO(userAssociationMock))
-                .thenReturn(expectedDTO);
+        when(associationLoginResponseMapperMock.fromEntityToDTO(associationMock)).thenReturn(expectedDTO);
 
-        boolean result = authService.addUserToResponse(userAssociationMock, response);
+        authService.addUserToResponse(associationMock, response);
 
-        assertTrue(result);
         assertEquals(expectedDTO, response.get("user"));
-
     }
 
     @Test
-    void addUserToResponse_shouldReturnFalseWithEmptyUser() {
-        User userMock = mock(User.class);
+    void addUserToResponse_shouldThrowExceptionForUnknownUserType() {
+        User unknownUser = mock(User.class);
 
-        boolean result = authService.addUserToResponse(userMock, response);
-
-        assertFalse(result);
+        assertThrows(IllegalArgumentException.class, () ->
+                authService.addUserToResponse(unknownUser, response)
+        );
     }
 }
