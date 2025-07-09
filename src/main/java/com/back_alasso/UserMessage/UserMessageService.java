@@ -31,7 +31,6 @@ public class UserMessageService {
     userMessageRepository.saveAll(userMessages);
   }
 
-  @Transactional
   public void markAsRead(UUID userId, UUID messageId) {
     UserMessage userMessage = userMessageRepository
       .findByUserIdAndMessageId(userId, messageId)

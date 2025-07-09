@@ -1,3 +1,5 @@
 package com.back_alasso.Activity.DTO;
 
-public record UpdateFavoriteRequestDTO(Boolean isSaved) {}
+import jakarta.validation.constraints.NotNull;
+
+public record UpdateFavoriteRequestDTO(@NotNull(message = "Le nouvel état doit être renseigné") Boolean isSaved) {}

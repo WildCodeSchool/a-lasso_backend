@@ -6,8 +6,8 @@ import com.back_alasso.Association.Association;
 import com.back_alasso.Association.AssociationRepository;
 import com.back_alasso.AssociationImage.AssociationImage;
 import com.back_alasso.AssociationImage.AssociationImageRepository;
-import com.back_alasso.Authentication.AssociationRegistrationDTO;
-import com.back_alasso.Authentication.VoluntaryRegistrationDTO;
+import com.back_alasso.Authentication.DTO.AssociationRegistrationDTO;
+import com.back_alasso.Authentication.DTO.VoluntaryRegistrationDTO;
 import com.back_alasso.Country.Country;
 import com.back_alasso.Country.CountryRepository;
 import com.back_alasso.Exception.EmailAlreadyUsedException;
@@ -77,7 +77,7 @@ public class UserService {
     User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Utilisateur non trouvé"));
 
     if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
-      throw new IllegalArgumentException("Ancien mot de passe incorrect");
+      throw new IllegalArgumentException("Identifiants incorrects");
     }
 
     user.setHashed_password(passwordEncoder.encode(newPassword));

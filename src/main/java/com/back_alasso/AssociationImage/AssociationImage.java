@@ -6,8 +6,13 @@ import com.back_alasso.core.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.*;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class AssociationImage extends BaseEntity {
 
   @ManyToOne
@@ -17,28 +22,4 @@ public class AssociationImage extends BaseEntity {
   @ManyToOne
   @JoinColumn(name = "association_id")
   private Association association;
-
-  // Necessary to have an empty constructor to instance object.
-  public AssociationImage() {}
-
-  public AssociationImage(Image image, Association association) {
-    this.image = image;
-    this.association = association;
-  }
-
-  public Image getImage() {
-    return image;
-  }
-
-  public void setImage(Image image) {
-    this.image = image;
-  }
-
-  public Association getAssociation() {
-    return association;
-  }
-
-  public void setAssociation(Association association) {
-    this.association = association;
-  }
 }

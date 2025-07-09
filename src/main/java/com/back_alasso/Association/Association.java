@@ -14,8 +14,12 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
+import lombok.*;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class Association extends User implements Geolocatable {
 
   public static final int DESC_MAX_LENGTH = 500;
@@ -54,11 +58,6 @@ public class Association extends User implements Geolocatable {
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Statistic> statistics;
 
-  // Necessary to have an empty constructor to instance object.
-  public Association() {
-    super();
-  }
-
   public Association(
     String description,
     String founder,
@@ -81,93 +80,5 @@ public class Association extends User implements Geolocatable {
     this.address = address;
     this.associationImages = associationImages;
     this.siteURL = siteURL;
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  public String getFounder() {
-    return founder;
-  }
-
-  public void setFounder(String founder) {
-    this.founder = founder;
-  }
-
-  public LocalDate getFoundationDate() {
-    return foundationDate;
-  }
-
-  public void setFoundationDate(LocalDate foundationDate) {
-    this.foundationDate = foundationDate;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public Address getAdress() {
-    return address;
-  }
-
-  public void setAdress(Address address) {
-    this.address = address;
-  }
-
-  public List<AssociationImage> getAssociationImages() {
-    return associationImages;
-  }
-
-  public void setAssociationImages(List<AssociationImage> associationImages) {
-    this.associationImages = associationImages;
-  }
-
-  public Address getAddress() {
-    return address;
-  }
-
-  public void setAddress(Address address) {
-    this.address = address;
-  }
-
-  public List<AssociationFollower> getAssociationFollowers() {
-    return associationFollowers;
-  }
-
-  public void setAssociationFollowers(List<AssociationFollower> associationFollowers) {
-    this.associationFollowers = associationFollowers;
-  }
-
-  public String getSiteURL() {
-    return siteURL;
-  }
-
-  public void setSiteURL(String siteURL) {
-    this.siteURL = siteURL;
-  }
-
-  public List<Activity> getActivities() {
-    return activities;
-  }
-
-  public void setActivities(List<Activity> activities) {
-    this.activities = activities;
-  }
-
-  public List<Statistic> getStatistics() {
-    return statistics;
-  }
-
-  public void setStatistics(List<Statistic> statistics) {
-    this.statistics = statistics;
   }
 }

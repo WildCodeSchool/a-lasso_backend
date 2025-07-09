@@ -2,7 +2,7 @@ package com.back_alasso.User;
 
 import com.back_alasso.ActivityImage.ActivityImageRepository;
 import com.back_alasso.AssociationImage.AssociationImageRepository;
-import com.back_alasso.Authentication.VoluntaryRegistrationDTO;
+import com.back_alasso.Authentication.DTO.VoluntaryRegistrationDTO;
 import com.back_alasso.Country.CountryRepository;
 import com.back_alasso.Geolocation.Geolocation;
 import com.back_alasso.Geolocation.GeolocationRepository;

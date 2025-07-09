@@ -48,21 +48,12 @@ public class AssociationService {
     this.activityImageRepository = activityImageRepository;
   }
 
-  public AssociationCardResponseDTO getAssociation(UUID id, UUID authenticatedUserId) {
-    Association association = associationRepository.findById(id).orElse(null);
-    return associationCardResponseMapper.fromEntityToDTO(association, authenticatedUserId);
-  }
-
-  public Boolean updateFollowStatus(UUID associationId, boolean isFollow, UUID authenticatedUserId) {
-    AssociationFollower associationfollower = associationFollowerRepository
-      .findByVoluntary_idAndAssociation_id(authenticatedUserId, associationId)
-      .orElse(null);
-
-    if (associationfollower != null) {
-      return updateFollowForNewAssociationFollower(associationfollower, isFollow);
-    } else {
-      return updateFollowForExistantAssociationFollower(associationId, isFollow, authenticatedUserId);
+  private Association getAuthenticatedAssociationById(UUID associationId, UUID authenticatedUserId) {
+    Association association = associationRepository.findById(associationId).orElseThrow(() -> new ResourceNotFoundException("Association not found"));
+    if (!association.getId().equals(authenticatedUserId)) {
+      throw new SecurityException("Not allowed to update");
     }
+    return association;
   }
 
   private Boolean updateFollowForNewAssociationFollower(AssociationFollower associationfollower, boolean isFollow) {
@@ -81,31 +72,39 @@ public class AssociationService {
 
   @Transactional
   public void updateGeneralInfo(UUID associationId, AssociationGeneralInfoDTO associationGeneralInfoDTO, UUID authenticatedUserId) {
-    Association association = associationRepository.findById(associationId).orElseThrow(() -> new ResourceNotFoundException("Association not found"));
-    if (!association.getId().equals(authenticatedUserId)) {
-      throw new SecurityException("Not allowed to update");
-    }
+    Association association = this.getAuthenticatedAssociationById(associationId, authenticatedUserId);
     association.setFounder(associationGeneralInfoDTO.founder());
     association.setFoundationDate(associationGeneralInfoDTO.foundationDate());
     associationRepository.save(association);
   }
 
+  public AssociationCardResponseDTO getAssociation(UUID id, UUID authenticatedUserId) {
+    Association association = associationRepository.findById(id).orElse(null);
+    return associationCardResponseMapper.fromEntityToDTO(association, authenticatedUserId);
+  }
+
+  public Boolean updateFollowStatus(UUID associationId, boolean isFollow, UUID authenticatedUserId) {
+    AssociationFollower associationfollower = associationFollowerRepository
+      .findByVoluntary_idAndAssociation_id(authenticatedUserId, associationId)
+      .orElse(null);
+
+    if (associationfollower != null) {
+      return updateFollowForNewAssociationFollower(associationfollower, isFollow);
+    } else {
+      return updateFollowForExistantAssociationFollower(associationId, isFollow, authenticatedUserId);
+    }
+  }
+
   @Transactional
   public void updateDescription(UUID associationId, String description, UUID authenticatedUserId) {
-    Association association = associationRepository.findById(associationId).orElseThrow(() -> new ResourceNotFoundException("Association not found"));
-    if (!association.getId().equals(authenticatedUserId)) {
-      throw new SecurityException("Not allowed to update");
-    }
+    Association association = this.getAuthenticatedAssociationById(associationId, authenticatedUserId);
     association.setDescription(description);
     associationRepository.save(association);
   }
 
   @Transactional
   public void updateStatistics(UUID associationId, List<StatisticDTO> newStats, UUID authenticatedUserId) {
-    Association association = associationRepository.findById(associationId).orElseThrow(() -> new ResourceNotFoundException("Association not found"));
-    if (!association.getId().equals(authenticatedUserId)) {
-      throw new SecurityException("Not allowed to update");
-    }
+    Association association = this.getAuthenticatedAssociationById(associationId, authenticatedUserId);
     List<Statistic> existingStats = association.getStatistics();
     existingStats.clear();
     for (StatisticDTO dto : newStats) {

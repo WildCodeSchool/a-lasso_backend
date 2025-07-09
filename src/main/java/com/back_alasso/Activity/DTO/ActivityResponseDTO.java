@@ -1,6 +1,6 @@
 package com.back_alasso.Activity.DTO;
 
-import com.back_alasso.ActivityVoluntary.ActivityVoluntaryDTO;
+import com.back_alasso.ActivityVoluntary.ActivityParticipantsRequestDTO;
 import com.back_alasso.Association.DTO.AssociationActivityDTO;
 import com.back_alasso.Geolocation.GeolocationDTO;
 import com.back_alasso.Image.DTO.ImageResponseDTO;
@@ -17,6 +17,6 @@ public record ActivityResponseDTO(
   AssociationActivityDTO association,
   GeolocationDTO location,
   LocalDateTime date,
-  ActivityVoluntaryDTO participants,
+  ActivityParticipantsRequestDTO participants,
   List<ThemeNameEnumType> themesName
 ) {}

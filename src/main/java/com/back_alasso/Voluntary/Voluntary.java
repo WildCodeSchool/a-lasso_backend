@@ -45,7 +45,6 @@ public class Voluntary extends User {
   @OneToMany(mappedBy = "voluntary", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<ActivityVoluntary> activityVoluntaries;
 
-  // Necessary to have an empty constructor to instance object.
   public Voluntary() {
     super();
   }
