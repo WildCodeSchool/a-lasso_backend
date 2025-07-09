@@ -2,22 +2,27 @@ package com.back_alasso.Report;
 
 import com.back_alasso.User.User;
 import com.back_alasso.core.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Report extends BaseEntity {
 
   public static final int MESSAGE_REPORTER_MAX_LENGTH = 700;
   public static final int COMMENTARY_ADMIN_MAX_LENGTH = 1000;
 
   @Column(length = MESSAGE_REPORTER_MAX_LENGTH)
-  private String message_reporter;
+  private String messageReporter;
 
   @Column(length = COMMENTARY_ADMIN_MAX_LENGTH)
-  private String commentary_admin;
+  private String commentaryAdmin;
 
   @Column(nullable = false)
   private StatusReportEnumType status;
@@ -26,91 +31,32 @@ public class Report extends BaseEntity {
   private ReasonReportEnumType reason;
 
   @ManyToOne
-  @JoinColumn(name = "user_reported_id")
-  private User user_reported;
+  @JoinColumn(name = "userReportedId")
+  private User userReported;
 
   @ManyToOne
-  @JoinColumn(name = "user_reporter_id")
-  private User user_reporter;
+  @JoinColumn(name = "userReporterId")
+  private User userReporter;
 
   @ManyToOne
-  @JoinColumn(name = "user_admin_id")
-  private User user_admin;
-
-  // Necessary to have an empty constructor to instance object.
-  public Report() {}
+  @JoinColumn(name = "userAdminId")
+  private User userAdmin;
 
   public Report(
     StatusReportEnumType status,
     ReasonReportEnumType reason,
-    User user_reported,
-    User user_reporter,
-    User user_admin,
-    String message_reporter,
-    String commentary_admin
+    User userReported,
+    User userReporter,
+    User userAdmin,
+    String messageReporter,
+    String commentaryAdmin
   ) {
     this.status = status;
     this.reason = reason;
-    this.user_reported = user_reported;
-    this.user_reporter = user_reporter;
-    this.user_admin = user_admin;
-    this.message_reporter = message_reporter;
-    this.commentary_admin = commentary_admin;
-  }
-
-  public String getMessage_reporter() {
-    return message_reporter;
-  }
-
-  public void setMessage_reporter(String message_reporter) {
-    this.message_reporter = message_reporter;
-  }
-
-  public String getCommentary_admin() {
-    return commentary_admin;
-  }
-
-  public void setCommentary_admin(String commentary_admin) {
-    this.commentary_admin = commentary_admin;
-  }
-
-  public StatusReportEnumType getStatus() {
-    return status;
-  }
-
-  public void setStatus(StatusReportEnumType status) {
-    this.status = status;
-  }
-
-  public ReasonReportEnumType getReason() {
-    return reason;
-  }
-
-  public void setReason(ReasonReportEnumType reason) {
-    this.reason = reason;
-  }
-
-  public User getUser_reported() {
-    return user_reported;
-  }
-
-  public void setUser_reported(User user_reported) {
-    this.user_reported = user_reported;
-  }
-
-  public User getUser_reporter() {
-    return user_reporter;
-  }
-
-  public void setUser_reporter(User user_reporter) {
-    this.user_reporter = user_reporter;
-  }
-
-  public User getUser_admin() {
-    return user_admin;
-  }
-
-  public void setUser_admin(User user_admin) {
-    this.user_admin = user_admin;
+    this.userReported = userReported;
+    this.userReporter = userReporter;
+    this.userAdmin = userAdmin;
+    this.messageReporter = messageReporter;
+    this.commentaryAdmin = commentaryAdmin;
   }
 }

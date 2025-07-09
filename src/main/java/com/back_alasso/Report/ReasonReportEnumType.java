@@ -1,7 +1,8 @@
 package com.back_alasso.Report;
 
 public enum ReasonReportEnumType {
-  RULE_VIOLATION,
+  INAPPROPRIATE_ACTIVITY,
   HARASSMENT,
-  DISCRIMINATION,
+  BAD_BEHAVIOR,
+  OTHER,
 }

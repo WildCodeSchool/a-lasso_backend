@@ -1,16 +1,20 @@
 package com.back_alasso.Authentication;
 
-import com.back_alasso.Association.Association;
-import com.back_alasso.Association.AssociationLoginDTO;
+import com.back_alasso.Association.AssociationLoginResponseMapper;
+import com.back_alasso.Authentication.DTO.AssociationRegistrationDTO;
+import com.back_alasso.Authentication.DTO.PasswordChangeDTO;
+import com.back_alasso.Authentication.DTO.UserLoginDTO;
+import com.back_alasso.Authentication.DTO.VoluntaryRegistrationDTO;
 import com.back_alasso.User.User;
 import com.back_alasso.User.UserService;
-import com.back_alasso.Voluntary.Voluntary;
-import com.back_alasso.Voluntary.VoluntaryLoginDTO;
+import com.back_alasso.Voluntary.VoluntaryLoginResponseMapper;
 import jakarta.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,10 +23,19 @@ public class AuthController {
 
   private final UserService userService;
   private final AuthService authService;
+  private final VoluntaryLoginResponseMapper voluntaryLoginResponseMapper;
+  private final AssociationLoginResponseMapper associationLoginResponseMapper;
 
-  public AuthController(UserService userService, AuthService authService) {
+  public AuthController(
+    UserService userService,
+    AuthService authService,
+    VoluntaryLoginResponseMapper voluntaryLoginResponseMapper,
+    AssociationLoginResponseMapper associationLoginResponseMapper
+  ) {
     this.userService = userService;
     this.authService = authService;
+    this.voluntaryLoginResponseMapper = voluntaryLoginResponseMapper;
+    this.associationLoginResponseMapper = associationLoginResponseMapper;
   }
 
   @PostMapping("/register/voluntary")
@@ -45,18 +58,29 @@ public class AuthController {
   public ResponseEntity<Map<String, Object>> authenticate(@Valid @RequestBody UserLoginDTO userLoginDTO) {
     String token = authService.authenticate(userLoginDTO.email(), userLoginDTO.password());
     User user = userService.findByEmail(userLoginDTO.email());
-
     Map<String, Object> response = new HashMap<>();
     response.put("token", token);
-
-    if (user instanceof Voluntary voluntary) {
-      response.put("user", VoluntaryLoginDTO.fromEntityToDTO(voluntary));
-    } else if (user instanceof Association association) {
-      response.put("user", AssociationLoginDTO.fromEntityToDTO(association));
-    } else {
+    try {
+      authService.addUserToResponse(user, response);
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+    } catch (IllegalArgumentException e) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
+  }
 
-    return ResponseEntity.status(HttpStatus.OK).body(response);
+  @PatchMapping("/change-password")
+  public ResponseEntity<?> changePassword(@RequestBody PasswordChangeDTO dto, @AuthenticationPrincipal UserDetails userDetails) {
+    try {
+      userService.changePassword(userDetails.getUsername(), dto.oldPassword(), dto.newPassword());
+      return ResponseEntity.ok().build();
+    } catch (IllegalArgumentException e) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", e.getMessage()));
+    }
+  }
+
+  @DeleteMapping("/delete-account")
+  public ResponseEntity<Void> deleteAccount(@AuthenticationPrincipal UserDetails userDetails) {
+    userService.deleteUser(userDetails.getUsername());
+    return ResponseEntity.noContent().build();
   }
 }

@@ -12,8 +12,13 @@ import com.back_alasso.core.BaseEntity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import lombok.*;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Activity extends BaseEntity implements Geolocatable {
 
   public static final int TITLE_MAX_LENGTH = 50;
@@ -29,7 +34,7 @@ public class Activity extends BaseEntity implements Geolocatable {
   private String description;
 
   @Column(nullable = false)
-  private Long volontaries_request;
+  private Long voluntariesRequest;
 
   @ManyToOne
   @JoinColumn(name = "association_id")
@@ -39,30 +44,27 @@ public class Activity extends BaseEntity implements Geolocatable {
   @JoinColumn(name = "adress_id")
   private Address address;
 
-  @OneToMany(mappedBy = "activity")
+  @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<ActivityImage> activityImages;
 
-  @OneToMany(mappedBy = "activity")
+  @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<ActivityTheme> activityThemes;
 
-  @OneToMany(mappedBy = "activity")
+  @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<ActivityVoluntary> activityVoluntaries;
 
-  @OneToMany(mappedBy = "activity")
+  @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Message> messages;
 
   @ManyToOne
   @JoinColumn(name = "geolocation_id")
   private Geolocation geolocation;
 
-  // Necessary to have an empty constructor to instance object.
-  public Activity() {}
-
   public Activity(
     String title,
     LocalDateTime date,
     String description,
-    Long volontaries_request,
+    Long voluntariesRequest,
     Association association,
     Address address,
     List<ActivityImage> activityImages,
@@ -71,98 +73,20 @@ public class Activity extends BaseEntity implements Geolocatable {
     this.title = title;
     this.date = date;
     this.description = description;
-    this.volontaries_request = volontaries_request;
+    this.voluntariesRequest = voluntariesRequest;
     this.association = association;
     this.address = address;
     this.activityImages = activityImages;
     this.activityThemes = activityThemes;
   }
 
-  public String getTitle() {
-    return title;
-  }
-
-  public void setTitle(String title) {
-    this.title = title;
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  public Long getVolontaries_request() {
-    return volontaries_request;
-  }
-
-  public void setVolontaries_request(Long volontaries_request) {
-    this.volontaries_request = volontaries_request;
-  }
-
-  public Association getAssociation() {
-    return association;
-  }
-
-  public void setAssociation(Association association) {
-    this.association = association;
-  }
-
+  @Override
   public Address getAddress() {
-    return address;
+    return this.address;
   }
 
-  public void setAddress(Address address) {
-    this.address = address;
-  }
-
-  public List<ActivityImage> getActivityImages() {
-    return activityImages;
-  }
-
-  public void setActivityImages(List<ActivityImage> activityImages) {
-    this.activityImages = activityImages;
-  }
-
-  public List<ActivityTheme> getActivityThemes() {
-    return activityThemes;
-  }
-
-  public void setActivityThemes(List<ActivityTheme> activityThemes) {
-    this.activityThemes = activityThemes;
-  }
-
-  public LocalDateTime getDate() {
-    return date;
-  }
-
-  public void setDate(LocalDateTime date) {
-    this.date = date;
-  }
-
-  public List<ActivityVoluntary> getActivityVoluntaries() {
-    return activityVoluntaries;
-  }
-
-  public void setActivityVoluntaries(List<ActivityVoluntary> activityVoluntaries) {
-    this.activityVoluntaries = activityVoluntaries;
-  }
-
-  public List<Message> getMessage() {
-    return messages;
-  }
-
-  public void setMessage(List<Message> messages) {
-    this.messages = messages;
-  }
-
+  @Override
   public Geolocation getGeolocation() {
-    return geolocation;
-  }
-
-  public void setGeolocation(Geolocation geolocation) {
-    this.geolocation = geolocation;
+    return this.geolocation;
   }
 }

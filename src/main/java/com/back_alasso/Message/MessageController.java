@@ -26,19 +26,17 @@ public class MessageController {
 
   @GetMapping("/{activityId}")
   public ResponseEntity<List<MessageDTO>> getAllActivityMessages(@PathVariable UUID activityId, @AuthenticationPrincipal UserDetails userDetails) {
-    String emailAuthenticatedUser = userDetails.getUsername();
-    UUID authenticatedUser = userService.findByEmail(emailAuthenticatedUser).getId();
+    UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
 
-    List<MessageDTO> messages = messageService.getAllActivityMessages(activityId, authenticatedUser);
+    List<MessageDTO> messages = messageService.getAllActivityMessages(activityId, authenticatedUserId);
     return ResponseEntity.status(HttpStatus.OK).body(messages);
   }
 
   @PostMapping
   public ResponseEntity<MessageDTO> createMessage(@RequestBody MessageCreationDTO newMessage, @AuthenticationPrincipal UserDetails userDetails) {
-    String emailAuthenticatedUser = userDetails.getUsername();
-    UUID authenticatedUser = userService.findByEmail(emailAuthenticatedUser).getId();
+    UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
 
-    MessageDTO savedMessage = messageService.createMessage(newMessage, authenticatedUser);
+    MessageDTO savedMessage = messageService.createMessage(newMessage, authenticatedUserId);
     return ResponseEntity.status(HttpStatus.CREATED).body(savedMessage);
   }
 }

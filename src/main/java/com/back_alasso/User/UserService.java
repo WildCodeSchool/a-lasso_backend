@@ -6,8 +6,8 @@ import com.back_alasso.Association.Association;
 import com.back_alasso.Association.AssociationRepository;
 import com.back_alasso.AssociationImage.AssociationImage;
 import com.back_alasso.AssociationImage.AssociationImageRepository;
-import com.back_alasso.Authentication.AssociationRegistrationDTO;
-import com.back_alasso.Authentication.VoluntaryRegistrationDTO;
+import com.back_alasso.Authentication.DTO.AssociationRegistrationDTO;
+import com.back_alasso.Authentication.DTO.VoluntaryRegistrationDTO;
 import com.back_alasso.Country.Country;
 import com.back_alasso.Country.CountryRepository;
 import com.back_alasso.Exception.EmailAlreadyUsedException;
@@ -73,6 +73,23 @@ public class UserService {
     }
   }
 
+  public void changePassword(String email, String oldPassword, String newPassword) {
+    User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Utilisateur non trouvé"));
+
+    if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+      throw new IllegalArgumentException("Identifiants incorrects");
+    }
+
+    user.setHashed_password(passwordEncoder.encode(newPassword));
+    userRepository.save(user);
+  }
+
+  public void deleteUser(String email) {
+    User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Utilisateur non trouvé"));
+    preferencesRepository.delete(user.getPreferences());
+    userRepository.delete(user);
+  }
+
   public UUID getAuthenticatedUserId(UserDetails userDetails) {
     if (userDetails == null) {
       return null;
@@ -127,16 +144,15 @@ public class UserService {
       .orElseThrow(() -> new RuntimeException("Image non trouvé"));
 
     Country country = countryRepository
-      .findFirstByName(associationRegistrationDTO.address().getCountry().getName())
-      .orElse(countryRepository.save(new Country(associationRegistrationDTO.address().getCountry().getName())));
+      .findFirstByName(associationRegistrationDTO.address().country())
+      .orElse(countryRepository.save(new Country(associationRegistrationDTO.address().country())));
 
     Address address = addressRepository.save(
       new Address(
-        associationRegistrationDTO.address().getHouse_number(),
-        associationRegistrationDTO.address().getStreet_name(),
-        associationRegistrationDTO.address().getAdress_suffix(),
-        associationRegistrationDTO.address().getZipCode(),
-        associationRegistrationDTO.address().getCity(),
+        associationRegistrationDTO.address().houseNumber(),
+        associationRegistrationDTO.address().streetName(),
+        associationRegistrationDTO.address().zipCode(),
+        associationRegistrationDTO.address().city(),
         country
       )
     );
@@ -156,7 +172,7 @@ public class UserService {
       null
     );
 
-    Geolocation geolocAssociation = geolocationService.getCoordinatesWithFullAddress(associationRegistrationDTO.address());
+    Geolocation geolocAssociation = new Geolocation(associationRegistrationDTO.address().lon(), associationRegistrationDTO.address().lat());
 
     geolocationRepository.save(geolocAssociation);
     association.setGeolocation(geolocAssociation);

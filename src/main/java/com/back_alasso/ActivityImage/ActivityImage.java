@@ -6,8 +6,13 @@ import com.back_alasso.core.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.*;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ActivityImage extends BaseEntity {
 
   @ManyToOne
@@ -17,28 +22,4 @@ public class ActivityImage extends BaseEntity {
   @ManyToOne
   @JoinColumn(name = "activity_id")
   private Activity activity;
-
-  // Necessary to have an empty constructor to instance object.
-  public ActivityImage() {}
-
-  public ActivityImage(Image image, Activity activity) {
-    this.image = image;
-    this.activity = activity;
-  }
-
-  public Image getImage() {
-    return image;
-  }
-
-  public void setImage(Image image) {
-    this.image = image;
-  }
-
-  public Activity getActivity() {
-    return activity;
-  }
-
-  public void setActivity(Activity activity) {
-    this.activity = activity;
-  }
 }

@@ -13,3 +13,6 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
         format-sql: true
+
+custom:
+  api-url: ${API_URL_PROD}

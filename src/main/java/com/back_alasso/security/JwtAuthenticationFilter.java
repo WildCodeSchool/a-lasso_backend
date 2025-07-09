@@ -1,7 +1,9 @@
 package com.back_alasso.security;
 
+import static com.back_alasso.security.SecurityConstants.ASSOCIATION_URLS;
 import static com.back_alasso.security.SecurityConstants.PUBLIC_URLS;
 
+import com.back_alasso.User.UserEnumType;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -43,11 +45,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     filterChain.doFilter(request, response);
   }
 
-  private boolean isPublicUrl(HttpServletRequest request) {
-    String requestURI = request.getRequestURI();
-    return PUBLIC_URLS.stream().anyMatch(pattern -> pathMatcher.match(pattern, requestURI));
-  }
-
   private boolean authenticateRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String jwt = parseJwt(request);
     if (jwt == null) return true;
@@ -57,17 +54,28 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       return false;
     }
 
-    setAuthenticationContext(jwt, request);
+    UsernamePasswordAuthenticationToken authentication = setAuthenticationContext(jwt, request);
+
+    if (
+      isAssociationUrl(request) &&
+      authentication.getAuthorities().stream().noneMatch(auth -> auth.getAuthority().equals(UserEnumType.ROLE_ASSOCIATION.name()))
+    ) {
+      sendUnauthorizedResponse(response);
+      return false;
+    }
+
     return true;
   }
 
-  private void setAuthenticationContext(String jwt, HttpServletRequest request) {
+  private UsernamePasswordAuthenticationToken setAuthenticationContext(String jwt, HttpServletRequest request) {
     String username = jwtService.extractClaims(jwt).getSubject();
     UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
     SecurityContextHolder.getContext().setAuthentication(authentication);
+
+    return authentication;
   }
 
   private void sendUnauthorizedResponse(HttpServletResponse response) throws IOException {
@@ -84,5 +92,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       return headerAuth.substring(bearer.length());
     }
     return null;
+  }
+
+  private boolean isPublicUrl(HttpServletRequest request) {
+    String requestURI = request.getRequestURI();
+    return PUBLIC_URLS.stream().anyMatch(pattern -> pathMatcher.match(pattern, requestURI));
+  }
+
+  private boolean isAssociationUrl(HttpServletRequest request) {
+    String requestURI = request.getRequestURI();
+    return ASSOCIATION_URLS.stream().anyMatch(pattern -> pathMatcher.match(pattern, requestURI));
   }
 }

@@ -1,8 +1,10 @@
 package com.back_alasso.Activity;
 
-import com.back_alasso.ActivityVoluntary.ActivityVoluntaryDTO;
+import com.back_alasso.Activity.DTO.*;
+import com.back_alasso.ActivityVoluntary.ActivityParticipantsRequestDTO;
 import com.back_alasso.ActivityVoluntary.ActivityVoluntaryService;
 import com.back_alasso.User.UserService;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
@@ -27,23 +29,23 @@ public class ActivityController {
   }
 
   @GetMapping
-  public ResponseEntity<List<ActivityDTO>> getAllActivities(@AuthenticationPrincipal UserDetails userDetails) {
+  public ResponseEntity<List<ActivityResponseDTO>> getAllActivities(@AuthenticationPrincipal UserDetails userDetails) {
     UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
-    List<ActivityDTO> activities = activityService.getAllActivities(authenticatedUserId);
+    List<ActivityResponseDTO> activities = activityService.getAllActivities(authenticatedUserId);
     return ResponseEntity.status(HttpStatus.OK).body(activities);
   }
 
   @GetMapping("/{activityId}")
-  public ResponseEntity<ActivityDTO> getActivityById(@AuthenticationPrincipal UserDetails userDetails, @PathVariable UUID activityId) {
+  public ResponseEntity<ActivityResponseDTO> getActivityById(@AuthenticationPrincipal UserDetails userDetails, @PathVariable UUID activityId) {
     UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
-    ActivityDTO activity = activityService.getActivityById(authenticatedUserId, activityId);
+    ActivityResponseDTO activity = activityService.getActivityById(authenticatedUserId, activityId);
     return ResponseEntity.status(HttpStatus.OK).body(activity);
   }
 
   @PatchMapping("/{activityId}/updateFavorite")
   public ResponseEntity<Boolean> patchFavoriteStatus(
     @PathVariable UUID activityId,
-    @RequestBody UpdateFavoriteRequestDTO request,
+    @Valid @RequestBody UpdateFavoriteRequestDTO request,
     @AuthenticationPrincipal UserDetails userDetails
   ) {
     UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
@@ -61,10 +63,29 @@ public class ActivityController {
     boolean updatedRegisterStatus = activityService.updatedRegisterStatus(activityId, request.isRegistered(), authenticatedUserId);
 
     // get fresh data to update frontEnd number of participants
-    ActivityVoluntaryDTO activityVoluntaryDTO = activityVoluntaryService.getActivityVoluntary(activityId);
+    ActivityParticipantsRequestDTO activityParticipantsRequestDTO = activityVoluntaryService.getActivityVoluntary(activityId);
 
-    UpdateRegisteredResponseDTO response = new UpdateRegisteredResponseDTO(updatedRegisterStatus, activityVoluntaryDTO);
+    UpdateRegisteredResponseDTO response = new UpdateRegisteredResponseDTO(updatedRegisterStatus, activityParticipantsRequestDTO);
 
     return ResponseEntity.status(HttpStatus.OK).body(response);
+  }
+
+  @PostMapping("/publish")
+  public ResponseEntity<ActivityResponseDTO> publish(
+    @RequestBody ActivityCreationRequestDTO newActivityDTO,
+    @AuthenticationPrincipal UserDetails userDetails
+  ) {
+    String emailAuthenticatedUser = userDetails.getUsername();
+    UUID authenticatedUser = userService.findByEmail(emailAuthenticatedUser).getId();
+
+    ActivityResponseDTO savedActivity = activityService.addNewActivity(newActivityDTO, authenticatedUser);
+    return ResponseEntity.status(HttpStatus.CREATED).body(savedActivity);
+  }
+
+  @DeleteMapping("/delete/{activityId}")
+  public ResponseEntity<Void> deleteActivity(@PathVariable UUID activityId, @AuthenticationPrincipal UserDetails userDetails) {
+    UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
+    activityService.deleteActivity(activityId, authenticatedUserId);
+    return ResponseEntity.noContent().build();
   }
 }

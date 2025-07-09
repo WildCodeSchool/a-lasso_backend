@@ -38,6 +38,8 @@ import com.back_alasso.Theme.ThemeNameEnumType;
 import com.back_alasso.Theme.ThemeRepository;
 import com.back_alasso.User.AccountEnumType;
 import com.back_alasso.User.UserEnumType;
+import com.back_alasso.UserMessage.UserMessage;
+import com.back_alasso.UserMessage.UserMessageRepository;
 import com.back_alasso.Voluntary.Voluntary;
 import com.back_alasso.Voluntary.VoluntaryRepository;
 import java.time.LocalDate;
@@ -54,19 +56,19 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class DatabaseInitializer {
 
-  public static final int FIRST_HOUSE_NUMBER = 10;
-  public static final int SECOND_HOUSE_NUMBER = 61;
-  public static final int HOUSE_NUMBER_NICE = 30;
-  public static final int HOUSE_NUMBER_LILLE = 14;
-  public static final int HOUSE_NUMBER_BORDEAUX = 5;
+  public static final String FIRST_HOUSE_NUMBER = "10";
+  public static final String SECOND_HOUSE_NUMBER = "61";
+  public static final String HOUSE_NUMBER_NICE = "30";
+  public static final String HOUSE_NUMBER_LILLE = "14";
+  public static final String HOUSE_NUMBER_BORDEAUX = "5";
   public static final int FIRST_ASSO_YEAR_FOUNDED = 1864;
-  public static final int HOUSE_NUMBER_NANCY = 8;
+  public static final String HOUSE_NUMBER_NANCY = "8";
   public static final int FIRST_ASSO_MONTH_FOUNDED = 8;
   public static final int FIRST_ASSO_DAY_FOUNDED = 25;
   public static final int SECOND_ASSO_YEAR_FOUNDED = 1845;
-  public static final int THIRD_HOUSE_NUMBER = 25;
-  public static final int FOURTH_HOUSE_NUMBER = 14;
-  public static final int FIFTH_HOUSE_NUMBER = 78;
+  public static final String THIRD_HOUSE_NUMBER = "25";
+  public static final String FOURTH_HOUSE_NUMBER = "14";
+  public static final String FIFTH_HOUSE_NUMBER = "78";
   public static final int THIRD_ASSO_YEAR_FOUNDED = 1985;
   public static final int FOURTH_ASSO_YEAR_FOUNDED = 1999;
   public static final int FIFTH_ASSO_YEAR_FOUNDED = 2008;
@@ -166,6 +168,7 @@ public class DatabaseInitializer {
   private final ActivityVoluntaryRepository activityVoluntaryRepository;
   private final MessageRepository messageRepository;
   private final ReportRepository reportRepository;
+  private final UserMessageRepository userMessageRepository;
 
   public DatabaseInitializer(
     CountryRepository countryRepository,
@@ -184,7 +187,8 @@ public class DatabaseInitializer {
     AssociationFollowerRepository associationFollowerRepository,
     ActivityVoluntaryRepository activityVoluntaryRepository,
     MessageRepository messageRepository,
-    ReportRepository reportRepository
+    ReportRepository reportRepository,
+    UserMessageRepository userMessageRepository
   ) {
     this.countryRepository = countryRepository;
     this.addressRepository = addressRepository;
@@ -203,6 +207,7 @@ public class DatabaseInitializer {
     this.activityVoluntaryRepository = activityVoluntaryRepository;
     this.messageRepository = messageRepository;
     this.reportRepository = reportRepository;
+    this.userMessageRepository = userMessageRepository;
   }
 
   @Bean
@@ -221,11 +226,11 @@ public class DatabaseInitializer {
 
     // initiate examples of associations
     List<Address> associationAddresses = Arrays.asList(
-      new Address(FIRST_HOUSE_NUMBER, "rue d'Athènes", null, "44300", "NANTES", firstCountry),
-      new Address(SECOND_HOUSE_NUMBER, "chemin de Gralan", null, "44470", "CARQUEFOU", firstCountry),
-      new Address(THIRD_HOUSE_NUMBER, "avenue des Champs-Élysées", null, "75008", "PARIS", firstCountry),
-      new Address(FOURTH_HOUSE_NUMBER, "rue Saint-Jean", null, "54000", "NANCY", firstCountry),
-      new Address(FIFTH_HOUSE_NUMBER, "rue de la République", null, "69002", "LYON", firstCountry)
+      new Address(FIRST_HOUSE_NUMBER, "rue d'Athènes", "44300", "NANTES", firstCountry),
+      new Address(SECOND_HOUSE_NUMBER, "chemin de Gralan", "44470", "CARQUEFOU", firstCountry),
+      new Address(THIRD_HOUSE_NUMBER, "avenue des Champs-Élysées", "75008", "PARIS", firstCountry),
+      new Address(FOURTH_HOUSE_NUMBER, "rue Saint-Jean", "54000", "NANCY", firstCountry),
+      new Address(FIFTH_HOUSE_NUMBER, "rue de la République", "69002", "LYON", firstCountry)
     );
 
     List<Image> associationLogos = List.of(
@@ -251,7 +256,7 @@ public class DatabaseInitializer {
         "La Croix-Rouge française agit pour protéger et relever sans condition, les personnes en situation de vulnérabilité et construire avec elles leur résilience.",
         "Henry DUNANT",
         LocalDate.of(FIRST_ASSO_YEAR_FOUNDED, FIRST_ASSO_MONTH_FOUNDED, FIRST_ASSO_DAY_FOUNDED),
-        "LA CROIX ROUGE",
+        "La Croix Rouge",
         associationAddresses.get(NUMBER_ZERO),
         null,
         new HashSet<>(List.of(UserEnumType.ROLE_ASSOCIATION)),
@@ -279,7 +284,7 @@ public class DatabaseInitializer {
         "Association dédiée à la protection de l'environnement en milieu urbain.",
         "Alice VERT",
         LocalDate.of(THIRD_ASSO_YEAR_FOUNDED, Month.MARCH, NUMBER_FOURTEEN),
-        "URBAN NATURE",
+        "Urban Nature",
         associationAddresses.get(NUMBER_TWO),
         null,
         new HashSet<>(List.of(UserEnumType.ROLE_ASSOCIATION)),
@@ -293,7 +298,7 @@ public class DatabaseInitializer {
         "Aide sociale et éducative pour les jeunes en difficulté.",
         "Bertrand JEUNE",
         LocalDate.of(FOURTH_ASSO_YEAR_FOUNDED, Month.SEPTEMBER, NUMBER_TWENTY),
-        "JEUNES SOLIDAIRES",
+        "Jeunes Solidaires",
         associationAddresses.get(NUMBER_THREE),
         null,
         new HashSet<>(List.of(UserEnumType.ROLE_ASSOCIATION)),
@@ -307,7 +312,7 @@ public class DatabaseInitializer {
         "Promotion culturelle à travers des ateliers et expositions artistiques.",
         "Chloé ARTS",
         LocalDate.of(FIFTH_ASSO_YEAR_FOUNDED, Month.JUNE, NUMBER_EIGHTEEN),
-        "CULTUR'ART",
+        "Cultur'Art",
         associationAddresses.get(NUMBER_FOUR),
         null,
         new HashSet<>(List.of(UserEnumType.ROLE_ASSOCIATION)),
@@ -387,13 +392,13 @@ public class DatabaseInitializer {
     );
 
     List<Address> activityAddresses = Arrays.asList(
-      new Address(FIRST_HOUSE_NUMBER, "rue du bonheur", null, "44300", "NANTES", firstCountry), // maraude
-      new Address(SECOND_HOUSE_NUMBER, "chemin de Gralan", null, "44470", "CARQUEFOU", firstCountry), // refuge SPA
-      new Address(HOUSE_NUMBER_NICE, "Promenade des Anglais", null, "06000", "NICE", firstCountry), // plage Nice
-      new Address(HOUSE_NUMBER_LILLE, "Rue Nationale", null, "59000", "LILLE", firstCountry), // cuisine solidaire Lille
-      new Address(HOUSE_NUMBER_NANCY, "Place Stanislas", null, "54000", "NANCY", firstCountry), // atelier écriture Nancy
-      new Address(HOUSE_NUMBER_BORDEAUX, "Rue Sainte-Catherine", null, "33000", "BORDEAUX", firstCountry), // jardins urbains Bordeaux
-      new Address(FIRST_HOUSE_NUMBER, "Rue Victor Hugo", null, "69002", "LYON", firstCountry) // spectacle Lyon
+      new Address(FIRST_HOUSE_NUMBER, "rue du bonheur", "44300", "NANTES", firstCountry), // maraude
+      new Address(SECOND_HOUSE_NUMBER, "chemin de Gralan", "44470", "CARQUEFOU", firstCountry), // refuge SPA
+      new Address(HOUSE_NUMBER_NICE, "Promenade des Anglais", "06000", "NICE", firstCountry), // plage Nice
+      new Address(HOUSE_NUMBER_LILLE, "Rue Nationale", "59000", "LILLE", firstCountry), // cuisine solidaire Lille
+      new Address(HOUSE_NUMBER_NANCY, "Place Stanislas", "54000", "NANCY", firstCountry), // atelier écriture Nancy
+      new Address(HOUSE_NUMBER_BORDEAUX, "Rue Sainte-Catherine", "33000", "BORDEAUX", firstCountry), // jardins urbains Bordeaux
+      new Address(FIRST_HOUSE_NUMBER, "Rue Victor Hugo", "69002", "LYON", firstCountry) // spectacle Lyon
     );
 
     List<Activity> activities = Arrays.asList(
@@ -566,7 +571,7 @@ public class DatabaseInitializer {
     voluntaries.get(NUMBER_ZERO).setGeolocation(voluntaryLocalisations.get(NUMBER_ZERO));
     voluntaries.get(NUMBER_ONE).setGeolocation(voluntaryLocalisations.get(NUMBER_ZERO));
 
-    // save messages between associations and voluntaries for a specific activity
+    // initiate messages between associations and voluntaries for a specific activity
     List<Message> allMessageFirstActivity = Arrays.asList(
       new Message(
         "Bonjour à tous, merci de participer !",
@@ -590,16 +595,45 @@ public class DatabaseInitializer {
       )
     );
 
+    List<UserMessage> allUserMessages = Arrays.asList(
+      // Pour le volontaire
+      new UserMessage(true, voluntaries.get(0), allMessageFirstActivity.get(0)),
+      new UserMessage(true, voluntaries.get(0), allMessageFirstActivity.get(1)),
+      new UserMessage(false, voluntaries.get(0), allMessageFirstActivity.get(NUMBER_TWO)),
+      // Pour l'association
+      new UserMessage(true, associations.get(0), allMessageFirstActivity.get(0)),
+      new UserMessage(true, associations.get(0), allMessageFirstActivity.get(1)),
+      new UserMessage(true, associations.get(0), allMessageFirstActivity.get(NUMBER_TWO))
+    );
+
     // initiate reports
     List<Report> allReports = Arrays.asList(
       new Report(
         StatusReportEnumType.IN_PROGRESS,
-        ReasonReportEnumType.RULE_VIOLATION,
-        voluntaries.get(NUMBER_ZERO),
+        ReasonReportEnumType.BAD_BEHAVIOR,
         associations.get(NUMBER_ZERO),
+        voluntaries.get(NUMBER_ZERO),
         voluntaries.get(NUMBER_ONE),
-        "Lors de ma participation à l’évenement d’aide au SDF, à plusieurs reprise le référent Mr.Patate à tenu des propos dégrant envers les femmes.",
-        "Ce retour concorde avec les 3 précédents."
+        "Lors de ma participation à l’évènement d’aide au SDF, à plusieurs reprise le référent Mr.Patate à tenu des propos dégradant envers les femmes.",
+        null
+      ),
+      new Report(
+        StatusReportEnumType.CLOSED,
+        ReasonReportEnumType.BAD_BEHAVIOR,
+        associations.get(NUMBER_ZERO),
+        voluntaries.get(NUMBER_ZERO),
+        voluntaries.get(NUMBER_ONE),
+        "M. Patate l'animateur est réellement problématique dans ses propos !",
+        "Pas assez d'informations ou de détails pour décider d'une pénalisation de l'association."
+      ),
+      new Report(
+        StatusReportEnumType.IN_PROGRESS,
+        ReasonReportEnumType.BAD_BEHAVIOR,
+        voluntaries.get(NUMBER_ZERO),
+        voluntaries.get(NUMBER_ZERO),
+        voluntaries.get(NUMBER_ONE),
+        "Le volontaire a été irrespectueux et insultant !! Nous avons dû faire intervenir la police!!",
+        null
       )
     );
 
@@ -636,6 +670,9 @@ public class DatabaseInitializer {
 
       // save messages of activity between associations and voluntaries
       messageRepository.saveAll(allMessageFirstActivity);
+
+      // save userMessages
+      userMessageRepository.saveAll(allUserMessages);
 
       // save reports
       reportRepository.saveAll(allReports);

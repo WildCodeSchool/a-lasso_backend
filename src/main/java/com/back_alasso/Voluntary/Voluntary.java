@@ -39,13 +39,12 @@ public class Voluntary extends User {
   @JoinColumn(name = "image_id")
   private Image avatar;
 
-  @OneToMany(mappedBy = "voluntary")
+  @OneToMany(mappedBy = "voluntary", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<AssociationFollower> associationFollowers;
 
-  @OneToMany(mappedBy = "voluntary")
+  @OneToMany(mappedBy = "voluntary", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<ActivityVoluntary> activityVoluntaries;
 
-  // Necessary to have an empty constructor to instance object.
   public Voluntary() {
     super();
   }

@@ -1,10 +1,12 @@
 package com.back_alasso.Association;
 
+import com.back_alasso.Activity.Activity;
 import com.back_alasso.Address.Address;
 import com.back_alasso.AssociationFollower.AssociationFollower;
 import com.back_alasso.AssociationImage.AssociationImage;
 import com.back_alasso.Geolocation.Geolocatable;
 import com.back_alasso.Preferences.Preferences;
+import com.back_alasso.Statistic.Statistic;
 import com.back_alasso.User.AccountEnumType;
 import com.back_alasso.User.User;
 import com.back_alasso.User.UserEnumType;
@@ -12,8 +14,12 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
+import lombok.*;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class Association extends User implements Geolocatable {
 
   public static final int DESC_MAX_LENGTH = 500;
@@ -40,16 +46,17 @@ public class Association extends User implements Geolocatable {
   @JoinColumn(name = "adress_id")
   private Address address;
 
-  @OneToMany(mappedBy = "association")
+  @OneToMany(mappedBy = "association", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<AssociationImage> associationImages;
 
-  @OneToMany(mappedBy = "association")
+  @OneToMany(mappedBy = "association", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<AssociationFollower> associationFollowers;
 
-  // Necessary to have an empty constructor to instance object.
-  public Association() {
-    super();
-  }
+  @OneToMany(mappedBy = "association", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Activity> activities;
+
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Statistic> statistics;
 
   public Association(
     String description,
@@ -72,78 +79,6 @@ public class Association extends User implements Geolocatable {
     this.name = name;
     this.address = address;
     this.associationImages = associationImages;
-    this.siteURL = siteURL;
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  public String getFounder() {
-    return founder;
-  }
-
-  public void setFounder(String founder) {
-    this.founder = founder;
-  }
-
-  public LocalDate getFoundationDate() {
-    return foundationDate;
-  }
-
-  public void setFoundationDate(LocalDate foundationDate) {
-    this.foundationDate = foundationDate;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public Address getAdress() {
-    return address;
-  }
-
-  public void setAdress(Address address) {
-    this.address = address;
-  }
-
-  public List<AssociationImage> getAssociationImages() {
-    return associationImages;
-  }
-
-  public void setAssociationImages(List<AssociationImage> associationImages) {
-    this.associationImages = associationImages;
-  }
-
-  public Address getAddress() {
-    return address;
-  }
-
-  public void setAddress(Address address) {
-    this.address = address;
-  }
-
-  public List<AssociationFollower> getAssociationFollowers() {
-    return associationFollowers;
-  }
-
-  public void setAssociationFollowers(List<AssociationFollower> associationFollowers) {
-    this.associationFollowers = associationFollowers;
-  }
-
-  public String getSiteURL() {
-    return siteURL;
-  }
-
-  public void setSiteURL(String siteURL) {
     this.siteURL = siteURL;
   }
 }

@@ -1,8 +1,8 @@
-package com.back_alasso.Authentication;
+package com.back_alasso.Authentication.DTO;
 
 import static com.back_alasso.Authentication.ValidationConstants.*;
 
-import com.back_alasso.Address.Address;
+import com.back_alasso.Address.AddressRequestDTO;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 
@@ -24,5 +24,5 @@ public record AssociationRegistrationDTO(
 
   @Pattern(regexp = PHONE_REGEX, message = "Le numéro de téléphone est invalide") String mobile_phone,
 
-  @NotNull(message = "L'adresse est requise") @Valid Address address
+  @NotNull(message = "L'adresse est requise") @Valid AddressRequestDTO address
 ) {}
