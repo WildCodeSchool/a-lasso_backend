@@ -167,7 +167,7 @@ public class ActivityService {
   }
 
   public List<ActivityResponseDTO> getAllActivities(UUID authenticatedUserId) {
-    List<Activity> activities = activityRepository.findAll();
+    List<Activity> activities = activityRepository.findAllFromNotBannedAssociations();
 
     if (activities.isEmpty()) {
       throw new ResourceNotFoundException("activities not found");
@@ -177,7 +177,9 @@ public class ActivityService {
   }
 
   public ActivityResponseDTO getActivityById(UUID authenticatedUserId, UUID activityId) {
-    Activity activity = activityRepository.findById(activityId).orElseThrow(() -> new ResourceNotFoundException("activity not found"));
+    Activity activity = activityRepository
+      .findByIdFromNotBannedAssociation(activityId)
+      .orElseThrow(() -> new ResourceNotFoundException("activity not found"));
 
     return activityResponseMapper.fromEntityToDTO(activity, authenticatedUserId);
   }
