@@ -1,6 +1,6 @@
 package com.back_alasso.Activity.DTO;
 
-import com.back_alasso.ActivityVoluntary.ActivityParticipantsRequestDTO;
+import com.back_alasso.ActivityVoluntary.DTO.ActivityParticipantsRequestDTO;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 

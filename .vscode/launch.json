@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-BackendProjectTemplateApplication<backend_project_template>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.back_alasso.BackendProjectTemplateApplication",
+      "projectName": "backend_project_template",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}

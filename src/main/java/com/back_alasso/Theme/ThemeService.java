@@ -1,10 +1,7 @@
 package com.back_alasso.Theme;
 
 import com.back_alasso.Exception.ResourceNotFoundException;
-import java.util.Comparator;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
@@ -29,5 +26,17 @@ public class ThemeService {
       .map(ThemeDTO::fromEntityToDTO)
       .sorted(Comparator.comparing(dto -> dto.name().name()))
       .collect(Collectors.toCollection(LinkedHashSet::new));
+  }
+
+  public List<Theme> getThemes(List<ThemeNameEnumType> themeNames) {
+    if (themeNames == null || themeNames.isEmpty()) {
+      return Collections.emptyList();
+    }
+
+    List<Theme> themes = themeRepository.findAllByNameIn(themeNames);
+    if (themes.isEmpty()) {
+      throw new ResourceNotFoundException("Themes not found");
+    }
+    return themes;
   }
 }

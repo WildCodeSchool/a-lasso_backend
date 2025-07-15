@@ -1,6 +1,9 @@
 package com.back_alasso.Report;
 
+import com.back_alasso.Report.DTO.ReportCreationRequestDTO;
+import com.back_alasso.Report.DTO.ReportDTO;
 import com.back_alasso.User.UserService;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
@@ -36,7 +39,10 @@ public class ReportController {
   }
 
   @PostMapping
-  public ResponseEntity<Boolean> createReport(@RequestBody ReportCreationDTO reportCreation, @AuthenticationPrincipal UserDetails userDetails) {
+  public ResponseEntity<Boolean> createReport(
+    @Valid @RequestBody ReportCreationRequestDTO reportCreation,
+    @AuthenticationPrincipal UserDetails userDetails
+  ) {
     UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
 
     Boolean isSuccessPostReport = reportService.createReport(reportCreation, authenticatedUserId);
@@ -45,7 +51,7 @@ public class ReportController {
   }
 
   @PutMapping
-  public ResponseEntity<Boolean> updateReport(@RequestBody ReportDTO updateReport) {
+  public ResponseEntity<Boolean> updateReport(@Valid @RequestBody ReportDTO updateReport) {
     Boolean hasUpdatedReportSuccessfully = reportService.updateReport(updateReport);
 
     return ResponseEntity.status(HttpStatus.OK).body(hasUpdatedReportSuccessfully);

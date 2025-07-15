@@ -1,5 +1,6 @@
 package com.back_alasso.Image;
 
+import com.back_alasso.Exception.ResourceNotFoundException;
 import com.back_alasso.Image.DTO.ImageResponseDTO;
 import java.util.Base64;
 import java.util.List;
@@ -20,6 +21,14 @@ public class ImageMapper {
   }
 
   public List<ImageResponseDTO> toResponseDTOs(List<UUID> imagesId, ImageEnumType type) {
+    if (imagesId == null || imagesId.isEmpty()) {
+      Image defaultImage = imageRepository
+        .findFirstByUrl("/images/Activity/defaultActivityImage.jpg")
+        .orElseThrow(() -> new ResourceNotFoundException("Default Image not found"));
+
+      return List.of(new ImageResponseDTO(defaultImage.getId(), apiUrl + defaultImage.getUrl()));
+    }
+
     List<Image> images;
 
     if (type != null) {

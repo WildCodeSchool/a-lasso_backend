@@ -15,6 +15,7 @@ public class Address extends BaseEntity {
   public static final int STREET_MAX_LENGTH = 255;
   public static final int ZIPCODE_MAX_LENGTH = 20;
   public static final int CITY_MAX_LENGTH = 100;
+  public static final int DISPLAY_NAME_MAX_LENGTH = 500;
 
   @Column(nullable = true)
   private String house_number;
@@ -27,6 +28,9 @@ public class Address extends BaseEntity {
 
   @Column(nullable = false, length = CITY_MAX_LENGTH)
   private String city;
+
+  @Column(nullable = false, length = DISPLAY_NAME_MAX_LENGTH)
+  private String displayName;
 
   @ManyToOne
   @JoinColumn(name = "country_id")

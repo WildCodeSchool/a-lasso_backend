@@ -1,16 +1,19 @@
 package com.back_alasso.Authentication;
 
+import com.back_alasso.Activity.DTO.OnPublish;
 import com.back_alasso.Association.AssociationLoginResponseMapper;
 import com.back_alasso.Authentication.DTO.AssociationRegistrationDTO;
-import com.back_alasso.Authentication.DTO.PasswordChangeDTO;
+import com.back_alasso.Authentication.DTO.PasswordChangeRequestDTO;
 import com.back_alasso.Authentication.DTO.UserLoginDTO;
 import com.back_alasso.Authentication.DTO.VoluntaryRegistrationDTO;
 import com.back_alasso.User.User;
 import com.back_alasso.User.UserService;
 import com.back_alasso.Voluntary.VoluntaryLoginResponseMapper;
 import jakarta.validation.Valid;
+import jakarta.validation.Validator;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,6 +23,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
+
+  @Autowired
+  private Validator validator;
 
   private final UserService userService;
   private final AuthService authService;
@@ -47,7 +53,9 @@ public class AuthController {
   }
 
   @PostMapping("/register/association")
-  public ResponseEntity<Boolean> register(@Valid @RequestBody AssociationRegistrationDTO associationRegistrationDTO) {
+  public ResponseEntity<Boolean> register(@RequestBody AssociationRegistrationDTO associationRegistrationDTO) {
+    validator.validate(associationRegistrationDTO, OnPublish.class);
+
     userService.checkUserExists(associationRegistrationDTO.email());
     boolean isRegisteredSuccess = userService.registerAssociation(associationRegistrationDTO);
 
@@ -69,7 +77,7 @@ public class AuthController {
   }
 
   @PatchMapping("/change-password")
-  public ResponseEntity<?> changePassword(@RequestBody PasswordChangeDTO dto, @AuthenticationPrincipal UserDetails userDetails) {
+  public ResponseEntity<?> changePassword(@Valid @RequestBody PasswordChangeRequestDTO dto, @AuthenticationPrincipal UserDetails userDetails) {
     try {
       userService.changePassword(userDetails.getUsername(), dto.oldPassword(), dto.newPassword());
       return ResponseEntity.ok().build();

@@ -2,7 +2,7 @@ package com.back_alasso.Association;
 
 import com.back_alasso.Association.DTO.AssociationLoginResponseDTO;
 import com.back_alasso.Exception.ResourceNotFoundException;
-import com.back_alasso.Geolocation.GeolocationLoginDTO;
+import com.back_alasso.Geolocation.DTO.GeolocationLoginDTO;
 import com.back_alasso.Image.DTO.ImageResponseDTO;
 import com.back_alasso.Image.ImageEnumType;
 import com.back_alasso.Image.ImageMapper;

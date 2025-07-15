@@ -1,12 +1,13 @@
 package com.back_alasso.Association;
 
 import com.back_alasso.Association.DTO.AssociationCardResponseDTO;
-import com.back_alasso.Association.DTO.AssociationDescriptionDTO;
-import com.back_alasso.Association.DTO.AssociationGeneralInfoDTO;
+import com.back_alasso.Association.DTO.AssociationDescriptionRequestDTO;
+import com.back_alasso.Association.DTO.AssociationGeneralInfoRequestDTO;
 import com.back_alasso.Association.DTO.UpdateFollowRequestDTO;
 import com.back_alasso.Image.DTO.ImageResponseDTO;
 import com.back_alasso.Statistic.StatisticDTO;
 import com.back_alasso.User.UserService;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
@@ -50,7 +51,7 @@ public class AssociationController {
   @PatchMapping("/{associationId}/updateFollow")
   public ResponseEntity<Boolean> putUpdateFollowStatus(
     @PathVariable UUID associationId,
-    @RequestBody UpdateFollowRequestDTO request,
+    @Valid @RequestBody UpdateFollowRequestDTO request,
     @AuthenticationPrincipal UserDetails userDetails
   ) {
     UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
@@ -61,7 +62,7 @@ public class AssociationController {
   @PutMapping("/{id}/general-info")
   public ResponseEntity<Void> updateGeneralInformation(
     @PathVariable UUID id,
-    @RequestBody AssociationGeneralInfoDTO associationGeneralInfoDTO,
+    @Valid @RequestBody AssociationGeneralInfoRequestDTO associationGeneralInfoDTO,
     @AuthenticationPrincipal UserDetails userDetails
   ) {
     UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
@@ -72,7 +73,7 @@ public class AssociationController {
   @PutMapping("/{id}/description")
   public ResponseEntity<Void> updateDescription(
     @PathVariable UUID id,
-    @RequestBody AssociationDescriptionDTO descriptionDTO,
+    @Valid @RequestBody AssociationDescriptionRequestDTO descriptionDTO,
     @AuthenticationPrincipal UserDetails userDetails
   ) {
     UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
@@ -83,7 +84,7 @@ public class AssociationController {
   @PutMapping("/{id}/statistics")
   public ResponseEntity<Void> updateAssociationStatistics(
     @PathVariable UUID id,
-    @RequestBody List<StatisticDTO> statistics,
+    @Valid @RequestBody List<StatisticDTO> statistics,
     @AuthenticationPrincipal UserDetails userDetails
   ) {
     UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);

@@ -1,11 +1,11 @@
 package com.back_alasso.Association.DTO;
 
 import com.back_alasso.Association.Association;
-import com.back_alasso.Geolocation.GeolocationDTO;
+import com.back_alasso.Geolocation.DTO.GeolocationRequestDTO;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public record AssociationActivityDTO(UUID id, String name, String logo, GeolocationDTO localisation) {
+public record AssociationActivityDTO(UUID id, String name, String logo, GeolocationRequestDTO localisation) {
   public static AssociationActivityDTO getAssociationDTO(Association association) {
     return new AssociationActivityDTO(
       association.getId(),
@@ -16,7 +16,7 @@ public record AssociationActivityDTO(UUID id, String name, String logo, Geolocat
         .filter(i -> i.getImage().getType().name().equals("LOGO"))
         .map(i -> i.getImage().getUrl())
         .collect(Collectors.joining()),
-      GeolocationDTO.getCoordinates(association)
+      GeolocationRequestDTO.getCoordinates(association)
     );
   }
 }
