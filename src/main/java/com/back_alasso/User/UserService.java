@@ -22,8 +22,10 @@ import com.back_alasso.Preferences.Preferences;
 import com.back_alasso.Preferences.PreferencesRepository;
 import com.back_alasso.Voluntary.Voluntary;
 import com.back_alasso.Voluntary.VoluntaryRepository;
+import java.time.LocalDateTime;
 import java.util.*;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -85,6 +87,21 @@ public class UserService {
     userRepository.save(user);
   }
 
+  public User changeEmail(String currentEmail, String newEmail, String password) {
+    User user = userRepository
+      .findByEmail(currentEmail)
+      .orElseThrow(() -> new UsernameNotFoundException("Utilisateur non trouvé avec l'email : " + currentEmail));
+    if (!passwordEncoder.matches(password, user.getPassword())) {
+      throw new IllegalArgumentException("Mot de passe incorrect.");
+    }
+    if (userRepository.existsByEmail(newEmail)) {
+      throw new IllegalArgumentException("Cet email est déjà utilisé.");
+    }
+    user.setEmail(newEmail);
+    user.setUpdatedAt(LocalDateTime.now());
+    return userRepository.save(user);
+  }
+
   public void deleteUser(String email) {
     User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Utilisateur non trouvé"));
     preferencesRepository.delete(user.getPreferences());
@@ -121,7 +138,8 @@ public class UserService {
       profileImage,
       voluntaryRegistrationDTO.mobile_phone(),
       null,
-      null
+      null,
+      voluntaryRegistrationDTO.birth_date()
     );
 
     GeolocationRequestDTO geolocDto = geolocationService.getVoluntaryCoordinates(voluntaryRegistrationDTO.city(), voluntaryRegistrationDTO.country());

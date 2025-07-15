@@ -1,13 +1,12 @@
 package com.back_alasso.Authentication;
 
 import com.back_alasso.Activity.DTO.OnPublish;
+import com.back_alasso.Association.Association;
 import com.back_alasso.Association.AssociationLoginResponseMapper;
-import com.back_alasso.Authentication.DTO.AssociationRegistrationDTO;
-import com.back_alasso.Authentication.DTO.PasswordChangeRequestDTO;
-import com.back_alasso.Authentication.DTO.UserLoginDTO;
-import com.back_alasso.Authentication.DTO.VoluntaryRegistrationDTO;
+import com.back_alasso.Authentication.DTO.*;
 import com.back_alasso.User.User;
 import com.back_alasso.User.UserService;
+import com.back_alasso.Voluntary.Voluntary;
 import com.back_alasso.Voluntary.VoluntaryLoginResponseMapper;
 import jakarta.validation.Valid;
 import jakarta.validation.Validator;
@@ -77,10 +76,31 @@ public class AuthController {
   }
 
   @PatchMapping("/change-password")
-  public ResponseEntity<?> changePassword(@Valid @RequestBody PasswordChangeRequestDTO dto, @AuthenticationPrincipal UserDetails userDetails) {
+  public ResponseEntity<Map<String, Object>> changePassword(
+    @Valid @RequestBody PasswordChangeRequestDTO dto,
+    @AuthenticationPrincipal UserDetails userDetails
+  ) {
     try {
       userService.changePassword(userDetails.getUsername(), dto.oldPassword(), dto.newPassword());
       return ResponseEntity.ok().build();
+    } catch (IllegalArgumentException e) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", e.getMessage()));
+    }
+  }
+
+  @PatchMapping("/change-email")
+  public ResponseEntity<Map<String, Object>> changeEmail(@RequestBody EmailChangeRequestDTO dto, @AuthenticationPrincipal UserDetails userDetails) {
+    try {
+      User updatedUser = userService.changeEmail(userDetails.getUsername(), dto.newEmail(), dto.password());
+      String newToken = authService.generateToken(updatedUser);
+      Map<String, Object> response = new HashMap<>();
+      response.put("token", newToken);
+      if (updatedUser instanceof Voluntary voluntary) {
+        response.put("user", voluntaryLoginResponseMapper.fromEntityToDTO(voluntary));
+      } else if (updatedUser instanceof Association association) {
+        response.put("user", associationLoginResponseMapper.fromEntityToDTO(association));
+      }
+      return ResponseEntity.ok(response);
     } catch (IllegalArgumentException e) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", e.getMessage()));
     }

@@ -130,4 +130,9 @@ public class ActivityService {
 
     activityRepository.delete(activity);
   }
+
+  public List<ActivityResponseDTO> getActivitiesByAssociationId(UUID associationId, UUID authenticatedUserId) {
+    List<Activity> activities = activityRepository.findByAssociationId(associationId);
+    return activities.stream().map(activity -> activityResponseMapper.fromEntityToDTO(activity, authenticatedUserId)).toList();
+  }
 }
