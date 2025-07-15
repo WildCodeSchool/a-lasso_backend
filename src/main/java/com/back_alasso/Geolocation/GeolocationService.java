@@ -1,5 +1,8 @@
 package com.back_alasso.Geolocation;
 
+import com.back_alasso.Activity.DTO.ActivitySaveRequestDTO;
+import com.back_alasso.Geolocation.DTO.GeolocationRequestDTO;
+import com.back_alasso.Geolocation.DTO.GouvGeolocDTO;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -11,12 +14,14 @@ public class GeolocationService {
 
   private final String GEOLOC_BASE_URL_GOUV = "https://api-adresse.data.gouv.fr/search/?q=";
   private final RestTemplate restTemplate;
+  private final GeolocationRepository geolocationRepository;
 
-  public GeolocationService(RestTemplate restTemplate) {
+  public GeolocationService(RestTemplate restTemplate, GeolocationRepository geolocationRepository) {
     this.restTemplate = restTemplate;
+    this.geolocationRepository = geolocationRepository;
   }
 
-  public GeolocationDTO getVoluntaryCoordinates(String city, String country) {
+  public GeolocationRequestDTO getVoluntaryCoordinates(String city, String country) {
     String query = String.format("%s, %s", city, country);
     String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
     String url = GEOLOC_BASE_URL_GOUV + encodedQuery + "&limit=1";
@@ -29,9 +34,17 @@ public class GeolocationService {
       double lon = coords.get(0);
       double lat = coords.get(1);
 
-      return new GeolocationDTO(lon, lat);
+      return new GeolocationRequestDTO(lon, lat);
     } else {
       throw new RuntimeException("Aucune donnée de géolocalisation trouvée pour " + city + ", " + country);
     }
+  }
+
+  public Geolocation createGeolocation(ActivitySaveRequestDTO dto) {
+    if (dto.getAddress() == null || dto.getLocation().latitude() == 0 || dto.getLocation().longitude() == 0) {
+      return null;
+    }
+
+    return geolocationRepository.save(new Geolocation(dto.getLocation().longitude(), dto.getLocation().latitude()));
   }
 }

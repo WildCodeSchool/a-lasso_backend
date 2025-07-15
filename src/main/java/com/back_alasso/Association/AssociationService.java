@@ -2,7 +2,7 @@ package com.back_alasso.Association;
 
 import com.back_alasso.ActivityImage.ActivityImageRepository;
 import com.back_alasso.Association.DTO.AssociationCardResponseDTO;
-import com.back_alasso.Association.DTO.AssociationGeneralInfoDTO;
+import com.back_alasso.Association.DTO.AssociationGeneralInfoRequestDTO;
 import com.back_alasso.AssociationFollower.AssociationFollower;
 import com.back_alasso.AssociationFollower.AssociationFollowerRepository;
 import com.back_alasso.Exception.ResourceNotFoundException;
@@ -49,10 +49,12 @@ public class AssociationService {
   }
 
   private Association getAuthenticatedAssociationById(UUID associationId, UUID authenticatedUserId) {
-    Association association = associationRepository.findById(associationId).orElseThrow(() -> new ResourceNotFoundException("Association not found"));
+    Association association = getAssociationOrThrow(associationId);
+
     if (!association.getId().equals(authenticatedUserId)) {
       throw new SecurityException("Not allowed to update");
     }
+
     return association;
   }
 
@@ -70,8 +72,16 @@ public class AssociationService {
     return isFollow;
   }
 
+  private Association getAssociationOrThrow(UUID associationId) {
+    return associationRepository.findById(associationId).orElseThrow(() -> new ResourceNotFoundException("Association not found"));
+  }
+
+  public Association getAssociationById(UUID id) {
+    return getAssociationOrThrow(id);
+  }
+
   @Transactional
-  public void updateGeneralInfo(UUID associationId, AssociationGeneralInfoDTO associationGeneralInfoDTO, UUID authenticatedUserId) {
+  public void updateGeneralInfo(UUID associationId, AssociationGeneralInfoRequestDTO associationGeneralInfoDTO, UUID authenticatedUserId) {
     Association association = this.getAuthenticatedAssociationById(associationId, authenticatedUserId);
     association.setFounder(associationGeneralInfoDTO.founder());
     association.setFoundationDate(associationGeneralInfoDTO.foundationDate());

@@ -1,4 +1,6 @@
-package com.back_alasso.Address;
+package com.back_alasso.Address.DTO;
+
+import com.back_alasso.Address.Address;
 
 public record AddressResponseDTO(String houseNumber, String streetName, String zipCode, String city, String country, String displayName) {
   public static AddressResponseDTO fromEntityToDTO(Address address) {

@@ -1,4 +1,4 @@
-package com.back_alasso.Geolocation;
+package com.back_alasso.Geolocation.DTO;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

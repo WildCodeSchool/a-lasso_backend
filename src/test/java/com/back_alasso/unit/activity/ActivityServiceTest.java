@@ -1,25 +1,22 @@
 package com.back_alasso.unit.activity;
 
 import com.back_alasso.Activity.ActivityResponseMapper;
-import com.back_alasso.ActivityImage.ActivityImageRepository;
-import com.back_alasso.ActivityTheme.ActivityThemeRepository;
-import com.back_alasso.ActivityVoluntary.ActivityVoluntaryRepository;
-import com.back_alasso.Address.AddressRepository;
+import com.back_alasso.ActivityImage.ActivityImageService;
+import com.back_alasso.ActivityTheme.ActivityThemeService;
+import com.back_alasso.Address.AddressService;
 import com.back_alasso.Association.Association;
 import com.back_alasso.Activity.Activity;
 import com.back_alasso.Activity.ActivityService;
 import com.back_alasso.Activity.ActivityRepository;
 import com.back_alasso.Address.Address;
-import com.back_alasso.Association.AssociationRepository;
+import com.back_alasso.Association.AssociationService;
 import com.back_alasso.Country.Country;
-import com.back_alasso.Country.CountryRepository;
 import com.back_alasso.Exception.ResourceNotFoundException;
-import com.back_alasso.Geolocation.GeolocationRepository;
-import com.back_alasso.Image.ImageRepository;
-import com.back_alasso.Theme.ThemeRepository;
+import com.back_alasso.Geolocation.GeolocationService;
+import com.back_alasso.Image.ImageService;
+import com.back_alasso.Theme.ThemeService;
 import com.back_alasso.User.AccountEnumType;
 import com.back_alasso.User.UserEnumType;
-import com.back_alasso.Voluntary.VoluntaryRepository;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,19 +42,17 @@ public class ActivityServiceTest {
     ActivityService activityService;
 
     ActivityRepository activityRepositoryMock = Mockito.mock(ActivityRepository.class);
-    VoluntaryRepository voluntaryRepository = Mockito.mock(VoluntaryRepository.class);
-    ActivityVoluntaryRepository activityVoluntaryRepository = Mockito.mock(ActivityVoluntaryRepository.class);
-    AssociationRepository associationRepository = Mockito.mock(AssociationRepository.class);
-    ThemeRepository themeRepository = Mockito.mock(ThemeRepository.class);
-    ActivityThemeRepository activityThemeRepository = Mockito.mock(ActivityThemeRepository.class);
-    AddressRepository addressRepository = Mockito.mock(AddressRepository.class);
-    GeolocationRepository geolocationRepository = Mockito.mock(GeolocationRepository.class);
-    ImageRepository imageRepository = Mockito.mock(ImageRepository.class);
-    ActivityImageRepository activityImageRepository = Mockito.mock(ActivityImageRepository.class);
-    CountryRepository countryRepository = Mockito.mock(CountryRepository.class);
+    ActivityRepository activityRepository = Mockito.mock(ActivityRepository.class);
     ActivityResponseMapper activityResponseMapper = Mockito.mock(ActivityResponseMapper.class);
+    AddressService addressService = Mockito.mock(AddressService.class);
+    ImageService imageService = Mockito.mock(ImageService.class);
+    ActivityImageService activityImageService = Mockito.mock(ActivityImageService.class);
+    ThemeService themeService = Mockito.mock(ThemeService.class);
+    ActivityThemeService activityThemeService = Mockito.mock(ActivityThemeService.class);
+    GeolocationService geolocationService = Mockito.mock(GeolocationService.class);
+    AssociationService associationService = Mockito.mock(AssociationService.class);
 
-    Address associationAddress = new Address(FIRST_HOUSE_NUMBER, "rue d'Athènes", "44300", "NANTES", new Country("France"),"");
+    Address associationAddress = new Address(FIRST_HOUSE_NUMBER, "rue d'Athènes", "44300", "NANTES", "", new Country("France"));
 
     Association associationMock = new Association(
             "La Croix-Rouge française agit pour protéger et relever sans condition, les personnes en situation de vulnérabilité et construire avec elles leur résilience.",
@@ -91,18 +86,16 @@ public class ActivityServiceTest {
     @BeforeEach
     public void setUp() {
         this.activityService = new ActivityService(
-                activityRepositoryMock,
-                voluntaryRepository,
-                activityVoluntaryRepository,
-                associationRepository,
-                themeRepository,
-                activityThemeRepository,
-                addressRepository,
-                geolocationRepository,
-                imageRepository,
-                activityImageRepository,
-                countryRepository,
-                activityResponseMapper);
+                activityRepository,
+                activityResponseMapper,
+                addressService,
+                imageService,
+                activityImageService,
+                themeService,
+                activityThemeService,
+                geolocationService,
+                associationService)
+        ;
     }
 
     @Test
@@ -110,17 +103,20 @@ public class ActivityServiceTest {
         when(activityRepositoryMock.findById(activityIdMock)).thenReturn(Optional.empty());
 
         Assertions.assertThrows(ResourceNotFoundException.class, () -> {
-            activityService.getActivity(activityIdMock);
+            activityService.getActivityById(activityIdMock);
         });
     }
 
     @Test
-    public void shouldReturnAnActivityDTO() {
-        when(activityRepositoryMock.findById(activityIdMock)).thenReturn(Optional.ofNullable(activityMock));
+    public void shouldReturnAnActivity() {
+        activityMock.setId(activityIdMock);
+        when(activityRepository.findById(activityIdMock)).thenReturn(Optional.of(activityMock));
 
-        Activity result = activityService.getActivity(activityIdMock);
+        Activity result = activityService.getActivityById(activityIdMock);
 
         Assertions.assertNotNull(result);
+        Assertions.assertEquals(activityIdMock, result.getId());
         Assertions.assertEquals("Test title Activity", result.getTitle());
     }
+
 }

@@ -1,7 +1,10 @@
 package com.back_alasso.Message;
 
 import com.back_alasso.Authentication.AuthService;
+import com.back_alasso.Message.DTO.MessageCreationRequestDTO;
+import com.back_alasso.Message.DTO.MessageResponseDTO;
 import com.back_alasso.User.UserService;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
@@ -25,18 +28,24 @@ public class MessageController {
   }
 
   @GetMapping("/{activityId}")
-  public ResponseEntity<List<MessageDTO>> getAllActivityMessages(@PathVariable UUID activityId, @AuthenticationPrincipal UserDetails userDetails) {
+  public ResponseEntity<List<MessageResponseDTO>> getAllActivityMessages(
+    @PathVariable UUID activityId,
+    @AuthenticationPrincipal UserDetails userDetails
+  ) {
     UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
 
-    List<MessageDTO> messages = messageService.getAllActivityMessages(activityId, authenticatedUserId);
+    List<MessageResponseDTO> messages = messageService.getAllActivityMessages(activityId, authenticatedUserId);
     return ResponseEntity.status(HttpStatus.OK).body(messages);
   }
 
   @PostMapping
-  public ResponseEntity<MessageDTO> createMessage(@RequestBody MessageCreationDTO newMessage, @AuthenticationPrincipal UserDetails userDetails) {
+  public ResponseEntity<MessageResponseDTO> createMessage(
+    @Valid @RequestBody MessageCreationRequestDTO newMessage,
+    @AuthenticationPrincipal UserDetails userDetails
+  ) {
     UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
 
-    MessageDTO savedMessage = messageService.createMessage(newMessage, authenticatedUserId);
+    MessageResponseDTO savedMessage = messageService.createMessage(newMessage, authenticatedUserId);
     return ResponseEntity.status(HttpStatus.CREATED).body(savedMessage);
   }
 }

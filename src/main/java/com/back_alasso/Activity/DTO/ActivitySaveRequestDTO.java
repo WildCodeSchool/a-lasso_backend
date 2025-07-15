@@ -1,16 +1,23 @@
 package com.back_alasso.Activity.DTO;
 
-import com.back_alasso.Address.AddressRequestDTO;
-import com.back_alasso.Geolocation.GeolocationDTO;
+import com.back_alasso.Address.DTO.AddressRequestDTO;
+import com.back_alasso.Geolocation.DTO.GeolocationRequestDTO;
 import com.back_alasso.Image.DTO.ImageActivityCreationRequestDTO;
 import com.back_alasso.Theme.ThemeNameEnumType;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ActivitySaveRequestDTO {
 
   private UUID id;
@@ -19,7 +26,7 @@ public class ActivitySaveRequestDTO {
   private ActivityStatusEnumType status;
 
   @NotEmpty(groups = OnPublish.class)
-  private List<ImageActivityCreationRequestDTO> images;
+  private List<@Valid ImageActivityCreationRequestDTO> images;
 
   @NotBlank(groups = OnPublish.class)
   private String title;
@@ -30,97 +37,17 @@ public class ActivitySaveRequestDTO {
   @NotNull(groups = OnPublish.class)
   private LocalDateTime dateTime;
 
+  @Valid
   @NotNull(groups = OnPublish.class)
   private AddressRequestDTO address;
 
+  @Valid
   @NotNull(groups = OnPublish.class)
-  private GeolocationDTO location;
+  private GeolocationRequestDTO location;
 
   @NotEmpty(groups = OnPublish.class)
   private List<ThemeNameEnumType> themes;
 
   @NotBlank(groups = OnPublish.class)
   private String description;
-
-  // Getters and setters
-
-  public ActivityStatusEnumType getStatus() {
-    return status;
-  }
-
-  public void setStatus(ActivityStatusEnumType status) {
-    this.status = status;
-  }
-
-  public List<ImageActivityCreationRequestDTO> getImages() {
-    return images;
-  }
-
-  public void setImages(List<ImageActivityCreationRequestDTO> images) {
-    this.images = images;
-  }
-
-  public String getTitle() {
-    return title;
-  }
-
-  public void setTitle(String title) {
-    this.title = title;
-  }
-
-  public Long getRequestedVolunteers() {
-    return requestedVolunteers;
-  }
-
-  public void setRequestedVolunteers(Long requestedVolunteers) {
-    this.requestedVolunteers = requestedVolunteers;
-  }
-
-  public LocalDateTime getDateTime() {
-    return dateTime;
-  }
-
-  public void setDateTime(LocalDateTime dateTime) {
-    this.dateTime = dateTime;
-  }
-
-  public AddressRequestDTO getAddress() {
-    return address;
-  }
-
-  public void setAddress(AddressRequestDTO address) {
-    this.address = address;
-  }
-
-  public List<ThemeNameEnumType> getThemes() {
-    return themes;
-  }
-
-  public void setThemes(List<ThemeNameEnumType> themes) {
-    this.themes = themes;
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  public UUID getId() {
-    return id;
-  }
-
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  public GeolocationDTO getLocation() {
-    return location;
-  }
-
-  public void setLocation(GeolocationDTO location) {
-    this.location = location;
-  }
 }

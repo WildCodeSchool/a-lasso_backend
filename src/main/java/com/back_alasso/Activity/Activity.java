@@ -66,7 +66,7 @@ public class Activity extends BaseEntity implements Geolocatable {
   private Geolocation geolocation;
 
   public Activity(
-          ActivityStatusEnumType status,
+    ActivityStatusEnumType status,
     String title,
     LocalDateTime date,
     String description,

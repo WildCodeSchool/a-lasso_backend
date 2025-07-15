@@ -5,7 +5,7 @@ import com.back_alasso.AssociationImage.AssociationImageRepository;
 import com.back_alasso.Authentication.DTO.VoluntaryRegistrationDTO;
 import com.back_alasso.Country.CountryRepository;
 import com.back_alasso.Geolocation.Geolocation;
-import com.back_alasso.Geolocation.GeolocationDTO;
+import com.back_alasso.Geolocation.DTO.GeolocationRequestDTO;
 import com.back_alasso.Geolocation.GeolocationRepository;
 import com.back_alasso.Geolocation.GeolocationService;
 import com.back_alasso.Image.ImageRepository;
@@ -79,7 +79,7 @@ class UserServiceIntegrationTest {
                 LocalDate.of(THIRD_ASSO_YEAR_FOUNDED, Month.MARCH, NUMBER_FOURTEEN)
         );
 
-        GeolocationDTO mockGeolocation = new GeolocationDTO(2.3522, 48.8566);
+        GeolocationRequestDTO mockGeolocation = new GeolocationRequestDTO(2.3522, 48.8566);
 
         when(geolocationService.getVoluntaryCoordinates("Paris", "France")).thenReturn(mockGeolocation);
 

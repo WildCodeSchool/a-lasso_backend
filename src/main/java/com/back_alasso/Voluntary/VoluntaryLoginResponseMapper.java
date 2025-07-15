@@ -1,9 +1,9 @@
 package com.back_alasso.Voluntary;
 
-import com.back_alasso.ActivityVoluntary.ActivityVoluntaryLoginDTO;
+import com.back_alasso.ActivityVoluntary.DTO.ActivityVoluntaryLoginResponseDTO;
 import com.back_alasso.AssociationFollower.AssociationFollower;
 import com.back_alasso.AssociationFollower.AssociationFollowerDTO;
-import com.back_alasso.Geolocation.GeolocationLoginDTO;
+import com.back_alasso.Geolocation.DTO.GeolocationLoginDTO;
 import com.back_alasso.Image.DTO.ImageResponseDTO;
 import com.back_alasso.Image.ImageEnumType;
 import com.back_alasso.Image.ImageMapper;
@@ -39,10 +39,10 @@ public class VoluntaryLoginResponseMapper {
       .map(AssociationFollowerDTO::fromEntityToDTO)
       .toList();
 
-    List<ActivityVoluntaryLoginDTO> activitiesUserInfos = voluntary
+    List<ActivityVoluntaryLoginResponseDTO> activitiesUserInfos = voluntary
       .getActivityVoluntaries()
       .stream()
-      .map(ActivityVoluntaryLoginDTO::fromEntityToDTO)
+      .map(ActivityVoluntaryLoginResponseDTO::fromEntityToDTO)
       .toList();
 
     boolean isAdmin = voluntary.getRoles().contains(UserEnumType.ROLE_ADMIN);

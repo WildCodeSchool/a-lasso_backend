@@ -227,11 +227,11 @@ public class DatabaseInitializer {
 
     // initiate examples of associations
     List<Address> associationAddresses = Arrays.asList(
-      new Address(FIRST_HOUSE_NUMBER, "rue d'Athènes", "44300", "NANTES", firstCountry, ""),
-      new Address(SECOND_HOUSE_NUMBER, "chemin de Gralan", "44470", "CARQUEFOU", firstCountry, ""),
-      new Address(THIRD_HOUSE_NUMBER, "avenue des Champs-Élysées", "75008", "PARIS", firstCountry, ""),
-      new Address(FOURTH_HOUSE_NUMBER, "rue Saint-Jean", "54000", "NANCY", firstCountry, ""),
-      new Address(FIFTH_HOUSE_NUMBER, "rue de la République", "69002", "LYON", firstCountry, "")
+      new Address(FIRST_HOUSE_NUMBER, "rue d'Athènes", "44300", "NANTES", "", firstCountry),
+      new Address(SECOND_HOUSE_NUMBER, "chemin de Gralan", "44470", "CARQUEFOU", "", firstCountry),
+      new Address(THIRD_HOUSE_NUMBER, "avenue des Champs-Élysées", "75008", "PARIS", "", firstCountry),
+      new Address(FOURTH_HOUSE_NUMBER, "rue Saint-Jean", "54000", "NANCY", "", firstCountry),
+      new Address(FIFTH_HOUSE_NUMBER, "rue de la République", "69002", "LYON", "", firstCountry)
     );
 
     List<Image> associationLogos = List.of(
@@ -394,13 +394,13 @@ public class DatabaseInitializer {
     );
 
     List<Address> activityAddresses = Arrays.asList(
-      new Address(FIRST_HOUSE_NUMBER, "rue du bonheur", "44300", "NANTES", firstCountry, ""), // maraude
-      new Address(SECOND_HOUSE_NUMBER, "chemin de Gralan", "44470", "CARQUEFOU", firstCountry, ""), // refuge SPA
-      new Address(HOUSE_NUMBER_NICE, "Promenade des Anglais", "06000", "NICE", firstCountry, ""), // plage Nice
-      new Address(HOUSE_NUMBER_LILLE, "Rue Nationale", "59000", "LILLE", firstCountry, ""), // cuisine solidaire Lille
-      new Address(HOUSE_NUMBER_NANCY, "Place Stanislas", "54000", "NANCY", firstCountry, ""), // atelier écriture Nancy
-      new Address(HOUSE_NUMBER_BORDEAUX, "Rue Sainte-Catherine", "33000", "BORDEAUX", firstCountry, ""), // jardins urbains Bordeaux
-      new Address(FIRST_HOUSE_NUMBER, "Rue Victor Hugo", "69002", "LYON", firstCountry, "") // spectacle Lyon
+      new Address(FIRST_HOUSE_NUMBER, "rue du bonheur", "44300", "NANTES", "", firstCountry), // maraude
+      new Address(SECOND_HOUSE_NUMBER, "chemin de Gralan", "44470", "CARQUEFOU", "", firstCountry), // refuge SPA
+      new Address(HOUSE_NUMBER_NICE, "Promenade des Anglais", "06000", "NICE", "", firstCountry), // plage Nice
+      new Address(HOUSE_NUMBER_LILLE, "Rue Nationale", "59000", "LILLE", "", firstCountry), // cuisine solidaire Lille
+      new Address(HOUSE_NUMBER_NANCY, "Place Stanislas", "54000", "NANCY", "", firstCountry), // atelier écriture Nancy
+      new Address(HOUSE_NUMBER_BORDEAUX, "Rue Sainte-Catherine", "33000", "BORDEAUX", "", firstCountry), // jardins urbains Bordeaux
+      new Address(FIRST_HOUSE_NUMBER, "Rue Victor Hugo", "69002", "LYON", "", firstCountry) // spectacle Lyon
     );
 
     List<Activity> activities = Arrays.asList(

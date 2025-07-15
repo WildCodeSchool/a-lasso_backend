@@ -2,8 +2,9 @@ package com.back_alasso.Authentication.DTO;
 
 import static com.back_alasso.Authentication.ValidationConstants.*;
 
-import com.back_alasso.Address.AddressRequestDTO;
-import com.back_alasso.Geolocation.GeolocationDTO;
+import com.back_alasso.Activity.DTO.OnPublish;
+import com.back_alasso.Address.DTO.AddressRequestDTO;
+import com.back_alasso.Geolocation.DTO.GeolocationRequestDTO;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 
@@ -25,7 +26,7 @@ public record AssociationRegistrationDTO(
 
   @Pattern(regexp = PHONE_REGEX, message = "Le numéro de téléphone est invalide") String mobile_phone,
 
-  @NotNull(message = "L'adresse est requise") @Valid AddressRequestDTO address,
+  @NotNull(message = "L'adresse est requise", groups = OnPublish.class) @Valid AddressRequestDTO address,
 
-  @NotNull(message = "La géolocalisation est requise") @Valid GeolocationDTO location
+  @NotNull(message = "La géolocalisation est requise") @Valid GeolocationRequestDTO location
 ) {}
