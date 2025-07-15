@@ -1,10 +1,11 @@
 package com.back_alasso.Activity;
 
 import com.back_alasso.Activity.DTO.ActivityResponseDTO;
-import com.back_alasso.ActivityVoluntary.ActivityParticipantsRequestDTO;
 import com.back_alasso.ActivityVoluntary.ActivityVoluntary;
+import com.back_alasso.ActivityVoluntary.DTO.ActivityParticipantsRequestDTO;
+import com.back_alasso.Address.DTO.AddressResponseDTO;
 import com.back_alasso.Association.DTO.AssociationActivityDTO;
-import com.back_alasso.Geolocation.GeolocationDTO;
+import com.back_alasso.Geolocation.DTO.GeolocationRequestDTO;
 import com.back_alasso.Image.ImageEnumType;
 import com.back_alasso.Image.ImageMapper;
 import java.util.List;
@@ -30,11 +31,13 @@ public class ActivityResponseMapper {
 
     return new ActivityResponseDTO(
       activity.getId(),
+      activity.getStatus(),
       activity.getTitle(),
       activity.getDescription(),
+      AddressResponseDTO.fromEntityToDTO(activity.getAddress()),
       imageMapper.toResponseDTOs(imageIds, ImageEnumType.ACTIVITY),
       activity.getAssociation() != null ? AssociationActivityDTO.getAssociationDTO(activity.getAssociation()) : null,
-      GeolocationDTO.getCoordinates(activity),
+      GeolocationRequestDTO.getCoordinates(activity),
       activity.getDate(),
       ActivityParticipantsRequestDTO.convertToDTO(activity),
       activity.getActivityThemes().stream().map(theme -> theme.getTheme().getName()).toList()

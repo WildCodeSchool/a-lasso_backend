@@ -1,5 +1,6 @@
 package com.back_alasso.Activity;
 
+import com.back_alasso.Activity.DTO.ActivityStatusEnumType;
 import com.back_alasso.ActivityImage.ActivityImage;
 import com.back_alasso.ActivityTheme.ActivityTheme;
 import com.back_alasso.ActivityVoluntary.ActivityVoluntary;
@@ -11,6 +12,7 @@ import com.back_alasso.Message.Message;
 import com.back_alasso.core.BaseEntity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.*;
 
@@ -24,13 +26,16 @@ public class Activity extends BaseEntity implements Geolocatable {
   public static final int TITLE_MAX_LENGTH = 50;
   public static final int DESC_MAX_LENGTH = 1000;
 
-  @Column(nullable = false, length = TITLE_MAX_LENGTH)
+  @Column
+  private ActivityStatusEnumType status;
+
+  @Column(length = TITLE_MAX_LENGTH)
   private String title;
 
-  @Column(nullable = false)
+  @Column
   private LocalDateTime date;
 
-  @Column(nullable = false, length = DESC_MAX_LENGTH)
+  @Column(length = DESC_MAX_LENGTH)
   private String description;
 
   @Column(nullable = false)
@@ -61,6 +66,7 @@ public class Activity extends BaseEntity implements Geolocatable {
   private Geolocation geolocation;
 
   public Activity(
+    ActivityStatusEnumType status,
     String title,
     LocalDateTime date,
     String description,
@@ -70,14 +76,15 @@ public class Activity extends BaseEntity implements Geolocatable {
     List<ActivityImage> activityImages,
     List<ActivityTheme> activityThemes
   ) {
+    this.status = status;
     this.title = title;
     this.date = date;
     this.description = description;
     this.voluntariesRequest = voluntariesRequest;
     this.association = association;
     this.address = address;
-    this.activityImages = activityImages;
-    this.activityThemes = activityThemes;
+    this.activityImages = activityImages != null ? activityImages : new ArrayList<>();
+    this.activityThemes = activityThemes != null ? activityThemes : new ArrayList<>();
   }
 
   @Override

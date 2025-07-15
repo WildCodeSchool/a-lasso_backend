@@ -3,6 +3,8 @@ package com.back_alasso.Message;
 import com.back_alasso.Activity.Activity;
 import com.back_alasso.Activity.ActivityRepository;
 import com.back_alasso.Exception.ResourceNotFoundException;
+import com.back_alasso.Message.DTO.MessageCreationRequestDTO;
+import com.back_alasso.Message.DTO.MessageResponseDTO;
 import com.back_alasso.User.User;
 import com.back_alasso.User.UserRepository;
 import com.back_alasso.UserMessage.UserMessageService;
@@ -33,17 +35,17 @@ public class MessageService {
     this.userMessageService = userMessageService;
   }
 
-  public List<MessageDTO> getAllActivityMessages(UUID activityId, UUID authenticatedUser) {
+  public List<MessageResponseDTO> getAllActivityMessages(UUID activityId, UUID authenticatedUser) {
     List<Message> messages = messageRepository.findAllByActivity_Id(activityId);
 
     messages.forEach(message -> {
       userMessageService.markAsRead(authenticatedUser, message.getId());
     });
 
-    return messages.stream().map(message -> MessageDTO.fromEntityToDTO(message, authenticatedUser)).collect(Collectors.toList());
+    return messages.stream().map(message -> MessageResponseDTO.fromEntityToDTO(message, authenticatedUser)).collect(Collectors.toList());
   }
 
-  public MessageDTO createMessage(MessageCreationDTO newMessage, UUID authenticatedUser) {
+  public MessageResponseDTO createMessage(MessageCreationRequestDTO newMessage, UUID authenticatedUser) {
     User user = userRepository.findById(authenticatedUser).orElseThrow(() -> new ResourceNotFoundException("L'utilisateur n'a pas été trouvé."));
     Activity activity = activityRepository
       .findById(newMessage.activityId())
@@ -58,6 +60,6 @@ public class MessageService {
 
     userMessageService.createForAllUsers(createdMessage, allUsers, authenticatedUser);
 
-    return MessageDTO.fromEntityToDTO(createdMessage, authenticatedUser);
+    return MessageResponseDTO.fromEntityToDTO(createdMessage, authenticatedUser);
   }
 }

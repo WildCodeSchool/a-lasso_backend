@@ -1,12 +1,14 @@
 package com.back_alasso.Activity;
 
 import com.back_alasso.Activity.DTO.*;
-import com.back_alasso.ActivityVoluntary.ActivityParticipantsRequestDTO;
 import com.back_alasso.ActivityVoluntary.ActivityVoluntaryService;
+import com.back_alasso.ActivityVoluntary.DTO.ActivityParticipantsRequestDTO;
 import com.back_alasso.User.UserService;
 import jakarta.validation.Valid;
+import jakarta.validation.Validator;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,8 +21,10 @@ public class ActivityController {
 
   private final ActivityService activityService;
   private final UserService userService;
-
   private final ActivityVoluntaryService activityVoluntaryService;
+
+  @Autowired
+  private Validator validator;
 
   public ActivityController(ActivityService activityService, UserService userService, ActivityVoluntaryService activityVoluntaryService) {
     this.activityService = activityService;
@@ -38,7 +42,7 @@ public class ActivityController {
   @GetMapping("/{activityId}")
   public ResponseEntity<ActivityResponseDTO> getActivityById(@AuthenticationPrincipal UserDetails userDetails, @PathVariable UUID activityId) {
     UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
-    ActivityResponseDTO activity = activityService.getActivityById(authenticatedUserId, activityId);
+    ActivityResponseDTO activity = activityService.getMappedActivityById(authenticatedUserId, activityId);
     return ResponseEntity.status(HttpStatus.OK).body(activity);
   }
 
@@ -49,18 +53,18 @@ public class ActivityController {
     @AuthenticationPrincipal UserDetails userDetails
   ) {
     UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
-    boolean updatedFavoriteStatus = activityService.updatedFavoriteStatus(activityId, request.isSaved(), authenticatedUserId);
+    boolean updatedFavoriteStatus = activityVoluntaryService.updatedFavoriteStatus(activityId, request.isSaved(), authenticatedUserId);
     return ResponseEntity.status(HttpStatus.OK).body(updatedFavoriteStatus);
   }
 
   @PatchMapping("/{activityId}/updateRegistered")
   public ResponseEntity<UpdateRegisteredResponseDTO> patchRegisteredStatus(
     @PathVariable UUID activityId,
-    @RequestBody UpdateRegisteredRequestDTO request,
+    @Valid @RequestBody UpdateRegisteredRequestDTO request,
     @AuthenticationPrincipal UserDetails userDetails
   ) {
     UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
-    boolean updatedRegisterStatus = activityService.updatedRegisterStatus(activityId, request.isRegistered(), authenticatedUserId);
+    boolean updatedRegisterStatus = activityVoluntaryService.updatedRegisterStatus(activityId, request.isRegistered(), authenticatedUserId);
 
     // get fresh data to update frontEnd number of participants
     ActivityParticipantsRequestDTO activityParticipantsRequestDTO = activityVoluntaryService.getActivityVoluntary(activityId);
@@ -70,16 +74,20 @@ public class ActivityController {
     return ResponseEntity.status(HttpStatus.OK).body(response);
   }
 
-  @PostMapping("/publish")
-  public ResponseEntity<ActivityResponseDTO> publish(
-    @RequestBody ActivityCreationRequestDTO newActivityDTO,
+  @PostMapping
+  public ResponseEntity<ActivityResponseDTO> createOrUpdateActivity(
+    @RequestBody @Valid ActivitySaveRequestDTO newActivityDTO,
     @AuthenticationPrincipal UserDetails userDetails
   ) {
-    String emailAuthenticatedUser = userDetails.getUsername();
-    UUID authenticatedUser = userService.findByEmail(emailAuthenticatedUser).getId();
+    if (newActivityDTO.getStatus() == ActivityStatusEnumType.published) {
+      validator.validate(newActivityDTO, OnPublish.class);
+    }
 
-    ActivityResponseDTO savedActivity = activityService.addNewActivity(newActivityDTO, authenticatedUser);
-    return ResponseEntity.status(HttpStatus.CREATED).body(savedActivity);
+    UUID userId = userService.getAuthenticatedUserId(userDetails);
+
+    ActivityResponseDTO saved = activityService.saveOrUpdateActivity(newActivityDTO, userId);
+
+    return ResponseEntity.status(HttpStatus.OK).body(saved);
   }
 
   @DeleteMapping("/delete/{activityId}")

@@ -1,7 +1,7 @@
 package com.back_alasso.Association.DTO;
 
 import com.back_alasso.Address.Address;
-import com.back_alasso.Geolocation.GeolocationLoginDTO;
+import com.back_alasso.Geolocation.DTO.GeolocationLoginDTO;
 import com.back_alasso.Image.DTO.ImageResponseDTO;
 import com.back_alasso.Statistic.StatisticDTO;
 import com.back_alasso.UserMessage.UserMessageNotificationDTO;
