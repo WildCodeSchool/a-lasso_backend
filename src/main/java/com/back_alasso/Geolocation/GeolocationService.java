@@ -1,8 +1,8 @@
 package com.back_alasso.Geolocation;
 
 import com.back_alasso.Activity.DTO.ActivitySaveRequestDTO;
+import com.back_alasso.Geolocation.DTO.GeolocApiGouvResponseDTO;
 import com.back_alasso.Geolocation.DTO.GeolocationRequestDTO;
-import com.back_alasso.Geolocation.DTO.GouvGeolocDTO;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -24,12 +24,12 @@ public class GeolocationService {
   public GeolocationRequestDTO getVoluntaryCoordinates(String city, String country) {
     String query = String.format("%s, %s", city, country);
     String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
-    String url = GEOLOC_BASE_URL_GOUV + encodedQuery + "&limit=1";
+    String url = GEOLOC_BASE_URL_GOUV + encodedQuery + "&limit=1&type=municipality";
 
-    GouvGeolocDTO response = restTemplate.getForObject(url, GouvGeolocDTO.class);
+    GeolocApiGouvResponseDTO response = restTemplate.getForObject(url, GeolocApiGouvResponseDTO.class);
 
     if (response != null && response.features() != null && !response.features().isEmpty()) {
-      GouvGeolocDTO.Feature feature = response.features().get(0);
+      GeolocApiGouvResponseDTO.Feature feature = response.features().get(0);
       List<Double> coords = feature.geometry().coordinates();
       double lon = coords.get(0);
       double lat = coords.get(1);

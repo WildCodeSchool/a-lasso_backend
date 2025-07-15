@@ -11,6 +11,7 @@ import com.back_alasso.Report.ReportRepository;
 import com.back_alasso.Report.StatusReportEnumType;
 import com.back_alasso.User.UserEnumType;
 import com.back_alasso.UserMessage.UserMessageNotificationDTO;
+import com.back_alasso.Voluntary.DTO.VoluntaryLoginResponseDTO;
 import com.back_alasso.shared.NotificationDTO;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -73,7 +74,8 @@ public class VoluntaryLoginResponseMapper {
       activitiesUserInfos,
       notification,
       GeolocationLoginDTO.from(voluntary.getGeolocation()),
-      voluntary.getCreatedAt().toLocalDate()
+      voluntary.getCreatedAt().toLocalDate(),
+      voluntary.getBirth_date().atStartOfDay().toLocalDate()
     );
   }
 }

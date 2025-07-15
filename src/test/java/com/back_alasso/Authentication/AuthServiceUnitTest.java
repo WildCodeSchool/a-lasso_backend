@@ -5,7 +5,7 @@ import com.back_alasso.Association.AssociationLoginResponseMapper;
 import com.back_alasso.Association.DTO.AssociationLoginResponseDTO;
 import com.back_alasso.User.User;
 import com.back_alasso.Voluntary.Voluntary;
-import com.back_alasso.Voluntary.VoluntaryLoginResponseDTO;
+import com.back_alasso.Voluntary.DTO.VoluntaryLoginResponseDTO;
 import com.back_alasso.Voluntary.VoluntaryLoginResponseMapper;
 import com.back_alasso.security.JwtService;
 import org.junit.jupiter.api.BeforeEach;

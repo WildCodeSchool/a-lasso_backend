@@ -2,7 +2,7 @@ package com.back_alasso.Activity.DTO;
 
 import com.back_alasso.ActivityVoluntary.DTO.ActivityParticipantsRequestDTO;
 import com.back_alasso.Address.DTO.AddressResponseDTO;
-import com.back_alasso.Association.DTO.AssociationActivityDTO;
+import com.back_alasso.Association.DTO.AssociationActivityRequestDTO;
 import com.back_alasso.Geolocation.DTO.GeolocationRequestDTO;
 import com.back_alasso.Image.DTO.ImageResponseDTO;
 import com.back_alasso.Theme.ThemeNameEnumType;
@@ -17,7 +17,7 @@ public record ActivityResponseDTO(
   String description,
   AddressResponseDTO address,
   List<ImageResponseDTO> images,
-  AssociationActivityDTO association,
+  AssociationActivityRequestDTO association,
   GeolocationRequestDTO location,
   LocalDateTime date,
   ActivityParticipantsRequestDTO participants,
