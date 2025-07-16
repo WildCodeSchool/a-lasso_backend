@@ -11,7 +11,8 @@ PROTECTED_FILES=(
     "checkstyle.xml",
 )
 
-PROTECTED_DIR="husky-scripts"
+PROTECTED_DIR=""
+#PROTECTED_DIR="husky-scripts"
 
 STAGED_FILES=$(git diff --cached --name-only)
 
