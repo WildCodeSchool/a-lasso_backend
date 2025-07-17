@@ -3,7 +3,7 @@ package com.back_alasso.security;
 import static com.back_alasso.security.SecurityConstants.ASSOCIATION_URLS;
 import static com.back_alasso.security.SecurityConstants.PUBLIC_URLS;
 
-import com.back_alasso.User.UserEnumType;
+import com.back_alasso.features.User.UserEnumType;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

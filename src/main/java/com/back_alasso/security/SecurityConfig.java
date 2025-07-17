@@ -2,7 +2,7 @@ package com.back_alasso.security;
 
 import static com.back_alasso.security.SecurityConstants.PUBLIC_URLS;
 
-import com.back_alasso.User.CustomUserDetailsService;
+import com.back_alasso.features.User.CustomUserDetailsService;
 import java.util.Arrays;
 import java.util.Collections;
 import org.springframework.beans.factory.annotation.Value;
