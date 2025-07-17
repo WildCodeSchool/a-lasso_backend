@@ -1,0 +1,38 @@
+package com.back_alasso.features.Address;
+
+import com.back_alasso.core.BaseEntity;
+import com.back_alasso.features.Country.Country;
+import jakarta.persistence.*;
+import lombok.*;
+
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class Address extends BaseEntity {
+
+  public static final int STREET_MAX_LENGTH = 255;
+  public static final int ZIPCODE_MAX_LENGTH = 20;
+  public static final int CITY_MAX_LENGTH = 100;
+  public static final int DISPLAY_NAME_MAX_LENGTH = 500;
+
+  @Column(nullable = true)
+  private String house_number;
+
+  @Column(nullable = true, length = STREET_MAX_LENGTH)
+  private String street_name;
+
+  @Column(nullable = false, length = ZIPCODE_MAX_LENGTH)
+  private String zipCode;
+
+  @Column(nullable = false, length = CITY_MAX_LENGTH)
+  private String city;
+
+  @Column(nullable = false, length = DISPLAY_NAME_MAX_LENGTH)
+  private String displayName;
+
+  @ManyToOne
+  @JoinColumn(name = "country_id")
+  private Country country;
+}
