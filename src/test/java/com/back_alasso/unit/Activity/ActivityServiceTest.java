@@ -101,6 +101,7 @@ public class ActivityServiceTest {
 
     @Test
     public void shouldReturnAnException() {
+
         when(activityRepository.findById(activityIdMock)).thenReturn(Optional.empty());
 
         Assertions.assertThrows(ResourceNotFoundException.class, () -> {
