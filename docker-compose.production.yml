@@ -29,7 +29,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.spring-app-production.rule=Host(`production-api.a-l-asso.fr`)"
+      - "traefik.http.routers.spring-app-production.rule=Host(`api.a-l-asso.fr`)"
       - "traefik.http.routers.spring-app-production.entrypoints=websecure"
       - "traefik.http.routers.spring-app-production.tls.certresolver=letsencrypt"
       - "traefik.http.services.spring-app-production.loadbalancer.server.port=8080"
