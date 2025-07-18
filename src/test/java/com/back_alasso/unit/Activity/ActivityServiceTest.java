@@ -2,6 +2,7 @@ package com.back_alasso.unit.Activity;
 
 
 import com.back_alasso.exception.ResourceNotFoundException;
+
 import com.back_alasso.features.Activity.ActivityResponseMapper;
 import com.back_alasso.features.ActivityImage.ActivityImageService;
 import com.back_alasso.features.ActivityTheme.ActivityThemeService;
@@ -42,6 +43,7 @@ import com.back_alasso.features.Activity.DTO.ActivityStatusEnumType;
 public class ActivityServiceTest {
 
     ActivityService activityService;
+
 
     ActivityRepository activityRepository = Mockito.mock(ActivityRepository.class);
     ActivityResponseMapper activityResponseMapper = Mockito.mock(ActivityResponseMapper.class);
@@ -101,6 +103,7 @@ public class ActivityServiceTest {
 
     @Test
     public void shouldReturnAnException() {
+
         when(activityRepository.findById(activityIdMock)).thenReturn(Optional.empty());
 
         Assertions.assertThrows(ResourceNotFoundException.class, () -> {
