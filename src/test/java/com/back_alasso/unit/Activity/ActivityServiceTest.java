@@ -1,5 +1,7 @@
 package com.back_alasso.unit.Activity;
 
+
+import com.back_alasso.exception.ResourceNotFoundException;
 import com.back_alasso.features.Activity.ActivityResponseMapper;
 import com.back_alasso.features.ActivityImage.ActivityImageService;
 import com.back_alasso.features.ActivityTheme.ActivityThemeService;
@@ -11,7 +13,7 @@ import com.back_alasso.features.Activity.ActivityRepository;
 import com.back_alasso.features.Address.Address;
 import com.back_alasso.features.Association.AssociationService;
 import com.back_alasso.features.Country.Country;
-import com.back_alasso.exception.ResourceNotFoundException;
+
 import com.back_alasso.features.Geolocation.GeolocationService;
 import com.back_alasso.features.Image.ImageService;
 import com.back_alasso.features.Theme.ThemeService;
@@ -41,7 +43,6 @@ public class ActivityServiceTest {
 
     ActivityService activityService;
 
-    ActivityRepository activityRepositoryMock = Mockito.mock(ActivityRepository.class);
     ActivityRepository activityRepository = Mockito.mock(ActivityRepository.class);
     ActivityResponseMapper activityResponseMapper = Mockito.mock(ActivityResponseMapper.class);
     AddressService addressService = Mockito.mock(AddressService.class);
@@ -100,7 +101,8 @@ public class ActivityServiceTest {
 
     @Test
     public void shouldReturnAnException() {
-        when(activityRepositoryMock.findById(activityIdMock)).thenReturn(Optional.empty());
+
+        when(activityRepository.findById(activityIdMock)).thenReturn(Optional.empty());
 
         Assertions.assertThrows(ResourceNotFoundException.class, () -> {
             activityService.getActivityById(activityIdMock);

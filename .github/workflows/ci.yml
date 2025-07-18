@@ -77,4 +77,4 @@ jobs:
           java-version: 21
 
       - name: Run E2E tests
-        run: mvn test -Pe2e-tests
+        run: mvn test -Pe2e-tests
