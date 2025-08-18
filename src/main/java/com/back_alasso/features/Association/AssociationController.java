@@ -1,9 +1,6 @@
 package com.back_alasso.features.Association;
 
-import com.back_alasso.features.Association.DTO.AssociationCardResponseDTO;
-import com.back_alasso.features.Association.DTO.AssociationDescriptionRequestDTO;
-import com.back_alasso.features.Association.DTO.AssociationGeneralInfoRequestDTO;
-import com.back_alasso.features.Association.DTO.UpdateFollowRequestDTO;
+import com.back_alasso.features.Association.DTO.*;
 import com.back_alasso.features.Image.DTO.ImageResponseDTO;
 import com.back_alasso.features.Statistic.StatisticDTO;
 import com.back_alasso.features.User.UserService;
@@ -102,5 +99,15 @@ public class AssociationController {
     UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
     associationService.uploadLogo(authenticatedUserId, logoFile);
     return ResponseEntity.status(HttpStatus.OK).build();
+  }
+
+  @PostMapping("/cards")
+  public ResponseEntity<List<AssociationCardResponseDTO>> getAssociationCards(
+    @Valid @RequestBody GetAssociationCardsRequestDTO request,
+    @AuthenticationPrincipal UserDetails userDetails
+  ) {
+    UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
+    List<AssociationCardResponseDTO> associationCards = associationService.getAssociationCards(request.ids(), authenticatedUserId);
+    return ResponseEntity.status(HttpStatus.OK).body(associationCards);
   }
 }
