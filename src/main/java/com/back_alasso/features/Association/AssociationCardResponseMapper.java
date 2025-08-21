@@ -1,6 +1,7 @@
 package com.back_alasso.features.Association;
 
 import com.back_alasso.features.Association.DTO.AssociationCardResponseDTO;
+import com.back_alasso.features.AssociationFollower.AssociationFollower;
 import com.back_alasso.features.Image.DTO.ImageResponseDTO;
 import com.back_alasso.features.Image.ImageEnumType;
 import com.back_alasso.features.Image.ImageMapper;
@@ -43,6 +44,14 @@ public class AssociationCardResponseMapper {
 
     List<StatisticDTO> statistics = association.getStatistic().stream().map(StatisticDTO::fromEntityToDTO).toList();
 
+    Boolean isFollow = association
+      .getAssociationFollowers()
+      .stream()
+      .filter(follower -> follower.getVoluntary().getId().equals(authenticatedUserId))
+      .findFirst()
+      .map(AssociationFollower::isFollow)
+      .orElse(false);
+
     return new AssociationCardResponseDTO(
       association.getId(),
       association.getDescription(),
@@ -52,7 +61,8 @@ public class AssociationCardResponseMapper {
       profileImage,
       logoImage,
       association.getSiteURL(),
-      statistics
+      statistics,
+      isFollow
     );
   }
 }

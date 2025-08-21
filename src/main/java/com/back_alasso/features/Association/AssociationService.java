@@ -90,8 +90,14 @@ public class AssociationService {
   }
 
   public AssociationCardResponseDTO getAssociationCard(UUID id, UUID authenticatedUserId) {
-    Association association = associationRepository.findById(id).orElse(null);
+    Association association = associationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Association not found"));
     return associationCardResponseMapper.fromEntityToDTO(association, authenticatedUserId);
+  }
+
+  public List<AssociationCardResponseDTO> getAssociationCards(List<UUID> ids, UUID authenticatedUserId) {
+    List<Association> associations = associationRepository.findAllById(ids);
+
+    return associations.stream().map(association -> associationCardResponseMapper.fromEntityToDTO(association, authenticatedUserId)).toList();
   }
 
   public AssociationGeneralInfoRequestDTO.AssociationLoginResponseDTO getMyAssociation(UUID id) {
