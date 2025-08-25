@@ -14,7 +14,7 @@ springdoc:
     enabled: false
 
 cors:
-  allowedOrigins: ${CLIENT_URL_STAGING}
+  allowedOrigins: ${CLIENT_URL_STAGING},${CLIENT_URL_DEV}
 
 logging:
   level:
