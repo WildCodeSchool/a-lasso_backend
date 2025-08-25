@@ -7,5 +7,6 @@ import java.util.UUID;
 public record ReportUserDTO(
   @NotNull(message = "L'ID ne peux pas être null") UUID id,
   @NotBlank(message = "Le userName ne peux pas être vide") String userName,
-  String type
+  String type,
+  String email
 ) {}

@@ -38,6 +38,19 @@ public class ReportController {
     return ResponseEntity.status(HttpStatus.OK).body(reports);
   }
 
+  @GetMapping("/ban/{userId}/{userType}")
+  public ResponseEntity<Boolean> banUser(@PathVariable UUID userId, @PathVariable String userType) {
+    Boolean reportsRemainsOpen;
+
+    if (userType.equals("association")) {
+      reportsRemainsOpen = reportService.banAssociation(userId);
+    } else {
+      reportsRemainsOpen = reportService.banVoluntary(userId);
+    }
+
+    return ResponseEntity.status(HttpStatus.OK).body(reportsRemainsOpen);
+  }
+
   @PostMapping
   public ResponseEntity<Boolean> createReport(
     @Valid @RequestBody ReportCreationRequestDTO reportCreation,

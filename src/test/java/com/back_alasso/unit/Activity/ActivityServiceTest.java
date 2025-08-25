@@ -111,7 +111,7 @@ public class ActivityServiceTest {
     @Test
     public void shouldReturnAnActivity() {
         activityMock.setId(activityIdMock);
-        when(activityRepository.findById(activityIdMock)).thenReturn(Optional.of(activityMock));
+        when(activityRepository.findByIdFromNotBannedAssociation(activityIdMock)).thenReturn(Optional.of(activityMock));
 
         Activity result = activityService.getActivityById(activityIdMock);
 

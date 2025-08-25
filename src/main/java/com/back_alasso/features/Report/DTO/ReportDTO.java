@@ -29,8 +29,8 @@ public record ReportDTO(
 
     return new ReportDTO(
       report.getId(),
-      new ReportUserDTO(report.getUserReported().getId(), getDisplayName(reported), getUserType(reported)),
-      new ReportUserDTO(report.getUserReporter().getId(), getDisplayName(reporter), getUserType(reporter)),
+      new ReportUserDTO(report.getUserReported().getId(), getDisplayName(reported), getUserType(reported), report.getUserReported().getEmail()),
+      new ReportUserDTO(report.getUserReporter().getId(), getDisplayName(reporter), getUserType(reporter), report.getUserReporter().getEmail()),
       report.getMessageReporter(),
       report.getReason(),
       report.getStatus(),
