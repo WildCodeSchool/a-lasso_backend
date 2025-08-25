@@ -5,6 +5,7 @@ import com.back_alasso.features.Association.Association;
 import com.back_alasso.features.Association.AssociationLoginResponseMapper;
 import com.back_alasso.features.Authentication.DTO.*;
 import com.back_alasso.features.Authentication.DTO.VoluntaryRegistrationDTO;
+import com.back_alasso.features.User.AccountEnumType;
 import com.back_alasso.features.User.User;
 import com.back_alasso.features.User.UserService;
 import com.back_alasso.features.Voluntary.Voluntary;
@@ -66,6 +67,11 @@ public class AuthController {
   public ResponseEntity<Map<String, Object>> authenticate(@Valid @RequestBody UserLoginDTO userLoginDTO) {
     String token = authService.authenticate(userLoginDTO.email(), userLoginDTO.password());
     User user = userService.findByEmail(userLoginDTO.email());
+
+    if (user.getAccount_status().equals(AccountEnumType.BANNED)) {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+    }
+
     Map<String, Object> response = new HashMap<>();
     response.put("token", token);
     try {

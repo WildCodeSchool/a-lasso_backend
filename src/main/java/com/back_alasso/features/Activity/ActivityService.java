@@ -56,11 +56,11 @@ public class ActivityService {
   }
 
   public Activity getActivityById(UUID activityId) {
-    return activityRepository.findById(activityId).orElseThrow(() -> new ResourceNotFoundException("Activity not found"));
+    return activityRepository.findByIdFromNotBannedAssociation(activityId).orElseThrow(() -> new ResourceNotFoundException("Activity not found"));
   }
 
   public List<ActivityResponseDTO> getAllActivities(UUID authenticatedUserId) {
-    List<Activity> activities = activityRepository.findAll();
+    List<Activity> activities = activityRepository.findAllFromNotBannedAssociations();
 
     if (activities.isEmpty()) {
       throw new ResourceNotFoundException("activities not found");

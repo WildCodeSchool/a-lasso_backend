@@ -9,5 +9,5 @@ public interface ReportRepository extends JpaRepository<Report, UUID> {
 
   List<Report> findByStatus(StatusReportEnumType status);
 
-  List<Report> findByUserReportedId(UUID reportedId);
+  List<Report> findAllByUserReportedId(UUID reportedId);
 }

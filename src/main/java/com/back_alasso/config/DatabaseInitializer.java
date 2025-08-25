@@ -648,7 +648,7 @@ public class DatabaseInitializer {
         StatusReportEnumType.IN_PROGRESS,
         ReasonReportEnumType.BAD_BEHAVIOR,
         voluntaries.get(NUMBER_ZERO),
-        voluntaries.get(NUMBER_ZERO),
+        associations.get(NUMBER_ZERO),
         voluntaries.get(NUMBER_ONE),
         "Le volontaire a été irrespectueux et insultant !! Nous avons dû faire intervenir la police!!",
         null

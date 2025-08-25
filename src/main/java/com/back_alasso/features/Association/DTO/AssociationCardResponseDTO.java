@@ -15,5 +15,6 @@ public record AssociationCardResponseDTO(
   ImageResponseDTO associationProfileImage,
   ImageResponseDTO associationLogoImage,
   String siteURL,
-  List<StatisticDTO> statistics
+  List<StatisticDTO> statistics,
+  Boolean isFollow
 ) {}
