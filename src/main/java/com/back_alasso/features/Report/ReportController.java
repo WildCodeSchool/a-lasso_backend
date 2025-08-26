@@ -6,6 +6,7 @@ import com.back_alasso.features.User.UserService;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,15 +15,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/report")
+@RequiredArgsConstructor
 public class ReportController {
 
   public final ReportService reportService;
   public final UserService userService;
-
-  public ReportController(ReportService reportService, UserService userService) {
-    this.reportService = reportService;
-    this.userService = userService;
-  }
 
   @GetMapping
   public ResponseEntity<List<ReportDTO>> getAllReportsInProgress() {

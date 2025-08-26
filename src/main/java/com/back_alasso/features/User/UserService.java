@@ -24,12 +24,14 @@ import com.back_alasso.features.Voluntary.Voluntary;
 import com.back_alasso.features.Voluntary.VoluntaryRepository;
 import java.time.LocalDateTime;
 import java.util.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
   private final UserRepository userRepository;
@@ -43,32 +45,6 @@ public class UserService {
   private final GeolocationService geolocationService;
   private final GeolocationRepository geolocationRepository;
   private final AssociationImageRepository associationImageRepository;
-
-  public UserService(
-    UserRepository userRepository,
-    PasswordEncoder passwordEncoder,
-    VoluntaryRepository voluntaryRepository,
-    AssociationRepository associationRepository,
-    ImageRepository imageRepository,
-    CountryRepository countryRepository,
-    AddressRepository addressRepository,
-    PreferencesRepository preferencesRepository,
-    GeolocationService geolocationService,
-    GeolocationRepository geolocationRepository,
-    AssociationImageRepository associationImageRepository
-  ) {
-    this.userRepository = userRepository;
-    this.passwordEncoder = passwordEncoder;
-    this.voluntaryRepository = voluntaryRepository;
-    this.associationRepository = associationRepository;
-    this.imageRepository = imageRepository;
-    this.countryRepository = countryRepository;
-    this.addressRepository = addressRepository;
-    this.preferencesRepository = preferencesRepository;
-    this.geolocationService = geolocationService;
-    this.geolocationRepository = geolocationRepository;
-    this.associationImageRepository = associationImageRepository;
-  }
 
   public void checkUserExists(String email) {
     if (userRepository.existsByEmail(email)) {

@@ -7,6 +7,7 @@ import com.back_alasso.features.Voluntary.Voluntary;
 import com.back_alasso.features.Voluntary.VoluntaryLoginResponseMapper;
 import com.back_alasso.security.JwtService;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,24 +15,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class AuthService {
 
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
   private final VoluntaryLoginResponseMapper voluntaryLoginResponseMapper;
   private final AssociationLoginResponseMapper associationLoginResponseMapper;
-
-  public AuthService(
-    JwtService jwtService,
-    AuthenticationManager authenticationManager,
-    VoluntaryLoginResponseMapper voluntaryLoginResponseMapper,
-    AssociationLoginResponseMapper associationLoginResponseMapper
-  ) {
-    this.authenticationManager = authenticationManager;
-    this.jwtService = jwtService;
-    this.voluntaryLoginResponseMapper = voluntaryLoginResponseMapper;
-    this.associationLoginResponseMapper = associationLoginResponseMapper;
-  }
 
   public String generateToken(User user) {
     return jwtService.generateToken(user);
