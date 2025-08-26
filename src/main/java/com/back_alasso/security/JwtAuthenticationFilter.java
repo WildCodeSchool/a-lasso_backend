@@ -1,7 +1,9 @@
 package com.back_alasso.security;
 
+import static com.back_alasso.security.SecurityConstants.ASSOCIATION_URLS;
 import static com.back_alasso.security.SecurityConstants.PUBLIC_URLS;
 
+import com.back_alasso.features.User.UserEnumType;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,47 +33,56 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
     throws ServletException, IOException {
-    // Get the request URI
-    String requestURI = request.getRequestURI();
-
-    // First check if it's a public URL (that doesn't need JWT)
-    boolean isPublicUrl = PUBLIC_URLS.stream().anyMatch(pattern -> pathMatcher.match(pattern, requestURI));
-
-    // If public , skip authentication
-    if (isPublicUrl) {
+    if (isPublicUrl(request) && parseJwt(request) == null) {
       filterChain.doFilter(request, response);
       return;
     }
 
-    // For private URLs, process authentication
-    try {
-      String jwt = parseJwt(request);
-      // If no token is provided, continue (security config will handle access)
-      if (jwt == null) {
-        filterChain.doFilter(request, response);
-        return;
-      }
-
-      boolean isTokenValid = jwtService.validateJwtToken(jwt, response);
-
-      // If token is invalid, send error to front to redirect user to auth page
-      if (!isTokenValid) {
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.setContentType("application/json");
-        response.getWriter().write("{\"message\": \"Token invalide - Non Authorisé\", \"error\": \"INVALID_TOKEN\"}");
-        response.getWriter().flush(); // send immediately the response
-        return;
-      }
-
-      String username = jwtService.extractClaims(jwt).getSubject();
-      UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-      UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-      authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-      SecurityContextHolder.getContext().setAuthentication(authentication);
-    } catch (Exception e) {
-      System.out.println("Cannot set user authentication: " + e);
+    if (!authenticateRequest(request, response)) {
+      return;
     }
+
     filterChain.doFilter(request, response);
+  }
+
+  private boolean authenticateRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    String jwt = parseJwt(request);
+    if (jwt == null) return true;
+
+    if (!jwtService.validateJwtToken(jwt, response)) {
+      sendUnauthorizedResponse(response);
+      return false;
+    }
+
+    UsernamePasswordAuthenticationToken authentication = setAuthenticationContext(jwt, request);
+
+    if (
+      isAssociationUrl(request) &&
+      authentication.getAuthorities().stream().noneMatch(auth -> auth.getAuthority().equals(UserEnumType.ROLE_ASSOCIATION.name()))
+    ) {
+      sendUnauthorizedResponse(response);
+      return false;
+    }
+
+    return true;
+  }
+
+  private UsernamePasswordAuthenticationToken setAuthenticationContext(String jwt, HttpServletRequest request) {
+    String username = jwtService.extractClaims(jwt).getSubject();
+    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+
+    return authentication;
+  }
+
+  private void sendUnauthorizedResponse(HttpServletResponse response) throws IOException {
+    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+    response.setContentType("application/json");
+    response.getWriter().write("{\"message\": \"Token invalide - Non Authorisé\", \"error\": \"INVALID_TOKEN\"}");
+    response.getWriter().flush();
   }
 
   private String parseJwt(HttpServletRequest request) {
@@ -81,5 +92,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       return headerAuth.substring(bearer.length());
     }
     return null;
+  }
+
+  private boolean isPublicUrl(HttpServletRequest request) {
+    String requestURI = request.getRequestURI();
+    return PUBLIC_URLS.stream().anyMatch(pattern -> pathMatcher.match(pattern, requestURI));
+  }
+
+  private boolean isAssociationUrl(HttpServletRequest request) {
+    String requestURI = request.getRequestURI();
+    return ASSOCIATION_URLS.stream().anyMatch(pattern -> pathMatcher.match(pattern, requestURI));
   }
 }

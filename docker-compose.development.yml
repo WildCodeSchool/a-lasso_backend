@@ -1,0 +1,46 @@
+services:
+  alasso-mysql-development:
+    image: mysql:8.0
+    container_name: mysql-development
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME_DEV}
+      MYSQL_USER: ${DB_USER_DEV}
+      MYSQL_PASSWORD: ${DB_PASSWORD_DEV}
+    volumes:
+      - mysql_data_development:/var/lib/mysql
+    env_file:
+      - .env
+    networks:
+      - local-alasso
+
+  alasso-spring-app-development:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: alasso/spring-app:development
+    container_name: alasso-spring-development
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    depends_on:
+      - alasso-mysql-development
+    env_file:
+      - .env
+    environment:
+      SPRING_PROFILES_ACTIVE: development # Active application-development.yml
+    networks:
+      - local-alasso
+#    labels:
+#      - "traefik.enable=true"
+#      - "traefik.http.routers.spring-app-development.rule=Host(`development-api.a-l-asso.fr`)"
+#      - "traefik.http.routers.spring-app-development.entrypoints=websecure"
+#      - "traefik.http.routers.spring-app-development.tls.certresolver=letsencrypt"
+#      - "traefik.http.services.spring-app-development.loadbalancer.server.port=8080"
+
+volumes:
+  mysql_data_development:
+
+networks:
+  local-alasso:

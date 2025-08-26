@@ -19,3 +19,6 @@ cors:
 logging:
   level:
     com.backend_project_template: INFO
+
+custom:
+  api-url: ${API_URL_PROD}

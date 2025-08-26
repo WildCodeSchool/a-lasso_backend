@@ -1,0 +1,42 @@
+services:
+  alasso-mysql-production:
+    image: mysql:8.0
+    container_name: mysql-production
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME_PRODUCTION}
+      MYSQL_USER: ${DB_USER_PRODUCTION}
+      MYSQL_PASSWORD: ${DB_PASSWORD_PRODUCTION}
+    volumes:
+      - mysql_data_production:/var/lib/mysql
+    env_file:
+      - .env
+    networks:
+      - traefik
+
+  alasso-spring-app-production:
+    image: alasso/spring-app:production
+    container_name: alasso-spring-production
+    restart: unless-stopped
+    depends_on:
+      - alasso-mysql-production
+    env_file:
+      - .env
+    environment:
+      SPRING_PROFILES_ACTIVE: production # Active application-production.yml
+    networks:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.spring-app-production.rule=Host(`api.a-l-asso.fr`)"
+      - "traefik.http.routers.spring-app-production.entrypoints=websecure"
+      - "traefik.http.routers.spring-app-production.tls.certresolver=letsencrypt"
+      - "traefik.http.services.spring-app-production.loadbalancer.server.port=8080"
+
+volumes:
+  mysql_data_production:
+
+networks:
+  traefik:
+    external: true
