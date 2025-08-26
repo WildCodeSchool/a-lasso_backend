@@ -13,12 +13,12 @@ springdoc:
   swagger-ui:
     enabled: false
 
+cors:
+  allowedOrigins: ${CLIENT_URL_STAGING}
+
 logging:
   level:
     com.backend_project_template: INFO
-
-cors:
-  allowedOrigins: ${CLIENT_URL_STAGING}
 
 custom:
   api-url: ${API_URL_STAGING}
