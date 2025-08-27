@@ -8,7 +8,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.Validator;
 import java.util.List;
 import java.util.UUID;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -64,25 +63,24 @@ public class ActivityController {
     return ResponseEntity.status(HttpStatus.OK).body(updatedFavoriteStatus);
   }
 
-    @PatchMapping("/{activityId}/updateRegistered")
-    public ResponseEntity<?> patchRegisteredStatus(
-            @PathVariable UUID activityId,
-            @Valid @RequestBody UpdateRegisteredRequestDTO request,
-            @AuthenticationPrincipal UserDetails userDetails
-    ) {
-        UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
-        try {
-            boolean updatedRegisterStatus = activityVoluntaryService.updatedRegisterStatus(activityId, request.isRegistered(), authenticatedUserId);
+  @PatchMapping("/{activityId}/updateRegistered")
+  public ResponseEntity<?> patchRegisteredStatus(
+    @PathVariable UUID activityId,
+    @Valid @RequestBody UpdateRegisteredRequestDTO request,
+    @AuthenticationPrincipal UserDetails userDetails
+  ) {
+    UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
+    try {
+      boolean updatedRegisterStatus = activityVoluntaryService.updatedRegisterStatus(activityId, request.isRegistered(), authenticatedUserId);
 
-            ActivityParticipantsRequestDTO activityParticipantsRequestDTO = activityVoluntaryService.getActivityVoluntary(activityId);
-            UpdateRegisteredResponseDTO response = new UpdateRegisteredResponseDTO(updatedRegisterStatus, activityParticipantsRequestDTO);
+      ActivityParticipantsRequestDTO activityParticipantsRequestDTO = activityVoluntaryService.getActivityVoluntary(activityId);
+      UpdateRegisteredResponseDTO response = new UpdateRegisteredResponseDTO(updatedRegisterStatus, activityParticipantsRequestDTO);
 
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-        } catch (IllegalStateException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-        }
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+    } catch (IllegalStateException e) {
+      return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
     }
-
+  }
 
   @PostMapping
   public ResponseEntity<ActivityResponseDTO> createOrUpdateActivity(

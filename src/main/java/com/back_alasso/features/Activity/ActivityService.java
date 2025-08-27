@@ -16,10 +16,8 @@ import com.back_alasso.features.Image.ImageService;
 import com.back_alasso.features.Theme.Theme;
 import com.back_alasso.features.Theme.ThemeService;
 import jakarta.transaction.Transactional;
-
 import java.time.LocalDateTime;
 import java.util.*;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -41,17 +39,15 @@ public class ActivityService {
     return activityRepository.findByIdFromNotBannedAssociation(activityId).orElseThrow(() -> new ResourceNotFoundException("Activity not found"));
   }
 
-    public List<ActivityResponseDTO> getAllActivities(UUID authenticatedUserId) {
-        List<Activity> activities = activityRepository.findAllFromNotBannedAssociationsAndFuture(LocalDateTime.now());
+  public List<ActivityResponseDTO> getAllActivities(UUID authenticatedUserId) {
+    List<Activity> activities = activityRepository.findAllFromNotBannedAssociationsAndFuture(LocalDateTime.now());
 
-        if (activities.isEmpty()) {
-            throw new ResourceNotFoundException("activities not found");
-        }
-
-        return activities.stream()
-                .map(activity -> activityResponseMapper.fromEntityToDTO(activity, authenticatedUserId))
-                .toList();
+    if (activities.isEmpty()) {
+      throw new ResourceNotFoundException("activities not found");
     }
+
+    return activities.stream().map(activity -> activityResponseMapper.fromEntityToDTO(activity, authenticatedUserId)).toList();
+  }
 
   public ActivityResponseDTO getMappedActivityById(UUID authenticatedUserId, UUID activityId) {
     Activity activity = getActivityById(activityId);
