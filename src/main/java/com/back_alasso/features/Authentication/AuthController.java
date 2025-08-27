@@ -14,6 +14,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.Validator;
 import java.util.HashMap;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
   @Autowired
@@ -32,18 +34,6 @@ public class AuthController {
   private final AuthService authService;
   private final VoluntaryLoginResponseMapper voluntaryLoginResponseMapper;
   private final AssociationLoginResponseMapper associationLoginResponseMapper;
-
-  public AuthController(
-    UserService userService,
-    AuthService authService,
-    VoluntaryLoginResponseMapper voluntaryLoginResponseMapper,
-    AssociationLoginResponseMapper associationLoginResponseMapper
-  ) {
-    this.userService = userService;
-    this.authService = authService;
-    this.voluntaryLoginResponseMapper = voluntaryLoginResponseMapper;
-    this.associationLoginResponseMapper = associationLoginResponseMapper;
-  }
 
   @PostMapping("/register/voluntary")
   public ResponseEntity<Boolean> register(@Valid @RequestBody VoluntaryRegistrationDTO voluntaryRegistrationDTO) {

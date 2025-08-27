@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.Validator;
 import java.util.List;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/activities")
+@RequiredArgsConstructor
 public class ActivityController {
 
   private final ActivityService activityService;
@@ -25,12 +27,6 @@ public class ActivityController {
 
   @Autowired
   private Validator validator;
-
-  public ActivityController(ActivityService activityService, UserService userService, ActivityVoluntaryService activityVoluntaryService) {
-    this.activityService = activityService;
-    this.userService = userService;
-    this.activityVoluntaryService = activityVoluntaryService;
-  }
 
   @GetMapping
   public ResponseEntity<List<ActivityResponseDTO>> getAllActivities(@AuthenticationPrincipal UserDetails userDetails) {
@@ -68,20 +64,22 @@ public class ActivityController {
   }
 
   @PatchMapping("/{activityId}/updateRegistered")
-  public ResponseEntity<UpdateRegisteredResponseDTO> patchRegisteredStatus(
+  public ResponseEntity<?> patchRegisteredStatus(
     @PathVariable UUID activityId,
     @Valid @RequestBody UpdateRegisteredRequestDTO request,
     @AuthenticationPrincipal UserDetails userDetails
   ) {
     UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
-    boolean updatedRegisterStatus = activityVoluntaryService.updatedRegisterStatus(activityId, request.isRegistered(), authenticatedUserId);
+    try {
+      boolean updatedRegisterStatus = activityVoluntaryService.updatedRegisterStatus(activityId, request.isRegistered(), authenticatedUserId);
 
-    // get fresh data to update frontEnd number of participants
-    ActivityParticipantsRequestDTO activityParticipantsRequestDTO = activityVoluntaryService.getActivityVoluntary(activityId);
+      ActivityParticipantsRequestDTO activityParticipantsRequestDTO = activityVoluntaryService.getActivityVoluntary(activityId);
+      UpdateRegisteredResponseDTO response = new UpdateRegisteredResponseDTO(updatedRegisterStatus, activityParticipantsRequestDTO);
 
-    UpdateRegisteredResponseDTO response = new UpdateRegisteredResponseDTO(updatedRegisterStatus, activityParticipantsRequestDTO);
-
-    return ResponseEntity.status(HttpStatus.OK).body(response);
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+    } catch (IllegalStateException e) {
+      return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+    }
   }
 
   @PostMapping

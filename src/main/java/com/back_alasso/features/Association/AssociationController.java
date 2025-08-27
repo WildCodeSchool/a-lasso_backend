@@ -7,6 +7,7 @@ import com.back_alasso.features.User.UserService;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,15 +17,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/association")
+@RequiredArgsConstructor
 public class AssociationController {
 
   private final AssociationService associationService;
   private final UserService userService;
-
-  public AssociationController(AssociationService associationService, UserService userService) {
-    this.associationService = associationService;
-    this.userService = userService;
-  }
 
   @GetMapping("/me")
   public ResponseEntity<AssociationGeneralInfoRequestDTO.AssociationLoginResponseDTO> getMyAssociation(

@@ -7,16 +7,14 @@ import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class UserMessageService {
 
   private final UserMessageRepository userMessageRepository;
-
-  public UserMessageService(UserMessageRepository userMessageRepository) {
-    this.userMessageRepository = userMessageRepository;
-  }
 
   @Transactional
   public void createForAllUsers(Message message, List<User> users, UUID authorId) {

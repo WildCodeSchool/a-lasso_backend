@@ -8,16 +8,14 @@ import com.back_alasso.features.Image.ImageMapper;
 import com.back_alasso.features.Statistic.StatisticDTO;
 import java.util.List;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class AssociationCardResponseMapper {
 
   private final ImageMapper imageMapper;
-
-  public AssociationCardResponseMapper(ImageMapper imageMapper) {
-    this.imageMapper = imageMapper;
-  }
 
   public AssociationCardResponseDTO fromEntityToDTO(Association association, UUID authenticatedUserId) {
     List<UUID> profileImageIds = association

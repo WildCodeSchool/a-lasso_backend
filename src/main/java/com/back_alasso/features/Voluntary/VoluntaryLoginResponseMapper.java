@@ -15,18 +15,15 @@ import com.back_alasso.features.Voluntary.DTO.VoluntaryLoginResponseDTO;
 import com.back_alasso.shared.NotificationDTO;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class VoluntaryLoginResponseMapper {
 
   private final ImageMapper imageMapper;
   private final ReportRepository reportRepository;
-
-  public VoluntaryLoginResponseMapper(ImageMapper imageMapper, ReportRepository reportRepository) {
-    this.imageMapper = imageMapper;
-    this.reportRepository = reportRepository;
-  }
 
   public VoluntaryLoginResponseDTO fromEntityToDTO(Voluntary voluntary) {
     ImageResponseDTO avatar = voluntary.getAvatar() != null

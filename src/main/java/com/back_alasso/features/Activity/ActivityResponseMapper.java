@@ -11,18 +11,14 @@ import com.back_alasso.features.Image.ImageMapper;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class ActivityResponseMapper {
 
   private final ImageMapper imageMapper;
-
-  @Autowired
-  public ActivityResponseMapper(ImageMapper imageMapper) {
-    this.imageMapper = imageMapper;
-  }
 
   public ActivityResponseDTO fromEntityToDTO(Activity activity, UUID authenticatedUserId) {
     Optional<ActivityVoluntary> voluntary = getUserActivityVoluntaryStatus(activity, authenticatedUserId);

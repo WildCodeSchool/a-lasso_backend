@@ -33,3 +33,4 @@ logging:
 
 custom:
   api-url: ${API_URL_DEV}
+  client-url: ${CLIENT_URL_DEV}

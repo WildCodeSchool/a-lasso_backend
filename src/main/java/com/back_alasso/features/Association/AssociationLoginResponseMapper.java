@@ -12,16 +12,14 @@ import com.back_alasso.shared.NotificationDTO;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class AssociationLoginResponseMapper {
 
   private final ImageMapper imageMapper;
-
-  public AssociationLoginResponseMapper(ImageMapper imageMapper) {
-    this.imageMapper = imageMapper;
-  }
 
   public AssociationGeneralInfoRequestDTO.AssociationLoginResponseDTO fromEntityToDTO(Association association) {
     UUID profileImageId = association

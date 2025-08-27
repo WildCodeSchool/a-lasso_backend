@@ -16,11 +16,13 @@ import com.back_alasso.features.Image.ImageService;
 import com.back_alasso.features.Theme.Theme;
 import com.back_alasso.features.Theme.ThemeService;
 import jakarta.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ActivityService {
 
   private final ActivityRepository activityRepository;
@@ -33,40 +35,18 @@ public class ActivityService {
   private final GeolocationService geolocationService;
   private final AssociationService associationService;
 
-  public ActivityService(
-    ActivityRepository activityRepository,
-    ActivityResponseMapper activityResponseMapper,
-    AddressService addressService,
-    ImageService imageService,
-    ActivityImageService activityImageService,
-    ThemeService themeService,
-    ActivityThemeService activityThemeService,
-    GeolocationService geolocationService,
-    AssociationService associationService
-  ) {
-    this.activityRepository = activityRepository;
-    this.activityResponseMapper = activityResponseMapper;
-    this.addressService = addressService;
-    this.imageService = imageService;
-    this.activityImageService = activityImageService;
-    this.themeService = themeService;
-    this.activityThemeService = activityThemeService;
-    this.geolocationService = geolocationService;
-    this.associationService = associationService;
-  }
-
   public Activity getActivityById(UUID activityId) {
     return activityRepository.findByIdFromNotBannedAssociation(activityId).orElseThrow(() -> new ResourceNotFoundException("Activity not found"));
   }
 
   public List<ActivityResponseDTO> getAllActivities(UUID authenticatedUserId) {
-    List<Activity> activities = activityRepository.findAllFromNotBannedAssociations();
+    List<Activity> activities = activityRepository.findAllFromNotBannedAssociationsAndFuture(LocalDateTime.now());
 
     if (activities.isEmpty()) {
       throw new ResourceNotFoundException("activities not found");
     }
 
-    return activities.stream().map(activity -> activityResponseMapper.fromEntityToDTO(activity, authenticatedUserId)).collect(Collectors.toList());
+    return activities.stream().map(activity -> activityResponseMapper.fromEntityToDTO(activity, authenticatedUserId)).toList();
   }
 
   public ActivityResponseDTO getMappedActivityById(UUID authenticatedUserId, UUID activityId) {
