@@ -1,4 +1,4 @@
-package com.back_alasso.PasswordReset;
+package com.back_alasso.features.PasswordReset;
 
 import com.back_alasso.core.BaseEntity;
 import com.back_alasso.features.User.User;

@@ -1,4 +1,4 @@
-package com.back_alasso.PasswordReset.DTO;
+package com.back_alasso.features.PasswordReset.DTO;
 
 import jakarta.validation.constraints.NotBlank;
 

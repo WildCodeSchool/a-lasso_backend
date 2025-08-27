@@ -1,7 +1,7 @@
-package com.back_alasso.PasswordReset;
+package com.back_alasso.features.PasswordReset;
 
-import com.back_alasso.PasswordReset.DTO.PasswordResetRequestDTO;
-import com.back_alasso.PasswordReset.DTO.ResetPasswordWithTokenRequestDTO;
+import com.back_alasso.features.PasswordReset.DTO.PasswordResetRequestDTO;
+import com.back_alasso.features.PasswordReset.DTO.ResetPasswordWithTokenRequestDTO;
 import com.back_alasso.features.User.User;
 import com.back_alasso.features.User.UserService;
 import jakarta.validation.Valid;
