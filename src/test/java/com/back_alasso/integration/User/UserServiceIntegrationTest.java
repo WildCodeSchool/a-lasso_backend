@@ -1,10 +1,12 @@
 package com.back_alasso.integration.User;
 
 import com.back_alasso.AbstractTests;
+import com.back_alasso.core.MailService;
 import com.back_alasso.features.ActivityImage.ActivityImageRepository;
 import com.back_alasso.features.AssociationImage.AssociationImageRepository;
 import com.back_alasso.features.Authentication.DTO.VoluntaryRegistrationDTO;
 import com.back_alasso.features.Country.Country;
+import com.back_alasso.features.ActivityVoluntary.ActivityVoluntaryService;
 import com.back_alasso.features.Country.CountryRepository;
 import com.back_alasso.features.Geolocation.Geolocation;
 import com.back_alasso.features.Geolocation.DTO.GeolocationRequestDTO;
@@ -49,10 +51,16 @@ class UserServiceIntegrationTest extends AbstractTests {
     private VoluntaryRepository voluntaryRepository;
 
     @Autowired
+    private ActivityVoluntaryService activityVoluntaryService;
+
+    @Autowired
     private AssociationImageRepository associationImageRepository;
 
     @Autowired
     private ActivityImageRepository activityImageRepository;
+
+    @Autowired
+    private MailService mailService;
 
     @Autowired
     private ImageRepository imageRepository;

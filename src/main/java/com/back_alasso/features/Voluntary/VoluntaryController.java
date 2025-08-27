@@ -5,6 +5,7 @@ import com.back_alasso.features.Voluntary.DTO.VoluntaryLoginResponseDTO;
 import com.back_alasso.features.Voluntary.DTO.VoluntaryUpdateRequestDTO;
 import jakarta.validation.Valid;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,17 +15,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/voluntary")
+@RequiredArgsConstructor
 public class VoluntaryController {
 
   private final VoluntaryService voluntaryService;
   private final VoluntaryLoginResponseMapper loginMapper;
   private final UserService userService;
-
-  public VoluntaryController(VoluntaryService voluntaryService, VoluntaryLoginResponseMapper loginMapper, UserService userService) {
-    this.voluntaryService = voluntaryService;
-    this.loginMapper = loginMapper;
-    this.userService = userService;
-  }
 
   @GetMapping("/me")
   public ResponseEntity<VoluntaryLoginResponseDTO> getMyProfile(@AuthenticationPrincipal UserDetails userDetails) {

@@ -3,18 +3,15 @@ package com.back_alasso.features.Address;
 import com.back_alasso.features.Activity.DTO.ActivitySaveRequestDTO;
 import com.back_alasso.features.Country.Country;
 import com.back_alasso.features.Country.CountryRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class AddressService {
 
   private final AddressRepository addressRepository;
   private final CountryRepository countryRepository;
-
-  public AddressService(AddressRepository addressRepository, CountryRepository countryRepository) {
-    this.addressRepository = addressRepository;
-    this.countryRepository = countryRepository;
-  }
 
   public Address createOrRetrieveAddress(ActivitySaveRequestDTO dto) {
     Country country = countryRepository

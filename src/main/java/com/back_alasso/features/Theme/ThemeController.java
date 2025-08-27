@@ -1,6 +1,7 @@
 package com.back_alasso.features.Theme;
 
 import java.util.Set;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,13 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/themes")
+@RequiredArgsConstructor
 public class ThemeController {
 
   private final ThemeService themeService;
-
-  public ThemeController(ThemeService themeService) {
-    this.themeService = themeService;
-  }
 
   @GetMapping
   public ResponseEntity<Set<ThemeDTO>> getAllThemes() {

@@ -19,9 +19,11 @@ import com.back_alasso.features.Voluntary.VoluntaryRepository;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ReportService {
 
   private final ReportRepository reportRepository;
@@ -31,24 +33,6 @@ public class ReportService {
   private final ActivityVoluntaryRepository activityVoluntaryRepository;
   private final AssociationFollowerRepository associationFollowerRepository;
   private final ActivityRepository activityRepository;
-
-  public ReportService(
-    ReportRepository reportRepository,
-    UserService userService,
-    AssociationRepository associationRepository,
-    VoluntaryRepository voluntaryRepository,
-    ActivityVoluntaryRepository activityVoluntaryRepository,
-    AssociationFollowerRepository associationFollowerRepository,
-    ActivityRepository activityRepository
-  ) {
-    this.reportRepository = reportRepository;
-    this.userService = userService;
-    this.associationRepository = associationRepository;
-    this.voluntaryRepository = voluntaryRepository;
-    this.activityVoluntaryRepository = activityVoluntaryRepository;
-    this.associationFollowerRepository = associationFollowerRepository;
-    this.activityRepository = activityRepository;
-  }
 
   public List<ReportDTO> getAllReportsInProgress() {
     List<Report> reports = reportRepository.findByStatus(StatusReportEnumType.IN_PROGRESS);

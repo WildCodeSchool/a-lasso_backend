@@ -12,10 +12,12 @@ import com.back_alasso.features.Image.ImageEnumType;
 import com.back_alasso.features.Image.ImageService;
 import com.back_alasso.features.Voluntary.DTO.VoluntaryUpdateRequestDTO;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
+@RequiredArgsConstructor
 public class VoluntaryService {
 
   private final VoluntaryRepository voluntaryRepository;
@@ -23,20 +25,6 @@ public class VoluntaryService {
   private final GeolocationRepository geolocationRepository;
   private final GeolocationService geolocationService;
   private final CountryRepository countryRepository;
-
-  public VoluntaryService(
-    VoluntaryRepository voluntaryRepository,
-    ImageService imageService,
-    GeolocationRepository geolocationRepository,
-    GeolocationService geolocationService,
-    CountryRepository countryRepository
-  ) {
-    this.voluntaryRepository = voluntaryRepository;
-    this.imageService = imageService;
-    this.geolocationRepository = geolocationRepository;
-    this.geolocationService = geolocationService;
-    this.countryRepository = countryRepository;
-  }
 
   public Voluntary findById(UUID id) {
     return voluntaryRepository.findById(id).orElse(null);
