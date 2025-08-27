@@ -23,4 +23,3 @@ logging:
 custom:
   api-url: ${API_URL_PRODUCTION}
   client-url: ${CLIENT_URL_PROD}
-
