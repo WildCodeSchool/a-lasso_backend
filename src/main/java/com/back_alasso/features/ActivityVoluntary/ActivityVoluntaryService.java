@@ -38,6 +38,7 @@ public class ActivityVoluntaryService {
     if (activityVoluntary != null) {
       activityVoluntary.setSaved(isFavorite);
       activityVoluntaryRepository.save(activityVoluntary);
+
       return isFavorite;
     } else {
       Voluntary voluntary = voluntaryService.getVoluntaryById(authenticatedUserId);
