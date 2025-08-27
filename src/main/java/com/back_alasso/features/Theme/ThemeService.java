@@ -3,16 +3,14 @@ package com.back_alasso.features.Theme;
 import com.back_alasso.exception.ResourceNotFoundException;
 import java.util.*;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ThemeService {
 
   private final ThemeRepository themeRepository;
-
-  public ThemeService(ThemeRepository themeRepository) {
-    this.themeRepository = themeRepository;
-  }
 
   public Set<ThemeDTO> getAllActivitiesThemes() {
     List<Theme> themes = themeRepository.findAll();

@@ -13,27 +13,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class MessageService {
 
   private final MessageRepository messageRepository;
   private final UserRepository userRepository;
   private final ActivityRepository activityRepository;
   private final UserMessageService userMessageService;
-
-  public MessageService(
-    MessageRepository messageRepository,
-    UserRepository userRepository,
-    ActivityRepository activityRepository,
-    UserMessageService userMessageService
-  ) {
-    this.messageRepository = messageRepository;
-    this.userRepository = userRepository;
-    this.activityRepository = activityRepository;
-    this.userMessageService = userMessageService;
-  }
 
   public List<MessageResponseDTO> getAllActivityMessages(UUID activityId, UUID authenticatedUser) {
     List<Message> messages = messageRepository.findAllByActivity_Id(activityId);

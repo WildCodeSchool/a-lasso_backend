@@ -1,6 +1,8 @@
 package com.back_alasso.features.Activity;
 
 import com.back_alasso.features.Voluntary.Voluntary;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -28,9 +30,10 @@ public interface ActivityRepository extends JpaRepository<Activity, UUID> {
         SELECT a
         FROM Activity a
         WHERE a.association.account_status <> 'BANNED'
+            AND a.date >= :now
     """
   )
-  List<Activity> findAllFromNotBannedAssociations();
+  List<Activity> findAllFromNotBannedAssociationsAndFuture(@Param("now") LocalDateTime now);
 
   @Query(
     """

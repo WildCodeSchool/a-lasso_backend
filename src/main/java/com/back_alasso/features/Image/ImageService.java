@@ -8,18 +8,16 @@ import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
+@RequiredArgsConstructor
 public class ImageService {
 
   private final ImageRepository imageRepository;
-
-  public ImageService(ImageRepository imageRepository) {
-    this.imageRepository = imageRepository;
-  }
 
   public List<Image> processImages(List<ImageActivityCreationRequestDTO> imageDTOs) {
     if (imageDTOs == null || imageDTOs.isEmpty()) return Collections.emptyList();

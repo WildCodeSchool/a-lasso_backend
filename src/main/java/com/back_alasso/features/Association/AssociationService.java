@@ -16,6 +16,7 @@ import com.back_alasso.features.Voluntary.VoluntaryRepository;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
+@RequiredArgsConstructor
 public class AssociationService {
 
   private final AssociationRepository associationRepository;
@@ -34,28 +36,6 @@ public class AssociationService {
   private final ImageRepository imageRepository;
   private final ImageService imageService;
   private final AssociationLoginResponseMapper associationLoginResponseMapper;
-
-  public AssociationService(
-    AssociationRepository associationRepository,
-    VoluntaryRepository voluntaryRepository,
-    AssociationFollowerRepository associationFollowerRepository,
-    AssociationCardResponseMapper associationCardResponseMapper,
-    ImageMapper imageMapper,
-    ActivityImageRepository activityImageRepository,
-    ImageRepository imageRepository,
-    ImageService imageService,
-    AssociationLoginResponseMapper associationLoginResponseMapper
-  ) {
-    this.associationRepository = associationRepository;
-    this.associationFollowerRepository = associationFollowerRepository;
-    this.voluntaryRepository = voluntaryRepository;
-    this.associationCardResponseMapper = associationCardResponseMapper;
-    this.imageMapper = imageMapper;
-    this.activityImageRepository = activityImageRepository;
-    this.imageRepository = imageRepository;
-    this.imageService = imageService;
-    this.associationLoginResponseMapper = associationLoginResponseMapper;
-  }
 
   private Association getAuthenticatedAssociationById(UUID associationId) {
     Association association = getAssociationById(associationId);

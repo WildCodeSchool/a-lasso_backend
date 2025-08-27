@@ -11,4 +11,8 @@ public interface ActivityVoluntaryRepository extends JpaRepository<ActivityVolun
   List<ActivityVoluntary> findAllByVoluntary_idAndRegistered(UUID voluntaryId, Boolean isRegistered);
 
   List<ActivityVoluntary> findAllByActivity_id(UUID activityId);
+
+  int countByActivity_id(UUID activityId);
+
+  boolean existsByVoluntary_idAndActivity_id(UUID activityId, UUID voluntaryId);
 }
