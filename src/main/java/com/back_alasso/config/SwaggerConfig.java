@@ -11,6 +11,6 @@ public class SwaggerConfig {
   @Bean
   public OpenAPI customOpenAPI() {
     return new OpenAPI()
-      .info(new Info().title("My backend template project").version("1.0").description("Documentation de l'API avec Springdoc OpenAPI"));
+      .info(new Info().title("A l'asso Backend Project").version("1.0").description("Documentation de l'API avec Springdoc OpenAPI"));
   }
 }
