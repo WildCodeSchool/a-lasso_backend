@@ -4,6 +4,7 @@ import com.back_alasso.core.MailService;
 import com.back_alasso.features.User.User;
 import com.back_alasso.features.User.UserRepository;
 import com.back_alasso.security.JwtService;
+import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,6 +38,7 @@ public class PasswordResetService {
     this.mailService = mailService;
   }
 
+  @Transactional
   public void sendPasswordResetEmail(User user) {
     tokenRepository.deleteByUser(user);
     String token = UUID.randomUUID().toString();
@@ -56,6 +58,7 @@ public class PasswordResetService {
     );
   }
 
+  @Transactional
   public void resetPassword(String token, String newPassword) {
     PasswordReset resetToken = tokenRepository.findByToken(token).orElseThrow(() -> new IllegalArgumentException("Token de reset password invalide"));
 

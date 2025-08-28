@@ -31,31 +31,31 @@ public class ActivityVoluntaryService {
   @Value("${custom.client-url}")
   private String clientUrl;
 
-  public ActivityParticipantsRequestDTO getActivityVoluntary(UUID activityId) {
-    Activity activity = activityRepository.findById(activityId).orElseThrow(() -> new ResourceNotFoundException("Activity not found"));
+    public ActivityParticipantsRequestDTO getActivityVoluntary(UUID activityId) {
+        Activity activity = activityRepository.findById(activityId).orElseThrow(() -> new ResourceNotFoundException("Activity not found"));
 
-    return ActivityParticipantsRequestDTO.convertToDTO(activity);
-  }
-
-  public ActivityVoluntary getActivityVoluntaryByIds(UUID authenticatedUser, UUID activityId) {
-    return activityVoluntaryRepository.findByVoluntary_idAndActivity_id(authenticatedUser, activityId).orElse(null);
-  }
-
-  public Boolean updatedFavoriteStatus(UUID activityId, boolean isFavorite, UUID authenticatedUserId) {
-    ActivityVoluntary activityVoluntary = getActivityVoluntaryByIds(authenticatedUserId, activityId);
-    if (activityVoluntary != null) {
-      activityVoluntary.setSaved(isFavorite);
-      activityVoluntaryRepository.save(activityVoluntary);
-
-      return isFavorite;
-    } else {
-      Voluntary voluntary = voluntaryService.getVoluntaryById(authenticatedUserId);
-      Activity activity = activityService.getActivityById(activityId);
-      ActivityVoluntary newActivityVoluntary = new ActivityVoluntary(isFavorite, false, voluntary, activity);
-      activityVoluntaryRepository.save(newActivityVoluntary);
-      return isFavorite;
+        return ActivityParticipantsRequestDTO.convertToDTO(activity);
     }
-  }
+
+    public ActivityVoluntary getActivityVoluntaryByIds(UUID authenticatedUser, UUID activityId) {
+        return activityVoluntaryRepository.findByVoluntary_idAndActivity_id(authenticatedUser, activityId).orElse(null);
+    }
+
+    public Boolean updatedFavoriteStatus(UUID activityId, boolean isFavorite, UUID authenticatedUserId) {
+        ActivityVoluntary activityVoluntary = getActivityVoluntaryByIds(authenticatedUserId, activityId);
+        if (activityVoluntary != null) {
+            activityVoluntary.setSaved(isFavorite);
+            activityVoluntaryRepository.save(activityVoluntary);
+
+            return isFavorite;
+        } else {
+            Voluntary voluntary = voluntaryService.getVoluntaryById(authenticatedUserId);
+            Activity activity = activityService.getActivityById(activityId);
+            ActivityVoluntary newActivityVoluntary = new ActivityVoluntary(isFavorite, false, voluntary, activity);
+            activityVoluntaryRepository.save(newActivityVoluntary);
+            return isFavorite;
+        }
+    }
 
   public Boolean updatedRegisterStatus(UUID activityId, boolean isRegistered, UUID authenticatedUserId) {
     ActivityVoluntary activityVoluntary = getActivityVoluntaryByIds(authenticatedUserId, activityId);
