@@ -125,26 +125,32 @@ public class AssociationService {
 
   @Transactional
   public void uploadLogo(UUID associationId, MultipartFile logoFile) {
+    uploadAssociationImage(associationId, logoFile, ImageEnumType.LOGO);
+  }
+
+  @Transactional
+  public void uploadCover(UUID associationId, MultipartFile coverFile) {
+    uploadAssociationImage(associationId, coverFile, ImageEnumType.PROFILE_ASSOCIATION);
+  }
+
+  private void uploadAssociationImage(UUID associationId, MultipartFile file, ImageEnumType type) {
     Association association = associationRepository.findById(associationId).orElseThrow(() -> new ResourceNotFoundException("Association not found"));
 
-    List<AssociationImage> existingLogos = association
-      .getAssociationImages()
-      .stream()
-      .filter(ai -> ai.getImage().getType() == ImageEnumType.LOGO)
-      .toList();
+    List<AssociationImage> existingImages = association.getAssociationImages().stream().filter(ai -> ai.getImage().getType() == type).toList();
 
-    existingLogos.forEach(ai -> {
+    existingImages.forEach(ai -> {
       association.getAssociationImages().remove(ai);
       imageRepository.delete(ai.getImage());
     });
 
-    Image logo = imageService.uploadImage(logoFile, ImageEnumType.LOGO, "Association");
+    Image image = imageService.uploadImage(file, type, "Association");
 
     AssociationImage associationImage = new AssociationImage();
     associationImage.setAssociation(association);
-    associationImage.setImage(logo);
+    associationImage.setImage(image);
 
     association.getAssociationImages().add(associationImage);
+
     associationRepository.save(association);
   }
 }

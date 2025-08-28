@@ -98,6 +98,13 @@ public class AssociationController {
     return ResponseEntity.status(HttpStatus.OK).build();
   }
 
+  @PostMapping("/me/cover")
+  public ResponseEntity<Void> uploadMyCover(@RequestParam("cover") MultipartFile coverFile, @AuthenticationPrincipal UserDetails userDetails) {
+    UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
+    associationService.uploadCover(authenticatedUserId, coverFile);
+    return ResponseEntity.status(HttpStatus.OK).build();
+  }
+
   @PostMapping("/cards")
   public ResponseEntity<List<AssociationCardResponseDTO>> getAssociationCards(
     @Valid @RequestBody GetAssociationCardsRequestDTO request,
