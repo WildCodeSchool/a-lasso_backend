@@ -28,11 +28,18 @@ public class ActivityController {
   @Autowired
   private Validator validator;
 
-  @GetMapping
-  public ResponseEntity<List<ActivityResponseDTO>> getAllActivities(@AuthenticationPrincipal UserDetails userDetails) {
+  @GetMapping("/future")
+  public ResponseEntity<List<ActivityResponseDTO>> getFutureActivities(@AuthenticationPrincipal UserDetails userDetails) {
     UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
-    List<ActivityResponseDTO> activities = activityService.getAllActivities(authenticatedUserId);
-    return ResponseEntity.status(HttpStatus.OK).body(activities);
+    List<ActivityResponseDTO> activities = activityService.getFutureActivities(authenticatedUserId);
+    return ResponseEntity.ok(activities);
+  }
+
+  @GetMapping("/past")
+  public ResponseEntity<List<ActivityResponseDTO>> getPastActivities(@AuthenticationPrincipal UserDetails userDetails) {
+    UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
+    List<ActivityResponseDTO> activities = activityService.getPastActivities(authenticatedUserId);
+    return ResponseEntity.ok(activities);
   }
 
   @GetMapping("/{activityId}")
