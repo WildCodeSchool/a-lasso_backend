@@ -56,12 +56,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     UsernamePasswordAuthenticationToken authentication = setAuthenticationContext(jwt, request);
 
-    if (
-      isAssociationUrl(request) &&
-      authentication.getAuthorities().stream().noneMatch(auth -> auth.getAuthority().equals(UserEnumType.ROLE_ASSOCIATION.name()))
-    ) {
-      sendUnauthorizedResponse(response);
-      return false;
+    if (isAssociationUrl(request)) {
+      boolean isAssociation = authentication
+        .getAuthorities()
+        .stream()
+        .anyMatch(auth -> auth.getAuthority().equals(UserEnumType.ROLE_ASSOCIATION.name()));
+
+      boolean isAdmin = authentication.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals(UserEnumType.ROLE_ADMIN.name()));
+
+      if (!isAssociation && !isAdmin) {
+        sendUnauthorizedResponse(response);
+        return false;
+      }
     }
 
     return true;

@@ -270,7 +270,7 @@ public class DatabaseInitializer {
         new HashSet<>(List.of(UserEnumType.ROLE_ASSOCIATION)),
         AccountEnumType.ACTIVE,
         "$2a$10$jw6BeI/txUaC1BQNGYZn4.hs5wpmLhe2uYpTBB40oUveFE3ZRQYQq", // password is "Password"
-        "lacroixrouge@gmail.com",
+        "lacroixrouge@g.com",
         null,
         "https://www.croix-rouge.fr/"
       ),
@@ -414,7 +414,7 @@ public class DatabaseInitializer {
       new Activity(
         ActivityStatusEnumType.published,
         "La maraude",
-        LocalDateTime.parse("2025-12-22 04:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
+        LocalDateTime.parse("2026-12-22 04:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
         "« La maraude » est une action de solidarité humaine essentielle qui consiste à aller à la rencontre des personnes sans-abri dans les rues de Nantes. En participant à cette maraude, vous jouerez un rôle actif dans la création de lien social, en offrant un moment d’écoute bienveillante, un sourire, des boissons chaudes et parfois des kits d’hygiène ou des couvertures. L’objectif n’est pas seulement d’apporter une aide matérielle, mais aussi de redonner un peu de dignité et de chaleur humaine à ceux qui sont trop souvent invisibilisés. Cette activité est organisée par des bénévoles expérimentés, dans le respect et la discrétion.",
         FIRST_ACTIVITY_VOLONTARY_REQUEST,
         associations.get(NUMBER_ZERO),
@@ -425,7 +425,7 @@ public class DatabaseInitializer {
       new Activity(
         ActivityStatusEnumType.published,
         "Réhabilitation refuge",
-        LocalDateTime.parse("2025-12-10 15:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
+        LocalDateTime.parse("2026-12-10 15:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
         "Rejoignez une équipe de bénévoles passionnés pour redonner vie à un refuge pour animaux abandonnés à Carquefou. L’objectif de cette activité est de remettre en état les infrastructures du refuge : repeindre les murs, réparer les enclos, installer des abris confortables, nettoyer les espaces communs, et créer un environnement sûr et accueillant pour chiens, chats et autres compagnons à quatre pattes. Ce chantier solidaire contribue non seulement au bien-être animal, mais renforce aussi la capacité d’accueil du refuge. Une belle manière de lier engagement écologique et cause animale.",
         SECOND_ACTIVITY_VOLONTARY_REQUEST,
         associations.get(NUMBER_ONE),
@@ -436,7 +436,7 @@ public class DatabaseInitializer {
       new Activity(
         ActivityStatusEnumType.published,
         "Nettoyage de plage",
-        LocalDateTime.parse("2025-07-15 09:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
+        LocalDateTime.parse("2026-07-15 09:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
         "Chaque été, les plages de Nice subissent l’impact de la pollution plastique et des déchets laissés par les vacanciers. Cette opération de nettoyage écologique vise à collecter les déchets tout en sensibilisant les promeneurs à la protection de notre littoral. Munis de gants et de sacs, les bénévoles sillonnent le sable, les rochers et les zones naturelles pour ramasser plastiques, mégots, emballages et objets flottants. L’activité est accompagnée d’un temps d’échange sur les enjeux environnementaux, la biodiversité marine et les gestes écoresponsables à adopter au quotidien.",
         THIRD_ACTIVITY_VOLONTARIES_REQUEST,
         associations.get(NUMBER_TWO),
@@ -447,7 +447,7 @@ public class DatabaseInitializer {
       new Activity(
         ActivityStatusEnumType.published,
         "Atelier cuisine",
-        LocalDateTime.parse("2025-08-20 14:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
+        LocalDateTime.parse("2026-08-20 14:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
         "Cet atelier culinaire à Lille est bien plus qu’une simple session de cuisine. Il s’agit d’un moment de convivialité et d’entraide où bénévoles et bénéficiaires se retrouvent pour préparer ensemble un repas chaud destiné aux personnes sans domicile fixe ou en grande précarité. Vous participerez à toutes les étapes : choix des recettes, préparation des ingrédients, cuisson, dressage, puis distribution des repas. L’atelier favorise les rencontres, le partage des savoir-faire, et contribue à redonner le sourire à ceux qui vivent dans l’isolement. Aucune compétence culinaire n’est requise, seulement de la bonne volonté.",
         FOURTH_ACTIVITY_VOLONTARIES_REQUEST,
         associations.get(NUMBER_ZERO),
@@ -458,7 +458,7 @@ public class DatabaseInitializer {
       new Activity(
         ActivityStatusEnumType.published,
         "Atelier d'écriture",
-        LocalDateTime.parse("2025-09-12 10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
+        LocalDateTime.parse("2026-09-12 10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
         "Destiné à un public de jeunes en difficulté à Nancy, cet atelier d’écriture créative vise à développer l’expression de soi, la confiance et la créativité par le biais de l’écriture. Encadré par des animateurs passionnés, l’atelier propose des jeux littéraires, des récits personnels, des slam, des poèmes ou des histoires imaginaires. Les participants découvrent la puissance des mots pour se raconter, libérer leurs émotions et échanger avec les autres. Une restitution finale peut être organisée sous forme de lecture publique ou de publication. Une expérience artistique et humaine très enrichissante.",
         FIFTH_ACTIVITY_VOLONTARIES_REQUEST,
         associations.get(NUMBER_THREE),
@@ -469,7 +469,7 @@ public class DatabaseInitializer {
       new Activity(
         ActivityStatusEnumType.published,
         "Réhabilitation jardins",
-        LocalDateTime.parse("2025-10-05 08:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
+        LocalDateTime.parse("2026-10-05 08:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
         "Au cœur de Bordeaux, cette activité de réhabilitation de jardins urbains transforme des friches abandonnées en véritables oasis de verdure. Accompagné d’experts en permaculture et d’habitants du quartier, vous participerez à la remise en état de potagers partagés, à la plantation d’arbres et de fleurs locales, à la mise en place de composteurs et à la création de mobiliers urbains en matériaux recyclés. L’objectif est de favoriser la biodiversité, de lutter contre les îlots de chaleur et de recréer du lien entre les habitants autour d’un projet durable, collectif et écologique.",
         SIXTH_ACTIVITY_VOLONTARIES_REQUEST,
         associations.get(NUMBER_TWO),
@@ -480,7 +480,7 @@ public class DatabaseInitializer {
       new Activity(
         ActivityStatusEnumType.published,
         "Spectacle solidaire",
-        LocalDateTime.parse("2025-11-20 19:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
+        LocalDateTime.parse("2024-11-20 19:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
         "Participez à l’organisation d’un spectacle solidaire à Lyon mêlant musique, théâtre, danse et humour, avec des artistes bénévoles engagés. Cet événement a pour but de récolter des fonds pour financer des actions sociales locales, mais aussi de proposer une soirée culturelle gratuite et ouverte à tous, dans un esprit de partage et d’inclusion. Vous pouvez aider à la logistique, à l’accueil du public, à la communication, ou encore à la technique. Le spectacle est suivi d’un moment d’échange autour d’un buffet solidaire. Une expérience festive, engagée, et riche en émotions.",
         SEVENTH_ACTIVITY_VOLONTARIES_REQUEST,
         associations.get(NUMBER_FOUR),
@@ -555,6 +555,21 @@ public class DatabaseInitializer {
         LocalDate.of(BIRTHDAY_YEAR_ONE, BIRTHDAY_MONTH_ONE, BIRTHDAY_DAY_ONE)
       ),
       new Voluntary(
+        new HashSet<>(List.of(UserEnumType.ROLE_ADMIN, UserEnumType.ROLE_VOLUNTARY)),
+        AccountEnumType.ACTIVE,
+        "$2a$10$jw6BeI/txUaC1BQNGYZn4.hs5wpmLhe2uYpTBB40oUveFE3ZRQYQq", // password is "Password"
+        "admin@gmail.com",
+        "Nantes",
+        firstCountry,
+        "Jacques",
+        "Loyal",
+        voluntaryAvatars.get(NUMBER_ZERO),
+        "+33612345678",
+        null,
+        null,
+        LocalDate.of(BIRTHDAY_YEAR_TWO, BIRTHDAY_MONTH_TWO, BIRTHDAY_DAY_TWO)
+      ),
+      new Voluntary(
         new HashSet<>(List.of(UserEnumType.ROLE_VOLUNTARY)),
         AccountEnumType.ACTIVE,
         "$2a$10$jw6BeI/txUaC1BQNGYZn4.hs5wpmLhe2uYpTBB40oUveFE3ZRQYQq", // password is "Password"
@@ -570,25 +585,43 @@ public class DatabaseInitializer {
         LocalDate.of(BIRTHDAY_YEAR_ONE, BIRTHDAY_MONTH_ONE, BIRTHDAY_DAY_ONE)
       ),
       new Voluntary(
-        new HashSet<>(List.of(UserEnumType.ROLE_ADMIN, UserEnumType.ROLE_VOLUNTARY)),
+        new HashSet<>(List.of(UserEnumType.ROLE_VOLUNTARY)),
         AccountEnumType.ACTIVE,
         "$2a$10$jw6BeI/txUaC1BQNGYZn4.hs5wpmLhe2uYpTBB40oUveFE3ZRQYQq", // password is "Password"
-        "admin@gmail.com",
+        "manu.bonoli@gmail.com",
         "Nantes",
         firstCountry,
-        "Jacques",
-        "Loyal",
+        "Emmanuelle",
+        "Bonoli",
         voluntaryAvatars.get(NUMBER_ZERO),
-        "+33612345678",
+        "+33689000000",
         null,
         null,
-        LocalDate.of(BIRTHDAY_YEAR_TWO, BIRTHDAY_MONTH_TWO, BIRTHDAY_DAY_TWO)
+        LocalDate.of(BIRTHDAY_YEAR_ONE, BIRTHDAY_MONTH_ONE, BIRTHDAY_DAY_ONE)
+      ),
+      new Voluntary(
+        new HashSet<>(List.of(UserEnumType.ROLE_VOLUNTARY)),
+        AccountEnumType.ACTIVE,
+        "$2a$10$jw6BeI/txUaC1BQNGYZn4.hs5wpmLhe2uYpTBB40oUveFE3ZRQYQq", // password is "Password"
+        "sebastiendechand@gmail.com",
+        "Nantes",
+        firstCountry,
+        "Sébastien",
+        "Dechand",
+        voluntaryAvatars.get(NUMBER_ZERO),
+        "+33689000000",
+        null,
+        null,
+        LocalDate.of(BIRTHDAY_YEAR_ONE, BIRTHDAY_MONTH_ONE, BIRTHDAY_DAY_ONE)
       )
     );
 
     List<Preferences> voluntaryPreferences = Arrays.asList(
       new Preferences(voluntaries.get(NUMBER_ZERO)),
-      new Preferences(voluntaries.get(NUMBER_ONE))
+      new Preferences(voluntaries.get(NUMBER_ONE)),
+      new Preferences(voluntaries.get(NUMBER_TWO)),
+      new Preferences(voluntaries.get(NUMBER_THREE)),
+      new Preferences(voluntaries.get(NUMBER_FOUR))
     );
 
     List<AssociationFollower> voluntaryAssociationFollowers = Arrays.asList(
@@ -596,13 +629,19 @@ public class DatabaseInitializer {
     );
 
     List<ActivityVoluntary> activityVoluntaries = Arrays.asList(
-      new ActivityVoluntary(false, true, voluntaries.get(NUMBER_ZERO), activities.get(NUMBER_ZERO))
+      new ActivityVoluntary(false, true, voluntaries.get(NUMBER_ZERO), activities.get(NUMBER_ZERO)),
+      new ActivityVoluntary(false, true, voluntaries.get(NUMBER_TWO), activities.get(NUMBER_SIX)),
+      new ActivityVoluntary(false, true, voluntaries.get(NUMBER_THREE), activities.get(NUMBER_SIX)),
+      new ActivityVoluntary(false, true, voluntaries.get(NUMBER_FOUR), activities.get(NUMBER_SIX))
     );
 
     List<Geolocation> voluntaryLocalisations = Arrays.asList(new Geolocation(FIRST_VOLUNTARY_LONGITUDE, FIRST_VOLUNTARY_LATITUDE));
 
     voluntaries.get(NUMBER_ZERO).setGeolocation(voluntaryLocalisations.get(NUMBER_ZERO));
     voluntaries.get(NUMBER_ONE).setGeolocation(voluntaryLocalisations.get(NUMBER_ZERO));
+    voluntaries.get(NUMBER_TWO).setGeolocation(voluntaryLocalisations.get(NUMBER_ZERO));
+    voluntaries.get(NUMBER_THREE).setGeolocation(voluntaryLocalisations.get(NUMBER_ZERO));
+    voluntaries.get(NUMBER_FOUR).setGeolocation(voluntaryLocalisations.get(NUMBER_ZERO));
 
     // initiate messages between associations and voluntaries for a specific activity
     List<Message> allMessageFirstActivity = Arrays.asList(
