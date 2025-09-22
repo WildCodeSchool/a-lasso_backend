@@ -5,7 +5,7 @@ spring:
     password: ${DB_PASSWORD_DEV}
   jpa:
     hibernate:
-      ddl-auto: create-drop  # Drops and recreates the schema on each run. TODO : Switch to update once DatabaseInitializer is completely done
+      ddl-auto: create-drop  # Drops and recreates the schema on each run.
     show-sql: true
     properties:
       hibernate:
