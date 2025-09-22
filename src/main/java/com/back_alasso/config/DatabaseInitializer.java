@@ -573,21 +573,6 @@ public class DatabaseInitializer {
         new HashSet<>(List.of(UserEnumType.ROLE_VOLUNTARY)),
         AccountEnumType.ACTIVE,
         "$2a$10$jw6BeI/txUaC1BQNGYZn4.hs5wpmLhe2uYpTBB40oUveFE3ZRQYQq", // password is "Password"
-        "irwin.soliman@gmail.com",
-        "Nantes",
-        firstCountry,
-        "Irwin",
-        "SOLIMAN",
-        voluntaryAvatars.get(NUMBER_ZERO),
-        "+33612345678",
-        null,
-        null,
-        LocalDate.of(BIRTHDAY_YEAR_ONE, BIRTHDAY_MONTH_ONE, BIRTHDAY_DAY_ONE)
-      ),
-      new Voluntary(
-        new HashSet<>(List.of(UserEnumType.ROLE_VOLUNTARY)),
-        AccountEnumType.ACTIVE,
-        "$2a$10$jw6BeI/txUaC1BQNGYZn4.hs5wpmLhe2uYpTBB40oUveFE3ZRQYQq", // password is "Password"
         "manu.bonoli@gmail.com",
         "Nantes",
         firstCountry,
@@ -620,8 +605,7 @@ public class DatabaseInitializer {
       new Preferences(voluntaries.get(NUMBER_ZERO)),
       new Preferences(voluntaries.get(NUMBER_ONE)),
       new Preferences(voluntaries.get(NUMBER_TWO)),
-      new Preferences(voluntaries.get(NUMBER_THREE)),
-      new Preferences(voluntaries.get(NUMBER_FOUR))
+      new Preferences(voluntaries.get(NUMBER_THREE))
     );
 
     List<AssociationFollower> voluntaryAssociationFollowers = Arrays.asList(
@@ -631,8 +615,7 @@ public class DatabaseInitializer {
     List<ActivityVoluntary> activityVoluntaries = Arrays.asList(
       new ActivityVoluntary(false, true, voluntaries.get(NUMBER_ZERO), activities.get(NUMBER_ZERO)),
       new ActivityVoluntary(false, true, voluntaries.get(NUMBER_TWO), activities.get(NUMBER_SIX)),
-      new ActivityVoluntary(false, true, voluntaries.get(NUMBER_THREE), activities.get(NUMBER_SIX)),
-      new ActivityVoluntary(false, true, voluntaries.get(NUMBER_FOUR), activities.get(NUMBER_SIX))
+      new ActivityVoluntary(false, true, voluntaries.get(NUMBER_THREE), activities.get(NUMBER_SIX))
     );
 
     List<Geolocation> voluntaryLocalisations = Arrays.asList(new Geolocation(FIRST_VOLUNTARY_LONGITUDE, FIRST_VOLUNTARY_LATITUDE));
@@ -641,7 +624,6 @@ public class DatabaseInitializer {
     voluntaries.get(NUMBER_ONE).setGeolocation(voluntaryLocalisations.get(NUMBER_ZERO));
     voluntaries.get(NUMBER_TWO).setGeolocation(voluntaryLocalisations.get(NUMBER_ZERO));
     voluntaries.get(NUMBER_THREE).setGeolocation(voluntaryLocalisations.get(NUMBER_ZERO));
-    voluntaries.get(NUMBER_FOUR).setGeolocation(voluntaryLocalisations.get(NUMBER_ZERO));
 
     // initiate messages between associations and voluntaries for a specific activity
     List<Message> allMessageFirstActivity = Arrays.asList(
