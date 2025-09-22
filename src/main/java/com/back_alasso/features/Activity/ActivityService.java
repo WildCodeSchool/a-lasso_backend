@@ -42,11 +42,21 @@ public class ActivityService {
     return activityRepository.findByIdFromNotBannedAssociation(activityId).orElseThrow(() -> new ResourceNotFoundException("Activity not found"));
   }
 
-  public List<ActivityResponseDTO> getAllActivities(UUID authenticatedUserId) {
+  public List<ActivityResponseDTO> getFutureActivities(UUID authenticatedUserId) {
     List<Activity> activities = activityRepository.findAllFromNotBannedAssociationsAndFuture(LocalDateTime.now());
 
     if (activities.isEmpty()) {
-      throw new ResourceNotFoundException("activities not found");
+      throw new ResourceNotFoundException("No future activities found");
+    }
+
+    return activities.stream().map(activity -> activityResponseMapper.fromEntityToDTO(activity, authenticatedUserId)).toList();
+  }
+
+  public List<ActivityResponseDTO> getPastActivities(UUID authenticatedUserId) {
+    List<Activity> activities = activityRepository.findAllFromNotBannedAssociationsAndPast(LocalDateTime.now());
+
+    if (activities.isEmpty()) {
+      throw new ResourceNotFoundException("No past activities found");
     }
 
     return activities.stream().map(activity -> activityResponseMapper.fromEntityToDTO(activity, authenticatedUserId)).toList();

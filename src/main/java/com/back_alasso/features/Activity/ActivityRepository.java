@@ -38,6 +38,16 @@ public interface ActivityRepository extends JpaRepository<Activity, UUID> {
     """
         SELECT a
         FROM Activity a
+        WHERE a.association.account_status <> 'BANNED'
+            AND a.date < :now
+    """
+  )
+  List<Activity> findAllFromNotBannedAssociationsAndPast(@Param("now") LocalDateTime now);
+
+  @Query(
+    """
+        SELECT a
+        FROM Activity a
         WHERE a.id = :activityId AND a.association.account_status <> 'BANNED'
     """
   )
