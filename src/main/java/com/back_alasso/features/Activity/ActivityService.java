@@ -15,10 +15,13 @@ import com.back_alasso.features.Image.Image;
 import com.back_alasso.features.Image.ImageService;
 import com.back_alasso.features.Theme.Theme;
 import com.back_alasso.features.Theme.ThemeService;
+import com.back_alasso.features.User.UserEnumType;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -104,7 +107,10 @@ public class ActivityService {
   public void deleteActivity(UUID activityId, UUID authenticatedUserId) {
     Activity activity = activityRepository.findById(activityId).orElseThrow(() -> new ResourceNotFoundException("Activity not found"));
 
-    if (!activity.getAssociation().getId().equals(authenticatedUserId)) {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    boolean isAdmin = authentication.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals(UserEnumType.ROLE_ADMIN.name()));
+
+    if (!isAdmin && !activity.getAssociation().getId().equals(authenticatedUserId)) {
       throw new SecurityException("You are not allowed to delete this activity");
     }
 
