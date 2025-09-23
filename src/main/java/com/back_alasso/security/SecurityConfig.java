@@ -30,15 +30,18 @@ public class SecurityConfig implements WebMvcConfigurer {
   private final CustomUserDetailsService customUserDetailsService;
   private final CustomAuthEntryPoint customAuthEntryPoint;
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
+  private final LoginRateLimitFilter loginRateLimitFilter;
 
   public SecurityConfig(
     CustomUserDetailsService customUserDetailsService,
     CustomAuthEntryPoint customAuthEntryPoint,
-    JwtAuthenticationFilter jwtAuthenticationFilter
+    JwtAuthenticationFilter jwtAuthenticationFilter,
+    LoginRateLimitFilter loginRateLimitFilter
   ) {
     this.customUserDetailsService = customUserDetailsService;
     this.customAuthEntryPoint = customAuthEntryPoint;
     this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+    this.loginRateLimitFilter = loginRateLimitFilter;
   }
 
   @Bean
@@ -48,6 +51,7 @@ public class SecurityConfig implements WebMvcConfigurer {
       .authorizeHttpRequests(auth -> auth.requestMatchers(PUBLIC_URLS.toArray(new String[0])).permitAll().anyRequest().authenticated())
       .userDetailsService(customUserDetailsService)
       .exceptionHandling(e -> e.authenticationEntryPoint(customAuthEntryPoint))
+      .addFilterBefore(loginRateLimitFilter, UsernamePasswordAuthenticationFilter.class)
       .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
       .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
     return http.build();
