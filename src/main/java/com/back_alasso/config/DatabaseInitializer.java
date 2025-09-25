@@ -555,6 +555,21 @@ public class DatabaseInitializer {
         LocalDate.of(BIRTHDAY_YEAR_ONE, BIRTHDAY_MONTH_ONE, BIRTHDAY_DAY_ONE)
       ),
       new Voluntary(
+        new HashSet<>(List.of(UserEnumType.ROLE_VOLUNTARY)),
+        AccountEnumType.ACTIVE,
+        "$2a$10$jw6BeI/txUaC1BQNGYZn4.hs5wpmLhe2uYpTBB40oUveFE3ZRQYQq", // password is "Password"
+        "irwin.soliman@gmail.com",
+        "Nantes",
+        firstCountry,
+        "Irwin",
+        "SOLIMAN",
+        voluntaryAvatars.get(NUMBER_ZERO),
+        "+33612345678",
+        null,
+        null,
+        LocalDate.of(BIRTHDAY_YEAR_ONE, BIRTHDAY_MONTH_ONE, BIRTHDAY_DAY_ONE)
+      ),
+      new Voluntary(
         new HashSet<>(List.of(UserEnumType.ROLE_ADMIN, UserEnumType.ROLE_VOLUNTARY)),
         AccountEnumType.ACTIVE,
         "$2a$10$jw6BeI/txUaC1BQNGYZn4.hs5wpmLhe2uYpTBB40oUveFE3ZRQYQq", // password is "Password"
