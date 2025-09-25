@@ -10,6 +10,9 @@ import com.back_alasso.features.User.User;
 import com.back_alasso.features.User.UserService;
 import com.back_alasso.features.Voluntary.Voluntary;
 import com.back_alasso.features.Voluntary.VoluntaryLoginResponseMapper;
+import com.back_alasso.security.LoginRateLimitFilter;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.Validator;
 import java.util.HashMap;
@@ -34,6 +37,7 @@ public class AuthController {
   private final AuthService authService;
   private final VoluntaryLoginResponseMapper voluntaryLoginResponseMapper;
   private final AssociationLoginResponseMapper associationLoginResponseMapper;
+  private final LoginRateLimitFilter loginRateLimitFilter;
 
   @PostMapping("/register/voluntary")
   public ResponseEntity<Boolean> register(@Valid @RequestBody VoluntaryRegistrationDTO voluntaryRegistrationDTO) {
@@ -54,21 +58,30 @@ public class AuthController {
   }
 
   @PostMapping("/login")
-  public ResponseEntity<Map<String, Object>> authenticate(@Valid @RequestBody UserLoginDTO userLoginDTO) {
-    String token = authService.authenticate(userLoginDTO.email(), userLoginDTO.password());
-    User user = userService.findByEmail(userLoginDTO.email());
+  public ResponseEntity<Map<String, Object>> authenticate(
+    @Valid @RequestBody UserLoginDTO userLoginDTO,
+    HttpServletRequest request,
+    HttpServletResponse res
+  ) {
+    String key = "ip:" + (request.getHeader("X-Forwarded-For") != null ? request.getHeader("X-Forwarded-For") : request.getRemoteAddr());
 
-    if (user.getAccount_status().equals(AccountEnumType.BANNED)) {
-      return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-    }
-
-    Map<String, Object> response = new HashMap<>();
-    response.put("token", token);
     try {
+      String token = authService.authenticate(userLoginDTO.email(), userLoginDTO.password());
+      User user = userService.findByEmail(userLoginDTO.email());
+
+      if (user.getAccount_status().equals(AccountEnumType.BANNED)) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+      }
+
+      loginRateLimitFilter.resetBucket(key);
+      res.setHeader("X-Rate-Limit-Remaining", String.valueOf(loginRateLimitFilter.getRemainingAttempt(key)));
+
+      Map<String, Object> response = new HashMap<>();
+      response.put("token", token);
       authService.addUserToResponse(user, response);
-      return ResponseEntity.status(HttpStatus.OK).body(response);
-    } catch (IllegalArgumentException e) {
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+      return ResponseEntity.ok(response);
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Invalid credentials"));
     }
   }
 

@@ -252,11 +252,11 @@ public class DatabaseInitializer {
       new Image("/images/Association/logoSPA.png", ImageEnumType.LOGO),
       new Image("/images/Association/spaProfile.jpg", ImageEnumType.PROFILE_ASSOCIATION),
       new Image("/images/Association/logoUrbanNature.png", ImageEnumType.LOGO),
-      new Image("/images/Association/plage_1.jpg", ImageEnumType.PROFILE_ASSOCIATION),
+      new Image("/images/Association/plage_1.png", ImageEnumType.PROFILE_ASSOCIATION),
       new Image("/images/Association/logoJeunesseSolidaire.png", ImageEnumType.LOGO),
-      new Image("/images/Association/ecriture_3.jpg", ImageEnumType.PROFILE_ASSOCIATION),
+      new Image("/images/Association/ecriture_3.png", ImageEnumType.PROFILE_ASSOCIATION),
       new Image("/images/Association/logoCulturArt.png", ImageEnumType.LOGO),
-      new Image("/images/Association/spectacle_2.jpg", ImageEnumType.PROFILE_ASSOCIATION)
+      new Image("/images/Association/spectacle_2.png", ImageEnumType.PROFILE_ASSOCIATION)
     );
 
     List<Association> associations = Arrays.asList(
@@ -387,16 +387,16 @@ public class DatabaseInitializer {
       new Image("/images/Activity/maraude1.png", ImageEnumType.ACTIVITY),
       new Image("/images/Activity/maraude2.jpg", ImageEnumType.ACTIVITY),
       new Image("/images/Activity/spaActivity.jpg", ImageEnumType.ACTIVITY),
-      new Image("/images/Activity/jardin_2.jpg", ImageEnumType.ACTIVITY),
-      new Image("/images/Activity/jardin_3.jpg", ImageEnumType.ACTIVITY),
-      new Image("/images/Activity/ecriture_1.jpg", ImageEnumType.ACTIVITY),
-      new Image("/images/Activity/ecriture_2.jpg", ImageEnumType.ACTIVITY),
-      new Image("/images/Activity/plage_2.jpg", ImageEnumType.ACTIVITY),
-      new Image("/images/Activity/spectacle_1.jpg", ImageEnumType.ACTIVITY),
-      new Image("/images/Activity/spectacle_3.jpg", ImageEnumType.ACTIVITY),
-      new Image("/images/Activity/cuisine_1.jpg", ImageEnumType.ACTIVITY),
-      new Image("/images/Activity/cuisine_2.jpg", ImageEnumType.ACTIVITY),
-      new Image("/images/Activity/cuisine_3.jpg", ImageEnumType.ACTIVITY),
+      new Image("/images/Activity/jardin_2.png", ImageEnumType.ACTIVITY),
+      new Image("/images/Activity/jardin_3.png", ImageEnumType.ACTIVITY),
+      new Image("/images/Activity/ecriture_1.png", ImageEnumType.ACTIVITY),
+      new Image("/images/Activity/ecriture_2.png", ImageEnumType.ACTIVITY),
+      new Image("/images/Activity/plage_2.png", ImageEnumType.ACTIVITY),
+      new Image("/images/Activity/spectacle_1.png", ImageEnumType.ACTIVITY),
+      new Image("/images/Activity/spectacle_3.png", ImageEnumType.ACTIVITY),
+      new Image("/images/Activity/cuisine_1.png", ImageEnumType.ACTIVITY),
+      new Image("/images/Activity/cuisine_2.png", ImageEnumType.ACTIVITY),
+      new Image("/images/Activity/cuisine_3.png", ImageEnumType.ACTIVITY),
       new Image("/images/Activity/defaultActivityImage.jpg", ImageEnumType.ACTIVITY)
     );
 
@@ -548,21 +548,6 @@ public class DatabaseInitializer {
         firstCountry,
         "Pierre",
         "Lapin",
-        voluntaryAvatars.get(NUMBER_ZERO),
-        "+33612345678",
-        null,
-        null,
-        LocalDate.of(BIRTHDAY_YEAR_ONE, BIRTHDAY_MONTH_ONE, BIRTHDAY_DAY_ONE)
-      ),
-      new Voluntary(
-        new HashSet<>(List.of(UserEnumType.ROLE_VOLUNTARY)),
-        AccountEnumType.ACTIVE,
-        "$2a$10$jw6BeI/txUaC1BQNGYZn4.hs5wpmLhe2uYpTBB40oUveFE3ZRQYQq", // password is "Password"
-        "irwin.soliman@gmail.com",
-        "Nantes",
-        firstCountry,
-        "Irwin",
-        "SOLIMAN",
         voluntaryAvatars.get(NUMBER_ZERO),
         "+33612345678",
         null,
