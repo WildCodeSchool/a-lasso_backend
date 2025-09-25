@@ -55,9 +55,15 @@ public class LoginRateLimitFilter extends OncePerRequestFilter {
     }
   }
 
+  public long getRemainingAttempt(String key) {
+    return cache.get(key).getAvailableTokens();
+  }
+
+  public void resetBucket(String key) {
+    cache.put(key, newBucket(key));
+  }
+
   private String extractKey(HttpServletRequest request) {
-    String username = request.getParameter("username");
-    if (username != null && !username.isBlank()) return "usr:" + username.toLowerCase();
     String ip = request.getHeader("X-Forwarded-For");
     if (ip == null) ip = request.getRemoteAddr();
     return "ip:" + ip;
