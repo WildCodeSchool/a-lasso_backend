@@ -1,45 +1,41 @@
-# À l’Asso ! – Frontend (Angular 19)
+# 📌 Backend – Spring Boot 3.4 / Java 21
 
-This repository contains the Angular frontend of the **À l’Asso !** platform.  
-It allows associations to publish activities and volunteers to browse and register.  
+This repository contains the Spring Boot backend of the **À l’Asso !** platform.  
+It exposes a REST API for user management (volunteers, associations, administrators), activities, registrations, messaging, and reporting.  
 
 ## Installation
 ```bash
-npm install
+./mvnw install
 ```
 
-## Initialize
-### Development
+## Start
+### Development profile
 ```bash
-npm run serve:development
+./mvnw spring-boot:run -Pdevelopment
 ```
 
 ## Tests
 ### Unit tests
 ```bash
-npm run test
+mvn test -Punit-tests
+```
+### Integration tests
+```bash
+mvn test -Pintegration-tests
+```
+### End-to-end tests
+```bash
+mvn test -Pe2e-tests
 ```
 
-### End-to-end tests (UI mode)
-```bash
-npm run e2e:ui:staging
-```
-
-### End-to-end tests (CI mode)
-```bash
-npm run e2e:ci:staging
-```
-
-## Documentation
-```bash
-npm run doc
-```
-Then accessible at: http://localhost:8081
+## API Documentation
+Swagger is available locally at: http://localhost:8080/swagger-ui/index.html#/
 
 ## Docker
-### Development mode
+### Development
 ```bash
-npm run docker:dev
+docker build -t alasso-backend .
+docker run -p 8080:8080 alasso-backend
 ```
 
 # Backend project template
