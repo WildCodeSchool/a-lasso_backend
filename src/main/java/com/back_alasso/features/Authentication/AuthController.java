@@ -48,7 +48,7 @@ public class AuthController {
   }
 
   @PostMapping("/register/association")
-  public ResponseEntity<Boolean> register(@RequestBody AssociationRegistrationDTO associationRegistrationDTO) {
+  public ResponseEntity<Boolean> register(@Valid @RequestBody AssociationRegistrationDTO associationRegistrationDTO) {
     validator.validate(associationRegistrationDTO, OnPublish.class);
 
     userService.checkUserExists(associationRegistrationDTO.email());
