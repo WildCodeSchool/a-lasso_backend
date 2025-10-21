@@ -3,6 +3,7 @@ package com.back_alasso.features.Activity;
 import com.back_alasso.exception.ResourceNotFoundException;
 import com.back_alasso.features.Activity.DTO.ActivityResponseDTO;
 import com.back_alasso.features.Activity.DTO.ActivitySaveRequestDTO;
+import com.back_alasso.features.Activity.DTO.ActivityStatusEnumType;
 import com.back_alasso.features.ActivityImage.ActivityImageService;
 import com.back_alasso.features.ActivityTheme.ActivityThemeService;
 import com.back_alasso.features.Address.Address;
@@ -58,6 +59,12 @@ public class ActivityService {
     if (activities.isEmpty()) {
       throw new ResourceNotFoundException("No past activities found");
     }
+
+    return activities.stream().map(activity -> activityResponseMapper.fromEntityToDTO(activity, authenticatedUserId)).toList();
+  }
+
+  public List<ActivityResponseDTO> getDraftActivities(UUID authenticatedUserId) {
+    List<Activity> activities = activityRepository.findAllFromNotBannedAssociationsAndDraft(ActivityStatusEnumType.draft);
 
     return activities.stream().map(activity -> activityResponseMapper.fromEntityToDTO(activity, authenticatedUserId)).toList();
   }

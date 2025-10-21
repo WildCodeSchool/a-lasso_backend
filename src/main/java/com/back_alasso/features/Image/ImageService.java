@@ -2,13 +2,18 @@ package com.back_alasso.features.Image;
 
 import com.back_alasso.exception.ResourceNotFoundException;
 import com.back_alasso.features.Image.DTO.ImageActivityCreationRequestDTO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import javax.imageio.ImageIO;
 import lombok.RequiredArgsConstructor;
+import net.coobird.thumbnailator.Thumbnails;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,6 +23,27 @@ import org.springframework.web.multipart.MultipartFile;
 public class ImageService {
 
   private final ImageRepository imageRepository;
+  private final double ZERO_POINT_SIX = 0.6;
+  private final double ONE = 1.0;
+
+  private byte[] compressImage(byte[] originalBytes, double targetQuality, double scale) throws IOException {
+    ByteArrayInputStream inputStream = new ByteArrayInputStream(originalBytes);
+    BufferedImage originalImage = ImageIO.read(inputStream);
+
+    if (originalImage == null) {
+      throw new IOException("Impossible de lire l'image");
+    }
+
+    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+    Thumbnails.of(originalImage)
+      .scale(scale) // ex: 1.0 garde la taille, <1.0 réduit
+      .outputQuality(targetQuality) // qualité JPEG/WebP (0.0 à 1.0)
+      .outputFormat("jpeg")
+      .toOutputStream(outputStream);
+
+    return outputStream.toByteArray();
+  }
 
   public List<Image> processImages(List<ImageActivityCreationRequestDTO> imageDTOs) {
     if (imageDTOs == null || imageDTOs.isEmpty()) return Collections.emptyList();
@@ -36,11 +62,17 @@ public class ImageService {
         }
         byte[] imageData = Base64.getDecoder().decode(base64);
 
-        Image image = new Image();
-        image.setData(imageData);
-        image.setType(ImageEnumType.ACTIVITY);
-        image.setUrl("");
-        newImages.add(image);
+        try {
+          byte[] compressed = compressImage(imageData, ZERO_POINT_SIX, ONE);
+
+          Image image = new Image();
+          image.setData(compressed);
+          image.setType(ImageEnumType.ACTIVITY);
+          image.setUrl("");
+          newImages.add(image);
+        } catch (IOException e) {
+          throw new RuntimeException("Erreur lors de la compression de l'image", e);
+        }
       }
     }
 
@@ -56,12 +88,16 @@ public class ImageService {
 
       validateExtension(extension);
 
+      byte[] originalData = file.getBytes();
+
+      byte[] compressedData = compressImage(originalData, ZERO_POINT_SIX, ONE);
+
       String cleanedFilename = cleanFilename(originalFilename != null ? originalFilename : type.name().toLowerCase());
       String uniqueFilename = UUID.randomUUID() + "_" + cleanedFilename;
       String url = "/images/" + folder + "/" + uniqueFilename;
 
       Image image = new Image();
-      image.setData(file.getBytes());
+      image.setData(compressedData);
       image.setType(type);
       image.setFilename(uniqueFilename);
       image.setFormat(extension);
