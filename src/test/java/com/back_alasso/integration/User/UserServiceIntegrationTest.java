@@ -75,7 +75,7 @@ class UserServiceIntegrationTest extends AbstractTests {
     private PreferencesRepository preferencesRepository;
 
     @MockitoBean
-    private GeolocationService geolocationService; // Mock du service externe
+    private GeolocationService geolocationService;
 
     @BeforeEach
     void setup() {

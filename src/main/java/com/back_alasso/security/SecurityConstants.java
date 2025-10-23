@@ -6,10 +6,11 @@ public class SecurityConstants {
 
   public static final Set<String> PUBLIC_URLS = new HashSet<>(
     Arrays.asList(
-      "/auth/**",
+      "auth/register/**",
+      "auth/login",
       "/reset-password/**",
       "/themes",
-      "/activities",
+      "/activities/future",
       "/activities/{id}",
       "/association/{id}",
       "/images/**",
