@@ -5,6 +5,7 @@ import com.back_alasso.features.Geolocation.DTO.GeolocationRequestDTO;
 import com.back_alasso.features.Image.DTO.ImageActivityCreationRequestDTO;
 import com.back_alasso.features.Theme.ThemeNameEnumType;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -31,7 +32,8 @@ public class ActivitySaveRequestDTO {
   @NotBlank(groups = OnPublish.class)
   private String title;
 
-  @NotNull(groups = OnPublish.class)
+  @NotNull(groups = OnPublish.class, message = "Le nombre de volontaires est obligatoire")
+  @Min(value = 1, message = "Le nombre de volontaires doit être supérieur à 0")
   private Long requestedVolunteers;
 
   @NotNull(groups = OnPublish.class)
