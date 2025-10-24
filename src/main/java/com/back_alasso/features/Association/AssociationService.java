@@ -133,6 +133,7 @@ public class AssociationService {
     uploadAssociationImage(associationId, coverFile, ImageEnumType.PROFILE_ASSOCIATION);
   }
 
+  @Transactional
   private void uploadAssociationImage(UUID associationId, MultipartFile file, ImageEnumType type) {
     Association association = associationRepository.findById(associationId).orElseThrow(() -> new ResourceNotFoundException("Association not found"));
 

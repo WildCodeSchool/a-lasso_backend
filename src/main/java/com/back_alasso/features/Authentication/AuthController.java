@@ -17,6 +17,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.Validator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,6 +39,16 @@ public class AuthController {
   private final VoluntaryLoginResponseMapper voluntaryLoginResponseMapper;
   private final AssociationLoginResponseMapper associationLoginResponseMapper;
   private final LoginRateLimitFilter loginRateLimitFilter;
+
+  @GetMapping("/token")
+  public ResponseEntity<Map<String, Object>> getUserByToken(@AuthenticationPrincipal UserDetails userDetails) {
+    UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
+    User user = userService.findById(authenticatedUserId);
+
+    Map<String, Object> response = new HashMap<>();
+    authService.addUserToResponse(user, response);
+    return ResponseEntity.ok(response);
+  }
 
   @PostMapping("/register/voluntary")
   public ResponseEntity<Boolean> register(@Valid @RequestBody VoluntaryRegistrationDTO voluntaryRegistrationDTO) {
