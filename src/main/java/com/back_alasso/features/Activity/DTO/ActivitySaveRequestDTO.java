@@ -33,7 +33,7 @@ public class ActivitySaveRequestDTO {
   private String title;
 
   @NotNull(groups = OnPublish.class, message = "Le nombre de volontaires est obligatoire")
-  @Min(value = 1, message = "Le nombre de volontaires doit être supérieur à 0")
+  @Min(groups = OnPublish.class, value = 1, message = "Le nombre de volontaires doit être supérieur à 0")
   private Long requestedVolunteers;
 
   @NotNull(groups = OnPublish.class)
