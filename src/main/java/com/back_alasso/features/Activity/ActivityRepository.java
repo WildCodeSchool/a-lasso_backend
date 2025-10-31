@@ -1,5 +1,6 @@
 package com.back_alasso.features.Activity;
 
+import com.back_alasso.features.Activity.DTO.ActivityStatusEnumType;
 import com.back_alasso.features.Voluntary.Voluntary;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -43,6 +44,15 @@ public interface ActivityRepository extends JpaRepository<Activity, UUID> {
     """
   )
   List<Activity> findAllFromNotBannedAssociationsAndPast(@Param("now") LocalDateTime now);
+
+  @Query(
+    """
+        SELECT a
+        FROM Activity a
+        WHERE a.association.account_status <> 'BANNED' AND a.status = :status
+    """
+  )
+  List<Activity> findAllFromNotBannedAssociationsAndDraft(@Param("status") ActivityStatusEnumType status);
 
   @Query(
     """

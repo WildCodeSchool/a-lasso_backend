@@ -42,6 +42,13 @@ public class ActivityController {
     return ResponseEntity.ok(activities);
   }
 
+  @GetMapping("/draft")
+  public ResponseEntity<List<ActivityResponseDTO>> getDraftActivities(@AuthenticationPrincipal UserDetails userDetails) {
+    UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);
+    List<ActivityResponseDTO> activities = activityService.getDraftActivities(authenticatedUserId);
+    return ResponseEntity.ok(activities);
+  }
+
   @GetMapping("/{activityId}")
   public ResponseEntity<ActivityResponseDTO> getActivityById(@AuthenticationPrincipal UserDetails userDetails, @PathVariable UUID activityId) {
     UUID authenticatedUserId = userService.getAuthenticatedUserId(userDetails);

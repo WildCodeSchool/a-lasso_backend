@@ -33,16 +33,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
     throws ServletException, IOException {
-    if (isPublicUrl(request) && parseJwt(request) == null) {
+    boolean isAuthenticated = authenticateRequest(request, response);
+    if (!isPublicUrl(request) && !isAuthenticated) {
+      return;
+    }
+    if (isAuthenticated) {
       filterChain.doFilter(request, response);
-      return;
     }
-
-    if (!authenticateRequest(request, response)) {
-      return;
-    }
-
-    filterChain.doFilter(request, response);
   }
 
   private boolean authenticateRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
