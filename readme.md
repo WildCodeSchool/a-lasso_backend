@@ -6,10 +6,9 @@ FrontEnd Prod : https://a-l-asso.fr/ | Stagging : https://staging.a-l-asso.fr/
 
 BackEnd Prod : https://api.a-l-asso.fr/ | Stagging : https://staging-api.a-l-asso.fr/
 
-https://ibb.co/YBgDQK1H
-
 Repo GitHub FrontEnd : https://github.com/WildCodeSchool/a-lasso_frontend
 
+![front](https://i.ibb.co/4RkstDXh/image.png)
 
 ## Stack Technique
 
@@ -241,7 +240,7 @@ L'application est hébergée sur un **VPS OVH** avec une architecture full Docke
 
 ### Architecture
 
-![alt text](image-4.png)
+![archi](https://i.ibb.co/0V1hpTk3/image-4.png)
 
 ### Stack Infrastructure
 
@@ -288,13 +287,14 @@ Les certificats SSL sont générés automatiquement par Traefik via **Let's Encr
 ## Schémas 
 
 ### MPD
-![alt text](image-1.png)
+
+![MDP](	https://i.ibb.co/Kcs8jH3H/image-1.png)
 
 ### Security Flow Login
-![alt text](image-2.png)
+![Login Flow](https://i.ibb.co/Q7Bz9rcR/image-2.png)
 
 ### Security Flow Request with JWT
 
-![alt text](image-3.png)
+![JWT Floww](https://i.ibb.co/rfKByVKC/image-3.png)
 
 
