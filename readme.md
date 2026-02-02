@@ -6,7 +6,7 @@ FrontEnd Prod : https://a-l-asso.fr/ | Stagging : https://staging.a-l-asso.fr/
 
 BackEnd Prod : https://api.a-l-asso.fr/ | Stagging : https://staging-api.a-l-asso.fr/
 
-![alt text](image.png)
+https://ibb.co/YBgDQK1H
 
 Repo GitHub FrontEnd : https://github.com/WildCodeSchool/a-lasso_frontend
 
